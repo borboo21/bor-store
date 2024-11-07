@@ -1,0 +1,16 @@
+@font-face {
+	font-family: 'MakroXMBold';
+	src: url('./fonts/MakroXMBold.ttf') format('truetype');
+	font-weight: bold;
+}
+
+@font-face {
+	font-family: 'MakroXMLight';
+	src: url('./fonts/MakroXMLight.ttf') format('truetype');
+	font-weight: light;
+}
+@font-face {
+	font-family: 'MakroXMMedium';
+	src: url('./fonts/MakroXMMedium.ttf') format('truetype');
+	font-weight: medium;
+}
