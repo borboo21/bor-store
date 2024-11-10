@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
-const CounterItemContainer = ({ className }) => {
+const CounterItemContainer = ({ className, count }) => {
 	return (
 		<div className={className}>
 			<button className="counter-button">-</button>
-			<input className="counter-input" />
+			<input className="counter-input" value={count}></input>
 			<button className="counter-button">+</button>
 		</div>
 	);

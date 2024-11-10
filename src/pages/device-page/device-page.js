@@ -1,24 +1,43 @@
-import styled from 'styled-components';
 import { BreadCrumbs, CounterItem, GreenButton } from '../../components';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router';
+import { selectDevice } from '../../selectors';
+import styled from 'styled-components';
+import { loadDeviceAsync } from '../../actions';
 
 const DevicePageContainer = ({ className }) => {
+	const [error, setError] = useState(null);
+
+	const dispatch = useDispatch();
+	const params = useParams();
+	const device = useSelector(selectDevice);
+
+	console.log(device);
+
+	useEffect(() => {
+		dispatch(loadDeviceAsync(params.id)).then((deviceData) => {
+			setError(deviceData.error);
+		});
+	}, [dispatch, params.id]);
+
 	return (
 		<div className={className}>
 			<div className="device-page-header">
-				<BreadCrumbs lastName={'iPhone 11'} />
+				<BreadCrumbs lastName={device.name} />
 			</div>
 			<div className="device-card">
 				<div className="img-block">
-					<img width={310} src={'/img/11.jpg'} alt={'iPhone'} />
+					<img width={310} src={device.imageUrl} alt={'iPhone'} />
 				</div>
 				<div className="description">
-					<h1>iPhone 11</h1>
-					<h2>39 990₽</h2>
+					<h1>{device.name}</h1>
+					<h2>{device.price}₽</h2>
 					<div className="device-info"></div>
 					<div className="buy-container">
-						<CounterItem className="counter" />
+						<CounterItem className="counter" count={device.count} />
 						<GreenButton>
 							Добавить в корзину <FontAwesomeIcon icon={faArrowRight} />
 						</GreenButton>

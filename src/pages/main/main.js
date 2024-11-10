@@ -43,9 +43,11 @@ export const MainContainer = ({ className }) => {
 			<div className="card-container">
 				{items.map((item) => (
 					<CardItem
+						key={item.id}
+						category={item.category}
 						name={item.name}
 						price={item.price}
-						img={item.img}
+						imageUrl={item.imageUrl}
 						id={item.id}
 						onPlus={item.onPlus}
 					/>

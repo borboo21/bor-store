@@ -38,7 +38,7 @@ export const Shop = () => {
 					<Route path="/login" element={<div>Авторизация</div>} />
 					<Route path="/register" element={<div>Регистрация</div>} />
 					<Route path="/iphone" element={<div>Айфон</div>} />
-					<Route path="/iphone/:id" element={<DevicePage />} />
+					<Route path="/:device/:id" element={<DevicePage />} />
 					<Route path="/ipad" element={<div>Айпад</div>} />
 					<Route path="/ipad/:id" element={<div>Айпад товар</div>} />
 					<Route path="/watch/" element={<div>Часы</div>} />
