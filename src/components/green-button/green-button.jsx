@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-const GreenButtonContainer = ({ children, className, ...props }) => (
-	<button className={className} {...props}>
+const GreenButtonContainer = ({ children, className, onClick, ...props }) => (
+	<button className={className} onClick={onClick} {...props}>
 		{children}
 	</button>
 );

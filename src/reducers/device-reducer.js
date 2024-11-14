@@ -16,6 +16,8 @@ export const deviceReducer = (state = deviceState, action) => {
 				...state,
 				...action.payload,
 			};
+		case ACTION_TYPE.RESET_DEVICE_DATA:
+			return deviceState;
 		default:
 			return state;
 	}

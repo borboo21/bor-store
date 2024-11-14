@@ -7,20 +7,25 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { CardItem } from '../../components';
 import { useEffect, useState } from 'react';
+import { URL } from '../../constants';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { loadCartAsync } from '../../actions/load-cart-async';
 
 export const MainContainer = ({ className }) => {
 	const [items, setItems] = useState([]);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
-		fetch('https://6720f7f998bbb4d93ca6e474.mockapi.io/iphone')
+		fetch(`${URL}/device`)
 			.then((res) => {
 				return res.json();
 			})
 			.then((json) => {
+				dispatch(loadCartAsync());
 				setItems(json);
 			});
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<div className={className}>
@@ -43,6 +48,7 @@ export const MainContainer = ({ className }) => {
 			<div className="card-container">
 				{items.map((item) => (
 					<CardItem
+						dispatch={dispatch}
 						key={item.id}
 						category={item.category}
 						name={item.name}

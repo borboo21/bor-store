@@ -1,15 +1,32 @@
 import { faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { CardButton } from '../card-button/card-button';
 import { useState } from 'react';
-import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { CounterItem } from '../counter/counter';
+import styled from 'styled-components';
+import { addCartAsync, deleteFromCartAsync } from '../../actions';
+import { useSelector } from 'react-redux';
+import { cartSelector } from '../../selectors';
 
-const CardItemContainer = ({ className, ...props }) => {
-	const [isAdded, setIsAdded] = useState(true);
+const CardItemContainer = ({ className, dispatch, ...props }) => {
+	const cart = useSelector(cartSelector);
 
-	const handleClick = () => {
-		setIsAdded(!isAdded);
+	const inCart = cart.devices.some((device) => device.id === props.id);
+
+	const handleClickPlus = () => {
+		dispatch(
+			addCartAsync({
+				id: props.id,
+				category: props.category,
+				imageUrl: props.imageUrl,
+				name: props.name,
+				price: props.price,
+			}),
+		);
+	};
+
+	const handleClickDelete = () => {
+		dispatch(deleteFromCartAsync(props.id));
 	};
 
 	return (
@@ -23,16 +40,20 @@ const CardItemContainer = ({ className, ...props }) => {
 					<span>Цена:</span>
 					<b>{props.price}₽</b>
 				</div>
-				{isAdded ? (
-					<CardButton faIcon={faPlus} color="#ffffff" onClick={handleClick} />
+				{!inCart ? (
+					<CardButton
+						faIcon={faPlus}
+						color="#ffffff"
+						onClick={handleClickPlus}
+					/>
 				) : (
 					<>
 						<CounterItem />
 						<CardButton
 							faIcon={faCheck}
 							color="#65ed65"
-							onClick={handleClick}
-						/>{' '}
+							onClick={handleClickDelete}
+						/>
 					</>
 				)}
 			</div>

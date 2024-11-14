@@ -5,8 +5,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { selectDevice } from '../../selectors';
-import styled from 'styled-components';
 import { loadDeviceAsync } from '../../actions';
+import styled from 'styled-components';
 
 const DevicePageContainer = ({ className }) => {
 	const [error, setError] = useState(null);
@@ -30,16 +30,16 @@ const DevicePageContainer = ({ className }) => {
 			</div>
 			<div className="device-card">
 				<div className="img-block">
-					<img width={310} src={device.imageUrl} alt={'iPhone'} />
+					<img width={310} src={device.imageUrl} alt={device.name} />
 				</div>
 				<div className="description">
 					<h1>{device.name}</h1>
 					<h2>{device.price}₽</h2>
 					<div className="device-info"></div>
 					<div className="buy-container">
-						<CounterItem className="counter" count={device.count} />
+						<CounterItem className="counter" />
 						<GreenButton>
-							Добавить в корзину <FontAwesomeIcon icon={faArrowRight} />
+							В корзину <FontAwesomeIcon icon={faArrowRight} />
 						</GreenButton>
 					</div>
 				</div>
@@ -64,6 +64,12 @@ export const DevicePage = styled(DevicePageContainer)`
 	}
 
 	.description {
+		width: 400px;
+		height: 400px;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: space-evenly;
 		box-shadow: 0 0 24px 0 rgba(27, 30, 37, 0.08);
 		border-radius: 20px;
 		padding: 0 30px 30px 30px;
@@ -71,9 +77,10 @@ export const DevicePage = styled(DevicePageContainer)`
 
 	.buy-container {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
+		align-items: center;
 	}
 	.counter {
-		padding-bottom: 20px;
+		padding-right: 20px;
 	}
 `;

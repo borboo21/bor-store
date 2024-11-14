@@ -1,11 +1,24 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
-const CounterItemContainer = ({ className, count }) => {
+const CounterItemContainer = ({ className }) => {
+	const [quantity, setQuantity] = useState(1);
+	const handleIncrease = () => setQuantity(quantity + 1);
+	const handleDeacrease = () => {
+		if (quantity > 1) {
+			setQuantity(quantity - 1);
+		}
+	};
+
 	return (
 		<div className={className}>
-			<button className="counter-button">-</button>
-			<input className="counter-input" value={count}></input>
-			<button className="counter-button">+</button>
+			<button className="counter-button" onClick={handleDeacrease}>
+				-
+			</button>
+			<input className="counter-input" value={quantity} readOnly></input>
+			<button className="counter-button" onClick={handleIncrease}>
+				+
+			</button>
 		</div>
 	);
 };

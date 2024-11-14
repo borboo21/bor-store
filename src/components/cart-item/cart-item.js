@@ -1,9 +1,14 @@
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { CardButton } from '../card-button/card-button';
 import { CounterItem } from '../counter/counter';
+import { deleteFromCartAsync } from '../../actions';
 import styled from 'styled-components';
 
-const cartItemContainer = ({ className, ...props }) => {
+const cartItemContainer = ({ className, dispatch, ...props }) => {
+	const handleClickX = () => {
+		dispatch(deleteFromCartAsync(props.id));
+	};
+
 	return (
 		<div className={className}>
 			<img width={90} src={props.img} alt="device" />
@@ -12,7 +17,7 @@ const cartItemContainer = ({ className, ...props }) => {
 				<b>{props.price}₽</b>
 				<CounterItem />
 			</div>
-			{<CardButton faIcon={faX} />}
+			{<CardButton faIcon={faX} onClick={handleClickX} />}
 		</div>
 	);
 };
