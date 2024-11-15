@@ -12,6 +12,9 @@ import styled from 'styled-components';
 
 const AddPageContainer = ({ className }) => {
 	const [src, setSrc] = useState('');
+	const [category, setCategory] = useState('');
+	const [name, setName] = useState('');
+	const [price, setPrice] = useState(0);
 
 	const isValidUrl = (url) => {
 		try {
@@ -22,9 +25,7 @@ const AddPageContainer = ({ className }) => {
 		}
 	};
 
-	const handleInputChange = (event) => {
-		setSrc(event.target.value);
-	};
+	const addDevice = () => {};
 
 	return (
 		<div className={className}>
@@ -65,7 +66,7 @@ const AddPageContainer = ({ className }) => {
 							placeholder="Вставьте ссылку на изображение"
 							type="text"
 							value={src}
-							onChange={handleInputChange}
+							onChange={({ target }) => setSrc(target.value)}
 						/>
 					</div>
 					<div className="add-container">
@@ -74,6 +75,8 @@ const AddPageContainer = ({ className }) => {
 							className="add-input"
 							placeholder="Укажите категорию товара"
 							type="text"
+							value={category}
+							onChange={({ target }) => setCategory(target.value)}
 						/>
 					</div>
 					<div className="add-container">
@@ -82,6 +85,8 @@ const AddPageContainer = ({ className }) => {
 							className="add-input"
 							placeholder="Укажите имя товара"
 							type="text"
+							value={name}
+							onChange={({ target }) => setName(target.value)}
 						/>
 					</div>
 					<div className="add-container">
@@ -90,6 +95,8 @@ const AddPageContainer = ({ className }) => {
 							className="add-input"
 							placeholder="Укажите цену товара"
 							type="text"
+							value={price}
+							onChange={({ target }) => setPrice(target.value)}
 						/>
 					</div>
 				</div>

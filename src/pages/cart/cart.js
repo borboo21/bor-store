@@ -1,10 +1,10 @@
-import styled from 'styled-components';
 import { CardButton, GreenButton } from '../../components';
 import { faArrowLeft, faArrowRight, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CartItem } from '../../components/cart-item/cart-item';
 import { cartSelector } from '../../selectors';
 import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
 
 const CartContainer = ({ className, ...props }) => {
 	const dispatch = useDispatch();
@@ -37,9 +37,9 @@ const CartContainer = ({ className, ...props }) => {
 									id={item.id}
 									name={item.name}
 									price={item.price}
-									count={item.count}
 									img={item.imageUrl}
 									dispatch={dispatch}
+									quantity={item.quantity}
 								/>
 							))}
 						</div>
@@ -48,12 +48,12 @@ const CartContainer = ({ className, ...props }) => {
 								<li className="sum">
 									<span>Итого:</span>
 									<div></div>
-									<b>{cart.amount}</b>
+									<b>{cart.amount}₽</b>
 								</li>
 								<li className="bonus">
 									<span>Бонусов к начислению:</span>
 									<div></div>
-									<b>{cart.amount * 0.02}</b>
+									<b>{Math.floor(cart.amount * 0.02)}₽</b>
 								</li>
 							</ul>
 							<GreenButton className="cartButton">

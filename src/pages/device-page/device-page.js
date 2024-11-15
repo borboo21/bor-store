@@ -1,27 +1,56 @@
 import { BreadCrumbs, CounterItem, GreenButton } from '../../components';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { selectDevice } from '../../selectors';
-import { loadDeviceAsync } from '../../actions';
+import { cartSelector, selectDevice } from '../../selectors';
+import { addCartAsync, deleteFromCartAsync, loadDeviceAsync } from '../../actions';
 import styled from 'styled-components';
 
 const DevicePageContainer = ({ className }) => {
 	const [error, setError] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
 
 	const dispatch = useDispatch();
 	const params = useParams();
 	const device = useSelector(selectDevice);
-
-	console.log(device);
+	const cart = useSelector(cartSelector);
 
 	useEffect(() => {
 		dispatch(loadDeviceAsync(params.id)).then((deviceData) => {
 			setError(deviceData.error);
+			setIsLoading(false);
 		});
 	}, [dispatch, params.id]);
+
+	const inCart = cart.devices.some((item) => item.id === device.id);
+	console.log(inCart);
+
+	const handleClick = () => {
+		dispatch(
+			addCartAsync({
+				id: device.id,
+				category: device.category,
+				imageUrl: device.imageUrl,
+				name: device.name,
+				price: device.price,
+				quantity: 1,
+			}),
+		);
+	};
+
+	const onDelete = () => {
+		const cartItemQuantity = cart.devices.find(
+			(item) => item.id === device.id,
+		).quantity;
+		console.log(cartItemQuantity);
+		dispatch(deleteFromCartAsync(device.id, device.price, cartItemQuantity));
+	};
+
+	if (isLoading) {
+		return null;
+	}
 
 	return (
 		<div className={className}>
@@ -37,10 +66,31 @@ const DevicePageContainer = ({ className }) => {
 					<h2>{device.price}₽</h2>
 					<div className="device-info"></div>
 					<div className="buy-container">
-						<CounterItem className="counter" />
-						<GreenButton>
-							В корзину <FontAwesomeIcon icon={faArrowRight} />
-						</GreenButton>
+						{!inCart ? (
+							<GreenButton
+								className="inCartButton"
+								inCart={false}
+								onClick={handleClick}
+							>
+								В корзину <FontAwesomeIcon icon={faArrowRight} />
+							</GreenButton>
+						) : (
+							<>
+								<GreenButton
+									className="outFromCartButton"
+									inCart={true}
+									onClick={onDelete}
+								>
+									<FontAwesomeIcon icon={faArrowLeft} />
+									Убрать из корзины
+								</GreenButton>
+								<CounterItem
+									className="counter"
+									id={device.id}
+									price={device.price}
+								/>
+							</>
+						)}
 					</div>
 				</div>
 			</div>
@@ -81,6 +131,43 @@ export const DevicePage = styled(DevicePageContainer)`
 		align-items: center;
 	}
 	.counter {
-		padding-right: 20px;
+		padding-left: 20px;
+	}
+
+	.inCartButton {
+
+	position: relative;
+
+		&:hover {
+			svg {
+				transform: translateX(5px);
+			}
+			}
+			svg {
+				right: 15px;
+				position: absolute;
+				top: 20px;
+				transition: transform 0.15s ease-in-out;
+			}
+		}
+	}
+
+	.outFromCartButton {
+
+	position: relative;
+
+		&:hover {
+			svg {
+				transform: translateX(-5px);
+			}
+			}
+			svg {
+				right: 200px;
+				position: absolute;
+				top: 20px;
+				transition: transform 0.15s ease-in-out;
+			}
+		}
+	}
 	}
 `;

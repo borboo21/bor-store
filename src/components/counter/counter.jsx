@@ -1,12 +1,22 @@
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { cartSelector } from '../../selectors';
+import { switchQuantity, switchQuantityAsync, updateQuantity } from '../../actions';
 import styled from 'styled-components';
 
-const CounterItemContainer = ({ className }) => {
-	const [quantity, setQuantity] = useState(1);
-	const handleIncrease = () => setQuantity(quantity + 1);
+const CounterItemContainer = ({ className, id, price }) => {
+	const dispatch = useDispatch();
+	const cart = useSelector(cartSelector);
+	const itemInCart = cart.devices.find((device) => device.id === id);
+	const quantity = itemInCart.quantity;
+	console.log(quantity);
+	const handleIncrease = () => {
+		dispatch(switchQuantity(1, id, price));
+		updateQuantity(id, quantity + 1);
+	};
 	const handleDeacrease = () => {
 		if (quantity > 1) {
-			setQuantity(quantity - 1);
+			dispatch(switchQuantity(-1, id, price));
+			updateQuantity(id, quantity + 1);
 		}
 	};
 

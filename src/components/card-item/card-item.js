@@ -1,12 +1,11 @@
 import { faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { CardButton } from '../card-button/card-button';
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CounterItem } from '../counter/counter';
-import styled from 'styled-components';
 import { addCartAsync, deleteFromCartAsync } from '../../actions';
 import { useSelector } from 'react-redux';
 import { cartSelector } from '../../selectors';
+import styled from 'styled-components';
 
 const CardItemContainer = ({ className, dispatch, ...props }) => {
 	const cart = useSelector(cartSelector);
@@ -21,12 +20,13 @@ const CardItemContainer = ({ className, dispatch, ...props }) => {
 				imageUrl: props.imageUrl,
 				name: props.name,
 				price: props.price,
+				quantity: 1,
 			}),
 		);
 	};
 
 	const handleClickDelete = () => {
-		dispatch(deleteFromCartAsync(props.id));
+		dispatch(deleteFromCartAsync(props.id, props.price, props.quantity));
 	};
 
 	return (
@@ -48,7 +48,7 @@ const CardItemContainer = ({ className, dispatch, ...props }) => {
 					/>
 				) : (
 					<>
-						<CounterItem />
+						<CounterItem id={props.id} price={props.price} />
 						<CardButton
 							faIcon={faCheck}
 							color="#65ed65"

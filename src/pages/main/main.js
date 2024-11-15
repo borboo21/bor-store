@@ -25,7 +25,7 @@ export const MainContainer = ({ className }) => {
 				dispatch(loadCartAsync());
 				setItems(json);
 			});
-	}, [dispatch]);
+	}, []);
 
 	return (
 		<div className={className}>

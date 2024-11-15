@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const cartItemContainer = ({ className, dispatch, ...props }) => {
 	const handleClickX = () => {
-		dispatch(deleteFromCartAsync(props.id));
+		dispatch(deleteFromCartAsync(props.id, props.price, props.quantity));
 	};
 
 	return (
@@ -15,7 +15,11 @@ const cartItemContainer = ({ className, dispatch, ...props }) => {
 			<div className="deviceInfo">
 				<p className="deviceName">{props.name}</p>
 				<b>{props.price}₽</b>
-				<CounterItem />
+				<CounterItem
+					id={props.id}
+					price={props.price}
+					quantity={props.quantity}
+				/>
 			</div>
 			{<CardButton faIcon={faX} onClick={handleClickX} />}
 		</div>
