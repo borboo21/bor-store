@@ -44,7 +44,6 @@ const DevicePageContainer = ({ className }) => {
 		const cartItemQuantity = cart.devices.find(
 			(item) => item.id === device.id,
 		).quantity;
-		console.log(cartItemQuantity);
 		dispatch(deleteFromCartAsync(device.id, device.price, cartItemQuantity));
 	};
 

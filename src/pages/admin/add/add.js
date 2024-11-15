@@ -9,9 +9,10 @@ import {
 	faTag,
 } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
+import { addDeviceAsync } from '../../../actions';
 
 const AddPageContainer = ({ className }) => {
-	const [src, setSrc] = useState('');
+	const [imageUrl, setimageUrl] = useState('');
 	const [category, setCategory] = useState('');
 	const [name, setName] = useState('');
 	const [price, setPrice] = useState(0);
@@ -25,7 +26,13 @@ const AddPageContainer = ({ className }) => {
 		}
 	};
 
-	const addDevice = () => {};
+	const addDevice = (category, name, imageUrl, price) => {
+		addDeviceAsync(category, name, imageUrl, Number(price));
+		setimageUrl('');
+		setCategory('');
+		setName('');
+		setPrice(0);
+	};
 
 	return (
 		<div className={className}>
@@ -33,17 +40,21 @@ const AddPageContainer = ({ className }) => {
 				<BreadCrumbs lastName={'Добавление товара'} />
 			</div>
 			<div className="add-main">
-				{isValidUrl(src) && (
+				{isValidUrl(imageUrl) && (
 					<div className="img-block">
 						<div className="img-container">
-							<img width={310} src={`${src}`} alt={'Изображение товара'} />
+							<img
+								width={310}
+								src={`${imageUrl}`}
+								alt={'Изображение товара'}
+							/>
 							<span className="description">На странице товара</span>
 						</div>
 						<div className="img-container">
 							<img
 								width={140}
 								height={180}
-								src={`${src}`}
+								src={`${imageUrl}`}
 								alt={'Изображение на карточке товара'}
 							/>
 							<span className="description">На главной</span>
@@ -51,7 +62,7 @@ const AddPageContainer = ({ className }) => {
 						<div className="img-container">
 							<img
 								width={90}
-								src={`${src}`}
+								src={`${imageUrl}`}
 								alt={'Изображение в корзине'}
 							/>
 							<span className="description">В корзине</span>
@@ -65,8 +76,8 @@ const AddPageContainer = ({ className }) => {
 							className="add-input"
 							placeholder="Вставьте ссылку на изображение"
 							type="text"
-							value={src}
-							onChange={({ target }) => setSrc(target.value)}
+							value={imageUrl}
+							onChange={({ target }) => setimageUrl(target.value)}
 						/>
 					</div>
 					<div className="add-container">
@@ -75,7 +86,7 @@ const AddPageContainer = ({ className }) => {
 							className="add-input"
 							placeholder="Укажите категорию товара"
 							type="text"
-							value={category}
+							value={category.trim()}
 							onChange={({ target }) => setCategory(target.value)}
 						/>
 					</div>
@@ -95,12 +106,12 @@ const AddPageContainer = ({ className }) => {
 							className="add-input"
 							placeholder="Укажите цену товара"
 							type="text"
-							value={price}
+							value={price.trim()}
 							onChange={({ target }) => setPrice(target.value)}
 						/>
 					</div>
 				</div>
-				<GreenButton>
+				<GreenButton onClick={() => addDevice(category, name, imageUrl, price)}>
 					Добавить товар <FontAwesomeIcon icon={faArrowRight} />
 				</GreenButton>
 			</div>
