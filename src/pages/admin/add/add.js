@@ -27,7 +27,7 @@ const AddPageContainer = ({ className }) => {
 	};
 
 	const addDevice = (category, name, imageUrl, price) => {
-		addDeviceAsync(category, name, imageUrl, Number(price));
+		addDeviceAsync(category.trim(), name, imageUrl.trim(), Number(price));
 		setimageUrl('');
 		setCategory('');
 		setName('');
@@ -106,7 +106,7 @@ const AddPageContainer = ({ className }) => {
 							className="add-input"
 							placeholder="Укажите цену товара"
 							type="text"
-							value={price.trim()}
+							value={price}
 							onChange={({ target }) => setPrice(target.value)}
 						/>
 					</div>

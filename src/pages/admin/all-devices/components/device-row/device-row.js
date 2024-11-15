@@ -3,13 +3,14 @@ import { TableRow } from '../table-row/table-row';
 import { faFloppyDisk, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
+import { request } from '../../../../../utils/request';
+import { URL } from '../../../../../constants';
 
-const DeviceRowContainer = ({ className }) => {
+const DeviceRowContainer = ({ className, ...props }) => {
 	const [isEdit, setIsEdit] = useState(false);
-	const [saveChanges, setSaveChanges] = useState(false);
-	const [newName, setNewName] = useState('');
-	const [newPrice, setNewPrice] = useState('');
-	const [newURL, setNewURL] = useState('');
+	const [newName, setNewName] = useState(props.name);
+	const [newPrice, setNewPrice] = useState(props.price);
+	const [newURL, setNewURL] = useState(props.imageUrl);
 
 	const symbolLengthBlock = (string) => {
 		if (string.length >= 17) {
@@ -19,7 +20,17 @@ const DeviceRowContainer = ({ className }) => {
 
 	const handleEditClick = () => {
 		setIsEdit((prev) => !prev);
-		console.log(newURL);
+	};
+
+	const onSave = (id, newName, newPrice, newURL) => {
+		request(`${URL}/device/${id}`, 'PATCH', {
+			name: newName,
+			price: newPrice,
+			imageUrl: newURL,
+		}).then(() => {
+			props.setShouldUpdateDeviceList(!props.shouldUpdateDeviceList);
+			setIsEdit((prev) => !prev);
+		});
 	};
 
 	return (
@@ -51,23 +62,25 @@ const DeviceRowContainer = ({ className }) => {
 				</TableRow>
 			) : (
 				<TableRow border={true}>
-					<div className="category-column">iPhone</div>
-					<div className="name-column">{newName}</div>
-					<div className="price-column">{newPrice}</div>
-					<div className="url-column">{symbolLengthBlock(newURL)}</div>
+					<div className="category-column">{props.category}</div>
+					<div className="name-column">{props.name}</div>
+					<div className="price-column">{props.price}</div>
+					<div className="url-column">{symbolLengthBlock(props.imageUrl)}</div>
 				</TableRow>
 			)}
 			<div className="controls">
 				{isEdit ? (
 					<FontAwesomeIcon
 						icon={faFloppyDisk}
-						onClick={handleEditClick}
+						onClick={() =>
+							onSave(props.id, newName, Number(newPrice), newURL)
+						}
 						size="xl"
 					/>
 				) : (
 					<FontAwesomeIcon icon={faPen} onClick={handleEditClick} size="xl" />
 				)}
-				<FontAwesomeIcon icon={faTrash} size="xl" />
+				<FontAwesomeIcon icon={faTrash} onClick={props.onDelete} size="xl" />
 			</div>
 		</div>
 	);
