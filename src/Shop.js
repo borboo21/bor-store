@@ -37,16 +37,8 @@ export const Shop = () => {
 					<Route path="/admin/add" element={<AddPage />} />
 					<Route path="/login" element={<div>Авторизация</div>} />
 					<Route path="/register" element={<div>Регистрация</div>} />
-					<Route path="/iphone" element={<div>Айфон</div>} />
+					<Route path="/:device" element={<Main />} />
 					<Route path="/:device/:id" element={<DevicePage />} />
-					<Route path="/ipad" element={<div>Айпад</div>} />
-					<Route path="/ipad/:id" element={<div>Айпад товар</div>} />
-					<Route path="/watch/" element={<div>Часы</div>} />
-					<Route path="/watch/:id" element={<div>Часы товар</div>} />
-					<Route path="/airpods/" element={<div>Наушники</div>} />
-					<Route path="/airpods/:id" element={<div>Наушники товар</div>} />
-					<Route path="/macbook/" element={<div>Макбук</div>} />
-					<Route path="/macbook/:id" element={<div>Макбук товар</div>} />
 				</Routes>
 			</Page>
 			<Footer />

@@ -62,6 +62,41 @@
       "name": "iPhone 12",
       "imageUrl": "https://www.apple.com/v/iphone/compare/ah/images/overview/compare_iphone12_blue__evxvj86rzj42_large.jpg",
       "price": 40990
+    },
+    {
+      "id": "ac5f",
+      "category": "MacBook",
+      "name": "MacBook Air 13 M3",
+      "imageUrl": "https://www.apple.com/v/mac/compare/ab/images/overview/compare_macbook_air_mx_silver__9azc0g37x3mm_large.jpg",
+      "price": 119990
+    },
+    {
+      "id": "843c",
+      "category": "MacBook",
+      "name": "MacBook Air 15 M3",
+      "imageUrl": "https://www.apple.com/v/mac/compare/ab/images/overview/compare_macbook_air_mx_15_silver__cdqgxdtq4jde_large.jpg",
+      "price": 139990
+    },
+    {
+      "id": "49ff",
+      "category": "iPad",
+      "name": "iPad Air 6 13\" M2",
+      "imageUrl": "https://www.apple.com/v/ipad/compare/ah/images/overview/ipad_air_13_m2_starlight__e5h5v3ualcia_large.jpg",
+      "price": 64990
+    },
+    {
+      "id": "8c6c",
+      "category": "iPad",
+      "name": "iPad Pro M4",
+      "imageUrl": "https://www.apple.com/v/ipad/compare/ah/images/overview/ipad_pro_13_m4_silver__gk642ojh0hme_large.jpg",
+      "price": 99990
+    },
+    {
+      "id": "ae2d",
+      "category": "iPad",
+      "name": "iPad 10",
+      "imageUrl": "https://www.apple.com/v/ipad/compare/ah/images/overview/ipad_10th_gen_pink__ghg1jgcbqumq_large.jpg",
+      "price": 54990
     }
   ],
   "cart": [],

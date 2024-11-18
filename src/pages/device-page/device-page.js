@@ -70,6 +70,8 @@ const DevicePageContainer = ({ className }) => {
 								className="inCartButton"
 								inCart={false}
 								onClick={handleClick}
+								right={true}
+								place={'20px'}
 							>
 								В корзину <FontAwesomeIcon icon={faArrowRight} />
 							</GreenButton>
@@ -79,6 +81,8 @@ const DevicePageContainer = ({ className }) => {
 									className="outFromCartButton"
 									inCart={true}
 									onClick={onDelete}
+									left={true}
+									place={'200px'}
 								>
 									<FontAwesomeIcon icon={faArrowLeft} />
 									Убрать из корзины
@@ -131,42 +135,6 @@ export const DevicePage = styled(DevicePageContainer)`
 	}
 	.counter {
 		padding-left: 20px;
-	}
-
-	.inCartButton {
-
-	position: relative;
-
-		&:hover {
-			svg {
-				transform: translateX(5px);
-			}
-			}
-			svg {
-				right: 15px;
-				position: absolute;
-				top: 20px;
-				transition: transform 0.15s ease-in-out;
-			}
-		}
-	}
-
-	.outFromCartButton {
-
-	position: relative;
-
-		&:hover {
-			svg {
-				transform: translateX(-5px);
-			}
-			}
-			svg {
-				right: 200px;
-				position: absolute;
-				top: 20px;
-				transition: transform 0.15s ease-in-out;
-			}
-		}
 	}
 	}
 `;

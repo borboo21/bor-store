@@ -1,6 +1,5 @@
 import { CardButton, GreenButton } from '../../components';
 import { faArrowLeft, faArrowRight, faX } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CartItem } from '../../components/cart-item/cart-item';
 import { cartSelector } from '../../selectors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,13 +18,21 @@ const CartContainer = ({ className, ...props }) => {
 				</div>
 				{cart.devices.length === 0 ? (
 					<div className="emptyCart">
-						<img width={200} src="/img/empty-cart.png" alt="empty" />
+						<img width={120} src="/img/empty-cart.png" alt="empty" />
 						<div className="emptyCartDescription">
-							<b>Корзина пустая</b>
-							<span>Добавь любой девайс, чтобы сделать заказ!</span>
+							<b className="empty-text">Корзина пустая</b>
+							<span className="empty-description">
+								Добавь любой девайс, чтобы сделать заказ!
+							</span>
 						</div>
-						<GreenButton className="cartButton" onClick={props.onClose}>
-							<FontAwesomeIcon icon={faArrowLeft} /> Вернуться назад
+						<GreenButton
+							className="cartButton"
+							left={true}
+							place={'320px'}
+							onClick={props.onClose}
+							icon={faArrowLeft}
+						>
+							Вернуться назад
 						</GreenButton>
 					</div>
 				) : (
@@ -56,8 +63,14 @@ const CartContainer = ({ className, ...props }) => {
 									<b>{Math.floor(cart.amount * 0.02)}₽</b>
 								</li>
 							</ul>
-							<GreenButton className="cartButton">
-								Оформить заказ <FontAwesomeIcon icon={faArrowRight} />
+							<GreenButton
+								className="cartButton"
+								right={true}
+								place={'20px'}
+								onClick={props.onClose}
+								icon={faArrowRight}
+							>
+								Оформить заказ
 							</GreenButton>
 						</div>
 					</div>
@@ -90,6 +103,7 @@ export const Cart = styled(CartContainer)`
 
 	.cartHeader {
 		display: flex;
+		align-items: center;
     	justify-content: space-between;
 	}
 
@@ -105,7 +119,15 @@ export const Cart = styled(CartContainer)`
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-}
+	}
+
+	.empty-text {
+		padding: 15px;
+    	font-size: 22px;
+	}
+
+	.empty-description {
+		padding-bottom: 15px;
 	}
 
 	.cartItems {
@@ -152,22 +174,6 @@ export const Cart = styled(CartContainer)`
 			top: -4px;
 			margin: 0 7px;
 		}
-		.cartButton {
-			position: relative;
-
-			&:hover {
-				svg {
-					transform: translateX(5px);
-				}
-			}
-			svg {
-				position: absolute;
-				right: 30px;
-				top: 20px;
-				transition: transform 0.15s ease-in-out;
-			}
-		}
-	}
 
 	.cartName {
 		display: flex;

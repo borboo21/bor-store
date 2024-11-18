@@ -5,3 +5,4 @@ export * from './green-button/green-button';
 export * from './card-item/card-item';
 export * from './counter/counter';
 export * from './breadcrumbs/breadcrumbs';
+export * from './input/input';

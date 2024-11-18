@@ -31,37 +31,43 @@ const CardItemContainer = ({ className, dispatch, ...props }) => {
 
 	return (
 		<div className={className}>
+			<div className="device-image"></div>
 			<Link to={`/${props.category}/${props.id}`}>
-				<img width={140} height={180} src={props.imageUrl} alt="device" />
-				<h5>{props.name}</h5>
+				<img width={170} src={props.imageUrl} alt="device" />
 			</Link>
-			<div className="cardBottom">
-				<div className="price">
-					<span>Цена:</span>
-					<b>{props.price}₽</b>
-				</div>
-				{!inCart ? (
-					<CardButton
-						faIcon={faPlus}
-						color="#ffffff"
-						onClick={handleClickPlus}
-					/>
-				) : (
-					<>
-						<CounterItem id={props.id} price={props.price} />
+			<div className="card-bottom">
+				<h5>{props.name}</h5>
+				<div className="buy-panel">
+					<div className="price">
+						<span>Цена:</span>
+						<b>{props.price}₽</b>
+					</div>
+					{!inCart ? (
 						<CardButton
-							faIcon={faCheck}
-							color="#65ed65"
-							onClick={handleClickDelete}
+							faIcon={faPlus}
+							color="#ffffff"
+							onClick={handleClickPlus}
 						/>
-					</>
-				)}
+					) : (
+						<>
+							<CounterItem id={props.id} price={props.price} />
+							<CardButton
+								faIcon={faCheck}
+								color="#65ed65"
+								onClick={handleClickDelete}
+							/>
+						</>
+					)}
+				</div>
 			</div>
 		</div>
 	);
 };
 
 export const CardItem = styled(CardItemContainer)`
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 	border: 1px solid #ebe5e5;
 	padding: 20px;
 	width: 220px;
@@ -76,14 +82,19 @@ export const CardItem = styled(CardItemContainer)`
 		transform: translateY(-5px);
 	}
 
-	.cardBottom {
+	.card-bottom {
 		display: flex;
-		justify-content: space-between;
-		align-items: center;
+		flex-direction: column;
 	}
 
 	.price {
 		display: flex;
 		flex-direction: column;
+	}
+
+	.buy-panel {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
 `;

@@ -12,19 +12,19 @@ const HeaderContainer = ({ className, ...props }) => (
 			</Link>
 		</div>
 		<div className="navigation">
-			<Link to="/macbook">
-				<h2>Mac</h2>
+			<Link to="/MacBook">
+				<h2>MacBook</h2>
 			</Link>
-			<Link to="/iphone">
+			<Link to="/iPhone">
 				<h2>iPhone</h2>
 			</Link>
-			<Link to="/ipad">
+			<Link to="/iPad">
 				<h2>iPad</h2>
 			</Link>
-			<Link to="/airpods">
+			<Link to="/AirPods">
 				<h2>AirPods</h2>
 			</Link>
-			<Link to="/watch">
+			<Link to="/Watch">
 				<h2>Watch</h2>
 			</Link>
 		</div>

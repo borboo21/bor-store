@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { BreadCrumbs } from '../../../components';
 import { DeviceRow, TableRow } from './components';
-
 import { URL } from '../../../constants';
 import { useEffect, useState } from 'react';
 import { request } from '../../../utils/request';
@@ -20,8 +19,6 @@ const AllPageContainer = ({ className }) => {
 			setDevice(deviceRes);
 		});
 	}, [shouldUpdateDeviceList]);
-
-	console.log(shouldUpdateDeviceList);
 
 	const onDelete = (deviceId) => {
 		request(`${URL}/device/${deviceId}`, 'DELETE').then(() => {
@@ -67,6 +64,9 @@ export const AllPage = styled(AllPageContainer)`
 	margin: 0 auto;
 	font-size: 18px;
 
+	.all-page-header {
+		padding-bottom: 20px;
+	}
 	.all-page-main {
 		display: flex;
 		flex-direction: column;
