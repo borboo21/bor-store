@@ -25,16 +25,20 @@ const CardItemContainer = ({ className, dispatch, ...props }) => {
 		);
 	};
 
-	const handleClickDelete = () => {
-		dispatch(deleteFromCartAsync(props.id, props.price, props.quantity));
+	const handleClickDelete = (id) => {
+		const quantityInCart = cart.devices.find(
+			(cartItem) => cartItem.id === id,
+		).quantity;
+		dispatch(deleteFromCartAsync(props.id, props.price, quantityInCart));
 	};
 
 	return (
 		<div className={className}>
-			<div className="device-image"></div>
-			<Link to={`/${props.category}/${props.id}`}>
-				<img width={170} src={props.imageUrl} alt="device" />
-			</Link>
+			<div className="device-image">
+				<Link to={`/${props.category}/${props.id}`}>
+					<img width={170} src={props.imageUrl} alt="device" />
+				</Link>
+			</div>
 			<div className="card-bottom">
 				<h5>{props.name}</h5>
 				<div className="buy-panel">
@@ -54,7 +58,7 @@ const CardItemContainer = ({ className, dispatch, ...props }) => {
 							<CardButton
 								faIcon={faCheck}
 								color="#65ed65"
-								onClick={handleClickDelete}
+								onClick={() => handleClickDelete(props.id)}
 							/>
 						</>
 					)}
@@ -67,7 +71,7 @@ const CardItemContainer = ({ className, dispatch, ...props }) => {
 export const CardItem = styled(CardItemContainer)`
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: flex-end;
 	border: 1px solid #ebe5e5;
 	padding: 20px;
 	width: 220px;

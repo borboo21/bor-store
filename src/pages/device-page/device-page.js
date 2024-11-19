@@ -1,6 +1,5 @@
 import { BreadCrumbs, CounterItem, GreenButton } from '../../components';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
@@ -68,23 +67,24 @@ const DevicePageContainer = ({ className }) => {
 						{!inCart ? (
 							<GreenButton
 								className="inCartButton"
-								inCart={false}
+								inсart={false}
 								onClick={handleClick}
 								right={true}
-								place={'20px'}
+								place={20}
+								icon={faArrowRight}
 							>
-								В корзину <FontAwesomeIcon icon={faArrowRight} />
+								В корзину
 							</GreenButton>
 						) : (
 							<>
 								<GreenButton
 									className="outFromCartButton"
-									inCart={true}
+									inсart={true}
 									onClick={onDelete}
 									left={true}
-									place={'200px'}
+									place={200}
+									icon={faArrowLeft}
 								>
-									<FontAwesomeIcon icon={faArrowLeft} />
 									Убрать из корзины
 								</GreenButton>
 								<CounterItem
@@ -104,7 +104,7 @@ const DevicePageContainer = ({ className }) => {
 export const DevicePage = styled(DevicePageContainer)`
 	.device-card {
 		display: flex;
-		align-items: flex-start;
+		align-items: center;
 	}
 
 	.device-page-header {

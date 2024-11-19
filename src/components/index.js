@@ -6,3 +6,5 @@ export * from './card-item/card-item';
 export * from './counter/counter';
 export * from './breadcrumbs/breadcrumbs';
 export * from './input/input';
+export * from './pagination/pagination';
+export * from './button/button';

@@ -62,24 +62,28 @@ const AddPageContainer = ({ className }) => {
 				)}
 				<div className="input-containers">
 					<Input
+						width={400}
 						value={imageUrl}
 						setValue={setImageUrl}
 						icon={faLink}
 						placeholder={'Вставьте ссылку на изображение'}
 					/>
 					<Input
+						width={400}
 						value={category}
 						setValue={setCategory}
 						icon={faList}
 						placeholder={'Укажите категорию товара'}
 					/>
 					<Input
+						width={400}
 						value={name}
 						setValue={setName}
 						icon={faTag}
 						placeholder={'Укажите имя товара'}
 					/>
 					<Input
+						width={400}
 						value={price}
 						setValue={setPrice}
 						icon={faRubleSign}
@@ -89,7 +93,7 @@ const AddPageContainer = ({ className }) => {
 				<GreenButton
 					onClick={() => addDevice(category, name, imageUrl, price)}
 					right={true}
-					place={'20px'}
+					place={20}
 					icon={faArrowRight}
 				>
 					Добавить товар

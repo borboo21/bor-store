@@ -5,48 +5,101 @@ import {
 	faMagnifyingGlass,
 	faRubleSign,
 } from '@fortawesome/free-solid-svg-icons';
-import { CardItem } from '../../components';
-import { useEffect, useState } from 'react';
-import { URL } from '../../constants';
+import { Button, CardItem, Input, Pagination } from '../../components';
+import { useEffect, useMemo, useState } from 'react';
+import { PAGINATION_LIMIT, URL } from '../../constants';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import { loadCartAsync } from '../../actions/load-cart-async';
+import { request } from '../../utils/request';
+import { debounce } from '../../utils';
+import styled from 'styled-components';
+import { useParams } from 'react-router';
 
 export const MainContainer = ({ className }) => {
-	const [items, setItems] = useState([]);
+	const [devices, setDevices] = useState([]);
+	const [category, setCategory] = useState('');
+	const [page, setPage] = useState(1);
+	const [shouldSearch, setShouldSearch] = useState('');
+	const [search, setSearch] = useState('');
+	const [lastPage, setLastPage] = useState(1);
+	const [sortPrice, setSortPrice] = useState('');
 	const dispatch = useDispatch();
+	const params = useParams();
 
 	useEffect(() => {
-		fetch(`${URL}/device`)
-			.then((res) => {
-				return res.json();
-			})
-			.then((json) => {
+		const getByCategory = () =>
+			request(
+				`${URL}/device?name=${search}&category=${category}&_page=${page}&_per_page=${PAGINATION_LIMIT}${sortPrice}`,
+			).then(({ data: devices, last }) => {
 				dispatch(loadCartAsync());
-				setItems(json);
+				setDevices(devices);
+				setLastPage(last);
 			});
-	}, [dispatch]);
+		const getMain = () =>
+			request(
+				`${URL}/device?name=${search}&_page=${page}&_per_page=${PAGINATION_LIMIT}${sortPrice}`,
+			).then(({ data: devices, last }) => {
+				dispatch(loadCartAsync());
+				setDevices(devices);
+				setLastPage(last);
+			});
+		setCategory(params.device);
+		params.device ? getByCategory() : getMain();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch, category, page, sortPrice, shouldSearch, params]);
+
+	const startDelayedSearch = useMemo(() => debounce(setShouldSearch, 2000), []);
+
+	const onSearch = ({ target }) => {
+		setSearch(target.value);
+		startDelayedSearch(!shouldSearch);
+	};
+
+	const onSortAsc = () => {
+		if (sortPrice === '&_sort=price') {
+			setSortPrice('');
+		} else {
+			setSortPrice('&_sort=price');
+		}
+	};
+
+	const onSortDesc = () => {
+		if (sortPrice === '&_sort=price&_order=desc') {
+			setSortPrice('');
+		} else {
+			setSortPrice('&_sort=price&_order=desc');
+		}
+	};
 
 	return (
 		<div className={className}>
 			<div className="main-header">
-				<div className="search-bar">
-					<FontAwesomeIcon icon={faMagnifyingGlass} />
-					<input className="search-input" placeholder="Поиск..." type="text" />
-				</div>
+				<Input
+					width={250}
+					value={search}
+					onChange={onSearch}
+					placeholder={'Поиск'}
+					icon={faMagnifyingGlass}
+				/>
 				<div className="sort-controls">
-					<button className="price-button">
-						<FontAwesomeIcon icon={faRubleSign} />
+					<Button
+						onClick={onSortAsc}
+						icon={faRubleSign}
+						isactive={sortPrice === '&_sort=price'}
+					>
 						<FontAwesomeIcon icon={faArrowUp} />
-					</button>
-					<button className="price-button">
-						<FontAwesomeIcon icon={faRubleSign} />
+					</Button>
+					<Button
+						onClick={onSortDesc}
+						icon={faRubleSign}
+						isactive={sortPrice === '&_sort=price&_order=desc'}
+					>
 						<FontAwesomeIcon icon={faArrowDown} />
-					</button>
+					</Button>
 				</div>
 			</div>
 			<div className="card-container">
-				{items.map((item) => (
+				{devices.map((item) => (
 					<CardItem
 						dispatch={dispatch}
 						key={item.id}
@@ -59,6 +112,7 @@ export const MainContainer = ({ className }) => {
 					/>
 				))}
 			</div>
+			<Pagination page={page} lastPage={lastPage} setPage={setPage} />
 		</div>
 	);
 };
@@ -73,20 +127,6 @@ export const Main = styled(MainContainer)`
 		padding: 0 0 20px;
 		display: flex;
 		justify-content: center;
-	}
-
-	.search-bar {
-		border: 1px solid #ebe5e5;
-		border-radius: 10px;
-		padding: 0 15px;
-	}
-
-	.search-input {
-		border: none;
-		outline: none;
-		padding: 13px;
-		font-size: 16px;
-		width: 200px;
 	}
 
 	h5 {
@@ -110,25 +150,5 @@ export const Main = styled(MainContainer)`
 
 	.sort-controls {
 		padding-left: 40px;
-	}
-
-	.price-button {
-		border: 1px solid #ebe5e5;
-		border-radius: 10px;
-		margin: 0 10px 0 10px;
-		width: 60px;
-		height: 45px;
-		background-color: #ffffff;
-		cursor: pointer;
-
-		opacity: 0.5;
-		transition: opacity 0.2s ease-in-out;
-
-		&: hover {
-			opacity: 1;
-		}
-		&: active {
-			background-color: #ebe5e5;
-		}
 	}
 `;

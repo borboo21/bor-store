@@ -28,7 +28,7 @@ const CartContainer = ({ className, ...props }) => {
 						<GreenButton
 							className="cartButton"
 							left={true}
-							place={'320px'}
+							place={320}
 							onClick={props.onClose}
 							icon={faArrowLeft}
 						>
@@ -66,7 +66,7 @@ const CartContainer = ({ className, ...props }) => {
 							<GreenButton
 								className="cartButton"
 								right={true}
-								place={'20px'}
+								place={20}
 								onClick={props.onClose}
 								icon={faArrowRight}
 							>

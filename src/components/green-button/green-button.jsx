@@ -9,6 +9,7 @@ const GreenButtonContainer = ({
 	left,
 	place,
 	icon,
+	inсart,
 	...props
 }) => (
 	<button className={className} onClick={onClick} {...props}>
@@ -33,7 +34,7 @@ export const GreenButton = styled(GreenButtonContainer)`
 	position: relative;
 
 	&:hover {
-		background-color: ${(props) => (props.inCart ? '#d59454e3' : '#9dd554e3')};
+		background-color: ${(props) => (props.inсart ? '#d59454e3' : '#9dd554e3')};
 		svg {
 			transform: ${(props) =>
 				props.right ? 'translateX(5px)' : 'translateX(-5px)'};
@@ -44,7 +45,7 @@ export const GreenButton = styled(GreenButtonContainer)`
 		}
 	}
 	svg {
-		right: ${(props) => `${props.place}`};
+		right: ${(props) => `${props.place}px`};
 		position: absolute;
 		top: 20px;
 		transition: transform 0.15s ease-in-out;
