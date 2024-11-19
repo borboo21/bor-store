@@ -99,20 +99,30 @@ export const MainContainer = ({ className }) => {
 				</div>
 			</div>
 			<div className="card-container">
-				{devices.map((item) => (
-					<CardItem
-						dispatch={dispatch}
-						key={item.id}
-						category={item.category}
-						name={item.name}
-						price={item.price}
-						imageUrl={item.imageUrl}
-						id={item.id}
-						onPlus={item.onPlus}
-					/>
-				))}
+				{devices.length > 0 ? (
+					devices.map((item) => (
+						<CardItem
+							dispatch={dispatch}
+							key={item.id}
+							category={item.category}
+							name={item.name}
+							price={item.price}
+							imageUrl={item.imageUrl}
+							id={item.id}
+							onPlus={item.onPlus}
+						/>
+					))
+				) : (
+					<div className="no-device-found">
+						Не найдено ни одного устройства, попробуйте снова.
+					</div>
+				)}
 			</div>
-			<Pagination page={page} lastPage={lastPage} setPage={setPage} />
+			{devices.length ? (
+				<Pagination page={page} lastPage={lastPage} setPage={setPage} />
+			) : (
+				''
+			)}
 		</div>
 	);
 };
@@ -150,5 +160,9 @@ export const Main = styled(MainContainer)`
 
 	.sort-controls {
 		padding-left: 40px;
+	}
+
+	.no-device-found {
+		font-size: large;
 	}
 `;
