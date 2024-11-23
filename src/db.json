@@ -99,7 +99,16 @@
       "price": 54990
     }
   ],
-  "cart": [],
+  "cart": [
+    {
+      "id": "5",
+      "category": "iPhone",
+      "imageUrl": "https://www.apple.com/v/iphone/compare/ah/images/overview/compare_iphone15_pink__e731ayt2rc66_large.jpg",
+      "name": "iPhone 15",
+      "price": 74990,
+      "quantity": 1
+    }
+  ],
   "users": [
     {
       "id": "001",
