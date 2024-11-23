@@ -12,8 +12,8 @@ import { useDispatch } from 'react-redux';
 import { loadCartAsync } from '../../actions/load-cart-async';
 import { request } from '../../utils/request';
 import { debounce } from '../../utils';
-import styled from 'styled-components';
 import { useParams } from 'react-router';
+import styled from 'styled-components';
 
 export const MainContainer = ({ className }) => {
 	const [devices, setDevices] = useState([]);
@@ -23,10 +23,12 @@ export const MainContainer = ({ className }) => {
 	const [search, setSearch] = useState('');
 	const [lastPage, setLastPage] = useState(1);
 	const [sortPrice, setSortPrice] = useState('');
+	const [isLoading, setIsLoading] = useState(true);
 	const dispatch = useDispatch();
 	const params = useParams();
 
 	useEffect(() => {
+		setIsLoading(true);
 		const getByCategory = () =>
 			request(
 				`${URL}/device?name=${search}&category=${category}&_page=${page}&_per_page=${PAGINATION_LIMIT}${sortPrice}`,
@@ -34,6 +36,7 @@ export const MainContainer = ({ className }) => {
 				dispatch(loadCartAsync());
 				setDevices(devices);
 				setLastPage(last);
+				setIsLoading(false);
 			});
 		const getMain = () =>
 			request(
@@ -42,6 +45,7 @@ export const MainContainer = ({ className }) => {
 				dispatch(loadCartAsync());
 				setDevices(devices);
 				setLastPage(last);
+				setIsLoading(false);
 			});
 		setCategory(params.device);
 		params.device ? getByCategory() : getMain();
@@ -110,6 +114,7 @@ export const MainContainer = ({ className }) => {
 							imageUrl={item.imageUrl}
 							id={item.id}
 							onPlus={item.onPlus}
+							loading={isLoading}
 						/>
 					))
 				) : (

@@ -27,7 +27,6 @@ const AddPageContainer = ({ className }) => {
 			return false;
 		}
 	};
-	console.log(category);
 
 	const onCategoryChange = ({ target }) => {
 		setCategory(target.value);

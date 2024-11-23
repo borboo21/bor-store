@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AuthFormError, GreenButton, Input } from '../../components';
+import { AuthFormError, GreenButton } from '../../components';
 import { useResetForm } from '../../hooks';
 import { setUser } from '../../actions';
 import { selectUserRole } from '../../selectors';
@@ -35,13 +35,6 @@ const regFormSchema = yup.object().shape({
 		.required('Заполните повтор пароля')
 		.oneOf([yup.ref('password'), null], 'Пароли не совпадают'),
 });
-
-const StyledLink = styled(Link)`
-	text-align: center;
-	text-decoration: underline;
-	margin: 20px 0;
-	font-size: 18px;
-`;
 
 const RegistrationContainer = ({ className }) => {
 	const {
@@ -117,7 +110,6 @@ const RegistrationContainer = ({ className }) => {
 					Войти
 				</GreenButton>
 				{errorMessage && <AuthFormError>{errorMessage}</AuthFormError>}
-				<StyledLink to="/register">Регистрация</StyledLink>
 			</form>
 		</div>
 	);

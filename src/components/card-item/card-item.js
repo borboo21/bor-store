@@ -6,8 +6,9 @@ import { addCartAsync, deleteFromCartAsync } from '../../actions';
 import { useSelector } from 'react-redux';
 import { cartSelector } from '../../selectors';
 import styled from 'styled-components';
+import Skeleton from '../skeleton/skeleton';
 
-const CardItemContainer = ({ className, dispatch, ...props }) => {
+const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 	const cart = useSelector(cartSelector);
 
 	const inCart = cart.devices.some((device) => device.id === props.id);
@@ -34,36 +35,42 @@ const CardItemContainer = ({ className, dispatch, ...props }) => {
 
 	return (
 		<div className={className}>
-			<div className="device-image">
-				<Link to={`/${props.category}/${props.id}`}>
-					<img width={170} src={props.imageUrl} alt="device" />
-				</Link>
-			</div>
-			<div className="card-bottom">
-				<h5>{props.name}</h5>
-				<div className="buy-panel">
-					<div className="price">
-						<span>Цена:</span>
-						<b>{props.price}₽</b>
+			{loading ? (
+				<Skeleton />
+			) : (
+				<>
+					<div className="device-image">
+						<Link to={`/${props.category}/${props.id}`}>
+							<img width={170} src={props.imageUrl} alt="device" />
+						</Link>
 					</div>
-					{!inCart ? (
-						<CardButton
-							faIcon={faPlus}
-							color="#ffffff"
-							onClick={handleClickPlus}
-						/>
-					) : (
-						<>
-							<CounterItem id={props.id} price={props.price} />
-							<CardButton
-								faIcon={faCheck}
-								color="#65ed65"
-								onClick={() => handleClickDelete(props.id)}
-							/>
-						</>
-					)}
-				</div>
-			</div>
+					<div className="card-bottom">
+						<h5>{props.name}</h5>
+						<div className="buy-panel">
+							<div className="price">
+								<span>Цена:</span>
+								<b>{props.price}₽</b>
+							</div>
+							{!inCart ? (
+								<CardButton
+									faIcon={faPlus}
+									color="#ffffff"
+									onClick={handleClickPlus}
+								/>
+							) : (
+								<>
+									<CounterItem id={props.id} price={props.price} />
+									<CardButton
+										faIcon={faCheck}
+										color="#65ed65"
+										onClick={() => handleClickDelete(props.id)}
+									/>
+								</>
+							)}
+						</div>
+					</div>
+				</>
+			)}
 		</div>
 	);
 };

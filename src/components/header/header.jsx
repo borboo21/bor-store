@@ -68,7 +68,6 @@ export const Header = styled(HeaderContainer)`
 	z-index: 1;
 
 	.logo {
-		width: 150px;
 		display: flex;
 		align-items: center;
 	}
