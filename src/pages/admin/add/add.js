@@ -10,10 +10,12 @@ import {
 import styled from 'styled-components';
 import { addDeviceAsync } from '../../../actions';
 import { Image } from './components';
+import { CATEGORIES } from '../../../constants';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const AddPageContainer = ({ className }) => {
 	const [imageUrl, setImageUrl] = useState('');
-	const [category, setCategory] = useState('');
+	const [category, setCategory] = useState('iPhone');
 	const [name, setName] = useState('');
 	const [price, setPrice] = useState(0);
 
@@ -25,9 +27,14 @@ const AddPageContainer = ({ className }) => {
 			return false;
 		}
 	};
+	console.log(category);
+
+	const onCategoryChange = ({ target }) => {
+		setCategory(target.value);
+	};
 
 	const addDevice = (category, name, imageUrl, price) => {
-		addDeviceAsync(category.trim(), name, imageUrl.trim(), Number(price));
+		addDeviceAsync(category, name, imageUrl.trim(), Number(price));
 		setImageUrl('');
 		setCategory('');
 		setName('');
@@ -68,13 +75,16 @@ const AddPageContainer = ({ className }) => {
 						icon={faLink}
 						placeholder={'Вставьте ссылку на изображение'}
 					/>
-					<Input
-						width={400}
-						value={category}
-						setValue={setCategory}
-						icon={faList}
-						placeholder={'Укажите категорию товара'}
-					/>
+					<div className="select-div">
+						<FontAwesomeIcon color="gray" icon={faList} />
+						<select value={category} onChange={onCategoryChange}>
+							{CATEGORIES.map((categoryName, index) => (
+								<option key={index} value={categoryName}>
+									{categoryName}
+								</option>
+							))}
+						</select>
+					</div>
 					<Input
 						width={400}
 						value={name}
@@ -120,6 +130,24 @@ export const AddPage = styled(AddPageContainer)`
 		align-items: flex-start;
 		flex-direction: column;
 		margin-top: 20px;
+	}
+
+	.select-div {
+		display: flex;
+		align-items: center;
+		border: 1px solid #ebe5e5;
+		border-radius: 10px;
+		padding: 0 15px;
+		margin-bottom: 20px;
+		width: 400px;
+	}
+
+	select {
+		border: none;
+		outline: none;
+		padding: 13px;
+		font-size: 16px;
+		width: 300px;
 	}
 
 	button {

@@ -24,6 +24,8 @@ const inputContainer = ({
 );
 
 export const Input = styled(inputContainer)`
+	display: flex;
+	align-items: center;
 	border: 1px solid #ebe5e5;
 	border-radius: 10px;
 	padding: 0 15px;

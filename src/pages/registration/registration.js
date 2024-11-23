@@ -1,0 +1,152 @@
+import { useState } from 'react';
+import { get, useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, Navigate } from 'react-router-dom';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { AuthFormError, GreenButton, Input } from '../../components';
+import { useResetForm } from '../../hooks';
+import { setUser } from '../../actions';
+import { selectUserRole } from '../../selectors';
+import { ROLE } from '../../constants';
+import { request } from '../../utils/request';
+import styled from 'styled-components';
+import { faArrowRight, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+const regFormSchema = yup.object().shape({
+	login: yup
+		.string()
+		.required('Заполните логин')
+		.matches(/^\w+$/, 'Неверно заполнен логин. Допускаются только буквы и цифры')
+		.min(3, 'Неверно заполнен логин. Минимум 3 символа')
+		.max(15, 'Неверно заполнен логин.Максимум 15 символов'),
+	password: yup
+		.string()
+		.required('Заполните пароль')
+		.matches(
+			/^[\w#%]+$/,
+			'Неверно заполнен пароль. Допускаются буквы, цифры и знаки #, %',
+		)
+		.min(6, 'Неверно заполнен пароль. Минимум 6 символов')
+		.max(30, 'Неверно заполнен пароль.Максимум 30 символов'),
+	passCheck: yup
+		.string()
+		.required('Заполните повтор пароля')
+		.oneOf([yup.ref('password'), null], 'Пароли не совпадают'),
+});
+
+const StyledLink = styled(Link)`
+	text-align: center;
+	text-decoration: underline;
+	margin: 20px 0;
+	font-size: 18px;
+`;
+
+const RegistrationContainer = ({ className }) => {
+	const {
+		register,
+		reset,
+		handleSubmit,
+		formState: { errors },
+		getValues,
+	} = useForm({
+		defaultValues: {
+			login: '',
+			password: '',
+			passCheck: '',
+		},
+		resolver: yupResolver(regFormSchema),
+	});
+
+	const [serverError, setServerError] = useState(null);
+
+	const dispatch = useDispatch();
+
+	const roleId = useSelector(selectUserRole);
+
+	useResetForm(reset);
+
+	const onSubmit = ({ login, password, passCheck }) =>
+		console.log(login, password, passCheck);
+
+	const formError =
+		errors?.login?.message || errors?.password?.message || errors?.passCheck?.message;
+	const errorMessage = formError || serverError;
+
+	if (roleId !== ROLE.GUEST) {
+		return <Navigate to="/" />;
+	}
+	console.log(getValues());
+
+	return (
+		<div className={className}>
+			<h2>Регистрация</h2>
+			<form onSubmit={handleSubmit(onSubmit)}>
+				<div className="input-auth">
+					<FontAwesomeIcon icon={faUser} color="gray" />
+					<input
+						type="text"
+						placeholder="Логин..."
+						{...register('login', {
+							onChange: () => setServerError(null),
+						})}
+					/>
+				</div>
+				<div className="input-auth">
+					<FontAwesomeIcon icon={faLock} color="gray" />
+					<input
+						type="password"
+						placeholder="Пароль..."
+						{...register('password', {
+							onChange: () => setServerError(null),
+						})}
+					/>
+				</div>
+				<div className="input-auth">
+					<FontAwesomeIcon icon={faLock} color="gray" />
+					<input
+						type="password"
+						placeholder="Проверка пароля..."
+						{...register('passCheck', {
+							onChange: () => setServerError(null),
+						})}
+					/>
+				</div>
+				<GreenButton place={20} right={true} icon={faArrowRight} type={'submit'}>
+					Войти
+				</GreenButton>
+				{errorMessage && <AuthFormError>{errorMessage}</AuthFormError>}
+				<StyledLink to="/register">Регистрация</StyledLink>
+			</form>
+		</div>
+	);
+};
+
+export const Registration = styled(RegistrationContainer)`
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+
+	.input-auth {
+		display: flex;
+		align-items: center;
+		border: 1px solid #ebe5e5;
+		border-radius: 10px;
+		padding: 0 15px;
+		margin-bottom: 20px;
+	}
+
+	input {
+		border: none;
+		outline: none;
+		padding: 13px;
+		font-size: 16px;
+	}
+
+	& > form {
+		display: flex;
+		flex-direction: column;
+		width: 260px;
+	}
+`;

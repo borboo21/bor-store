@@ -88,6 +88,7 @@ export const Cart = styled(CartContainer)`
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 1;
+	overFlow: hidden;
 
 	.drawer {
 		display: flex;
@@ -134,6 +135,7 @@ export const Cart = styled(CartContainer)`
 		flex: 1;
 		overflow: auto;
 		margin-bottom: 40px;
+		height: 55%;
 	}
 
 	.cartItem {
@@ -142,10 +144,9 @@ export const Cart = styled(CartContainer)`
 		justify-content: space-between;
 		border: 1px solid #ebe5e5;
 		border-radius: 20px;
-		overflow: hidden;
 		padding: 20px;
 		margin-bottom: 20px;
-	}
+		}
 
 	.deviceInfo {
 		margin-right: 10px;

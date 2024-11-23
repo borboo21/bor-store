@@ -76,7 +76,6 @@ export const Header = styled(HeaderContainer)`
 	& .navigation {
 		display: flex;
 		align-items: center;
-		padding-left: 85px;
 	}
 
 	& .control-panel {

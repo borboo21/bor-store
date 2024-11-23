@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router';
 import { Footer, Header } from './components';
-import { Cart, DevicePage, Main } from './pages';
+import { Authorization, Cart, DevicePage, Main, Registration } from './pages';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { AdminPage, AddPage, AllPage } from './pages/admin';
@@ -35,8 +35,8 @@ export const Shop = () => {
 					<Route path="/admin" element={<AdminPage />} />
 					<Route path="/admin/all" element={<AllPage />} />
 					<Route path="/admin/add" element={<AddPage />} />
-					<Route path="/login" element={<div>Авторизация</div>} />
-					<Route path="/register" element={<div>Регистрация</div>} />
+					<Route path="/login" element={<Authorization />} />
+					<Route path="/register" element={<Registration />} />
 					<Route path="/:device" element={<Main />} />
 					<Route path="/:device/:id" element={<DevicePage />} />
 				</Routes>

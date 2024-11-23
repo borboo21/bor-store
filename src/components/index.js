@@ -8,3 +8,4 @@ export * from './breadcrumbs/breadcrumbs';
 export * from './input/input';
 export * from './pagination/pagination';
 export * from './button/button';
+export * from './auth-form-error/auth-form-error';

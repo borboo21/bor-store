@@ -10,9 +10,10 @@ const GreenButtonContainer = ({
 	place,
 	icon,
 	inсart,
+	type,
 	...props
 }) => (
-	<button className={className} onClick={onClick} {...props}>
+	<button className={className} onClick={onClick} type={type} {...props}>
 		{left ? <FontAwesomeIcon icon={icon} /> : ''}
 		{children}
 		{right ? <FontAwesomeIcon icon={icon} /> : ''}
