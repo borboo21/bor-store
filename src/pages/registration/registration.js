@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { get, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AuthFormError, GreenButton } from '../../components';
@@ -42,7 +42,6 @@ const RegistrationContainer = ({ className }) => {
 		reset,
 		handleSubmit,
 		formState: { errors },
-		getValues,
 	} = useForm({
 		defaultValues: {
 			login: '',
@@ -60,8 +59,16 @@ const RegistrationContainer = ({ className }) => {
 
 	useResetForm(reset);
 
-	const onSubmit = ({ login, password, passCheck }) =>
-		console.log(login, password, passCheck);
+	const onSubmit = ({ login, password }) =>
+		request('/register', 'POST', { login, password }).then(({ error, user }) => {
+			if (error) {
+				setServerError(`Ошибка запроса: ${error}`);
+				return;
+			}
+
+			dispatch(setUser(user));
+			sessionStorage.setItem('userData', JSON.stringify(user));
+		});
 
 	const formError =
 		errors?.login?.message || errors?.password?.message || errors?.passCheck?.message;
@@ -70,7 +77,6 @@ const RegistrationContainer = ({ className }) => {
 	if (roleId !== ROLE.GUEST) {
 		return <Navigate to="/" />;
 	}
-	console.log(getValues());
 
 	return (
 		<div className={className}>

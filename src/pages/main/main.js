@@ -7,7 +7,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Button, CardItem, Input, Pagination } from '../../components';
 import { useEffect, useMemo, useState } from 'react';
-import { PAGINATION_LIMIT, URL } from '../../constants';
 import { useDispatch } from 'react-redux';
 import { loadCartAsync } from '../../actions/load-cart-async';
 import { request } from '../../utils/request';
@@ -31,22 +30,24 @@ export const MainContainer = ({ className }) => {
 		setIsLoading(true);
 		const getByCategory = () =>
 			request(
-				`${URL}/device?name=${search}&category=${category}&_page=${page}&_per_page=${PAGINATION_LIMIT}${sortPrice}`,
-			).then(({ data: devices, last }) => {
-				dispatch(loadCartAsync());
+				`/device?search=${search}&category=${category}&page=${page}${sortPrice}`,
+			).then(({ data: { devices, lastPage } }) => {
+				//dispatch(loadCartAsync());
 				setDevices(devices);
-				setLastPage(last);
+				setLastPage(lastPage);
+				setPage(1);
 				setIsLoading(false);
 			});
 		const getMain = () =>
-			request(
-				`${URL}/device?name=${search}&_page=${page}&_per_page=${PAGINATION_LIMIT}${sortPrice}`,
-			).then(({ data: devices, last }) => {
-				dispatch(loadCartAsync());
-				setDevices(devices);
-				setLastPage(last);
-				setIsLoading(false);
-			});
+			request(`/device?search=${search}&page=${page}${sortPrice}`).then(
+				({ data: { devices, lastPage } }) => {
+					//dispatch(loadCartAsync());
+					console.log(devices);
+					setDevices(devices);
+					setLastPage(lastPage);
+					setIsLoading(false);
+				},
+			);
 		setCategory(params.device);
 		params.device ? getByCategory() : getMain();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,18 +61,18 @@ export const MainContainer = ({ className }) => {
 	};
 
 	const onSortAsc = () => {
-		if (sortPrice === '&_sort=price') {
+		if (sortPrice === '&sorting=1') {
 			setSortPrice('');
 		} else {
-			setSortPrice('&_sort=price');
+			setSortPrice('&sorting=1');
 		}
 	};
 
 	const onSortDesc = () => {
-		if (sortPrice === '&_sort=price&_order=desc') {
+		if (sortPrice === '&sorting=-1') {
 			setSortPrice('');
 		} else {
-			setSortPrice('&_sort=price&_order=desc');
+			setSortPrice('&sorting=-1');
 		}
 	};
 
@@ -89,14 +90,14 @@ export const MainContainer = ({ className }) => {
 					<Button
 						onClick={onSortAsc}
 						icon={faRubleSign}
-						isactive={sortPrice === '&_sort=price'}
+						isactive={sortPrice === '&sorting=1'}
 					>
 						<FontAwesomeIcon icon={faArrowUp} />
 					</Button>
 					<Button
 						onClick={onSortDesc}
 						icon={faRubleSign}
-						isactive={sortPrice === '&_sort=price&_order=desc'}
+						isactive={sortPrice === '&sorting=-1'}
 					>
 						<FontAwesomeIcon icon={faArrowDown} />
 					</Button>
@@ -107,12 +108,12 @@ export const MainContainer = ({ className }) => {
 					devices.map((item) => (
 						<CardItem
 							dispatch={dispatch}
-							key={item.id}
+							key={item._id}
 							category={item.category}
 							name={item.name}
 							price={item.price}
 							imageUrl={item.imageUrl}
-							id={item.id}
+							id={item._id}
 							onPlus={item.onPlus}
 							loading={isLoading}
 						/>

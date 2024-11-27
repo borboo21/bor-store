@@ -1,9 +1,11 @@
 import { Route, Routes } from 'react-router';
 import { Footer, Header } from './components';
 import { Authorization, Cart, DevicePage, Main, Registration } from './pages';
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AdminPage, AddPage, AllPage } from './pages/admin';
+import { useDispatch } from 'react-redux';
+import { setUser } from './actions';
 
 const AppColumn = styled.div`
 	display: flex;
@@ -24,6 +26,23 @@ const Page = styled.div`
 `;
 
 export const Shop = () => {
+	const dispatch = useDispatch();
+
+	useLayoutEffect(() => {
+		const currentUserDataJson = sessionStorage.getItem('userData');
+		if (!currentUserDataJson) {
+			return;
+		}
+
+		const currentUserData = JSON.parse(currentUserDataJson);
+
+		dispatch(
+			setUser({ ...currentUserData, roleId: Number(currentUserData.roleId) }, [
+				dispatch,
+			]),
+		);
+	});
+
 	const [cartOpened, setCartOpened] = useState(false);
 	return (
 		<AppColumn>

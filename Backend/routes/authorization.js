@@ -32,7 +32,7 @@ router.post('/login', async (req, res) => {
 });
 // Выход
 router.post('/logout', (req, res) => {
-	res.cookie('token', '', { httpOnly: true }).send();
+	res.cookie('token', '', { httpOnly: true }).send({});
 });
 
 module.exports = router;

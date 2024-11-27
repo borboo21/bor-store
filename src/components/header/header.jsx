@@ -1,16 +1,29 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBasketShopping, faGear, faUser } from '@fortawesome/free-solid-svg-icons';
+import {
+	faBasketShopping,
+	faGear,
+	faUser,
+	faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import { HeadLink } from './head-link/head-link';
+import { cartSelector, userSelector } from '../../selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { ItemsInCart } from './items-in-cart/items-in-cart';
+import { logout } from '../../actions';
 import myIcon from './logo/bor-store.png';
 import styled from 'styled-components';
-import { HeadLink } from './head-link/head-link';
-import { cartSelector } from '../../selectors';
-import { useSelector } from 'react-redux';
-import { ItemsInCart } from './items-in-cart/items-in-cart';
 
 const HeaderContainer = ({ className, ...props }) => {
+	const dispatch = useDispatch();
 	const cart = useSelector(cartSelector);
+	const user = useSelector(userSelector);
 	const quantityAmount = cart.devices.reduce((sum, device) => sum + device.quantity, 0);
+
+	const onLogout = () => {
+		dispatch(logout());
+		sessionStorage.removeItem('userData');
+	};
 	return (
 		<header className={className}>
 			<div className="logo">
@@ -37,10 +50,16 @@ const HeaderContainer = ({ className, ...props }) => {
 			</div>
 			<div className="control-panel">
 				<div className="icon-container">
-					<HeadLink to="admin" icon={faGear} />
-					<HeadLink to="login" icon={faUser}>
-						<span>Nikita Borisov</span>
-					</HeadLink>
+					{user.roleId === 0 ? <HeadLink to="admin" icon={faGear} /> : ''}
+					{user.login ? (
+						<div className="user" onClick={onLogout} icon={faUser}>
+							<FontAwesomeIcon icon={faUser} size="xl" />
+							<FontAwesomeIcon className="exit" icon={faXmark} size="xs" />
+							<span>{user.login}</span>
+						</div>
+					) : (
+						<HeadLink to="login" icon={faUser} />
+					)}
 				</div>
 				<div className="basket-control" onClick={props.onClickCart}>
 					<FontAwesomeIcon
@@ -103,6 +122,23 @@ export const Header = styled(HeaderContainer)`
 		&:hover {
 			color: #dfdfdf;
 		}
+	}
+
+	.user {
+		display: flex;
+		position: relative;
+		flex-direction: column;
+		position: relative;
+		cursor: pointer;
+		&:hover {
+			color: #dfdfdf;
+		}
+	}
+
+	.exit {
+		position: absolute;
+		left: 34px;
+		top: -6px;
 	}
 
 	.amount {

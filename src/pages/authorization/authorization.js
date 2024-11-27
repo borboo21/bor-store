@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import { get, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, Navigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AuthFormError, GreenButton, Input } from '../../components';
+import { AuthFormError, GreenButton } from '../../components';
 import { useResetForm } from '../../hooks';
 import { setUser } from '../../actions';
 import { selectUserRole } from '../../selectors';
 import { ROLE } from '../../constants';
 import { request } from '../../utils/request';
-import styled from 'styled-components';
 import { faArrowRight, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styled from 'styled-components';
 
 const authFormSchema = yup.object().shape({
 	login: yup
@@ -62,7 +62,17 @@ const AuthorizationContainer = ({ className }) => {
 
 	useResetForm(reset);
 
-	const onSubmit = ({ login, password }) => console.log(login, password);
+	const onSubmit = ({ login, password }) => {
+		request('/login', 'POST', { login, password }).then(({ error, user }) => {
+			if (error) {
+				setServerError(`Ошибка запроса: ${error}`);
+				return;
+			}
+
+			dispatch(setUser(user));
+			sessionStorage.setItem('userData', JSON.stringify(user));
+		});
+	};
 
 	const formError = errors?.login?.message || errors?.password?.message;
 	const errorMessage = formError || serverError;
