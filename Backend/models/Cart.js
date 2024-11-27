@@ -4,7 +4,7 @@ const validator = require('validator');
 const CartSchema = mongoose.Schema({
 	deviceId: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Device',
+		required: true,
 	},
 	category: {
 		type: String,
@@ -22,12 +22,17 @@ const CartSchema = mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	quantity: {
+		type: Number,
+		required: true,
+		default: 1,
+	},
 	price: {
 		type: Number,
 		required: true,
 	},
 });
 
-const Cart = mongoose.model('User', CartSchema);
+const CartItem = mongoose.model('CartItem', CartSchema);
 
-module.exports = Cart;
+module.exports = CartItem;

@@ -5,6 +5,7 @@ const UserSchema = mongoose.Schema({
 	login: {
 		type: String,
 		required: true,
+		unique: true,
 	},
 	password: {
 		type: String,
@@ -14,6 +15,7 @@ const UserSchema = mongoose.Schema({
 		type: Number,
 		default: roles.USER,
 	},
+	cart: [],
 });
 
 const User = mongoose.model('User', UserSchema);
