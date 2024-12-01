@@ -6,6 +6,7 @@ const {
 	deleteDeviceInCart,
 	switchQuantityInCart,
 	getCart,
+	addCartForUser,
 } = require('../controllers/cart');
 
 const router = express.Router({ mergeParams: true });
@@ -37,6 +38,12 @@ router.patch('/:userId', authenticated, async (req, res) => {
 // получить данные корзины
 router.get('/:userId', authenticated, async (req, res) => {
 	const cart = await getCart(req.params.userId);
+	res.send({ data: cart });
+});
+
+// добавить корзину собранную на фронтенде
+router.post('/merge/:userId', authenticated, async (req, res) => {
+	const cart = await addCartForUser(req.params.userId, req.body);
 	res.send({ data: cart });
 });
 

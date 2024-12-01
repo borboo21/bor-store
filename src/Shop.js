@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import { AdminPage, AddPage, AllPage } from './pages/admin';
 import { useDispatch } from 'react-redux';
 import { setUser } from './actions';
+import { setCartStorage } from './actions/set-cart-storage';
+import { loadCartAsync } from './actions/load-cart-async';
 
 const AppColumn = styled.div`
 	display: flex;
@@ -30,18 +32,19 @@ export const Shop = () => {
 
 	useLayoutEffect(() => {
 		const currentUserDataJson = sessionStorage.getItem('userData');
-		if (!currentUserDataJson) {
-			return;
-		}
-
+		const currentCartDataJson = sessionStorage.getItem('cartData');
+		const currentCartData = JSON.parse(currentCartDataJson);
 		const currentUserData = JSON.parse(currentUserDataJson);
-
-		dispatch(
-			setUser({ ...currentUserData, roleId: Number(currentUserData.roleId) }, [
-				dispatch,
-			]),
-		);
-	});
+		if (currentCartDataJson) {
+			dispatch(setCartStorage([...currentCartData]));
+		}
+		if (currentUserDataJson) {
+			dispatch(
+				setUser({ ...currentUserData, roleId: Number(currentUserData.roleId) }),
+			);
+			dispatch(loadCartAsync(currentUserData.id));
+		}
+	}, [dispatch]);
 
 	const [cartOpened, setCartOpened] = useState(false);
 	return (

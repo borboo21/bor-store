@@ -9,3 +9,6 @@ export * from './update-quantity-async';
 export * from './add-device-async';
 export * from './set-user';
 export * from './logout';
+export * from './delete-from-cart';
+export * from './add-to-cart';
+export * from './set-cart-data';

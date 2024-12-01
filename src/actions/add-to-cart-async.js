@@ -1,9 +1,8 @@
-import { URL } from '../constants';
 import { request } from '../utils/request';
 import { addCart } from './add-to-cart';
 
-export const addCartAsync = (device) => (dispatch) => {
-	request(`${URL}/cart`, 'POST', device).then((rawDevice) => {
-		dispatch(addCart(rawDevice, rawDevice.price));
+export const addCartAsync = (userId, device) => (dispatch) => {
+	request(`/cart/${userId}`, 'POST', device).then((rawDevice) => {
+		dispatch(addCart(rawDevice.data, rawDevice.data.price));
 	});
 };

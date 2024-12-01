@@ -13,6 +13,7 @@ import { request } from '../../utils/request';
 import { faArrowRight, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
+import { uploadCartAsync } from '../../actions/upload-cart-async';
 
 const authFormSchema = yup.object().shape({
 	login: yup
@@ -71,6 +72,10 @@ const AuthorizationContainer = ({ className }) => {
 
 			dispatch(setUser(user));
 			sessionStorage.setItem('userData', JSON.stringify(user));
+			if (sessionStorage.cartData) {
+				uploadCartAsync(user.id, JSON.parse(sessionStorage.getItem('cartData')));
+				sessionStorage.removeItem('cartData');
+			}
 		});
 	};
 

@@ -8,7 +8,6 @@ import {
 import { Button, CardItem, Input, Pagination } from '../../components';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loadCartAsync } from '../../actions/load-cart-async';
 import { request } from '../../utils/request';
 import { debounce } from '../../utils';
 import { useParams } from 'react-router';
@@ -32,7 +31,6 @@ export const MainContainer = ({ className }) => {
 			request(
 				`/device?search=${search}&category=${category}&page=${page}${sortPrice}`,
 			).then(({ data: { devices, lastPage } }) => {
-				//dispatch(loadCartAsync());
 				setDevices(devices);
 				setLastPage(lastPage);
 				setPage(1);
@@ -41,13 +39,12 @@ export const MainContainer = ({ className }) => {
 		const getMain = () =>
 			request(`/device?search=${search}&page=${page}${sortPrice}`).then(
 				({ data: { devices, lastPage } }) => {
-					//dispatch(loadCartAsync());
-					console.log(devices);
 					setDevices(devices);
 					setLastPage(lastPage);
 					setIsLoading(false);
 				},
 			);
+
 		setCategory(params.device);
 		params.device ? getByCategory() : getMain();
 		// eslint-disable-next-line react-hooks/exhaustive-deps

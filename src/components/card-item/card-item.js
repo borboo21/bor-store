@@ -4,33 +4,44 @@ import { Link } from 'react-router-dom';
 import { CounterItem } from '../counter/counter';
 import { addCartAsync, deleteFromCartAsync } from '../../actions';
 import { useSelector } from 'react-redux';
-import { cartSelector } from '../../selectors';
+import { cartSelector, userSelector } from '../../selectors';
 import styled from 'styled-components';
 import Skeleton from '../skeleton/skeleton';
+import { addCart } from '../../actions/add-to-cart';
+import { deleteFromCart } from '../../actions/delete-from-cart';
 
 const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 	const cart = useSelector(cartSelector);
+	const user = useSelector(userSelector);
+	const userId = user.id;
 
-	const inCart = cart.devices.some((device) => device.id === props.id);
+	const inCart = cart.devices.some((device) => device.deviceId === props.id);
 
-	const handleClickPlus = () => {
-		dispatch(
-			addCartAsync({
-				id: props.id,
-				category: props.category,
-				imageUrl: props.imageUrl,
-				name: props.name,
-				price: props.price,
-				quantity: 1,
-			}),
-		);
+	const device = {
+		deviceId: props.id,
+		category: props.category,
+		imageUrl: props.imageUrl,
+		name: props.name,
+		price: props.price,
+		quantity: 1,
 	};
 
-	const handleClickDelete = (id) => {
+	const handleClickPlus = (userId) => {
+		if (user.roleId !== 3) {
+			dispatch(addCartAsync(userId, device));
+		} else {
+			dispatch(addCart(device, props.price));
+			sessionStorage.setItem('cartData', JSON.stringify([...cart.devices, device]));
+		}
+	};
+
+	const handleClickDelete = (id, userId) => {
 		const quantityInCart = cart.devices.find(
-			(cartItem) => cartItem.id === id,
+			(cartItem) => cartItem.deviceId === id,
 		).quantity;
-		dispatch(deleteFromCartAsync(props.id, props.price, quantityInCart));
+		user.roleId !== 3
+			? dispatch(deleteFromCartAsync(id, userId, props.price, quantityInCart))
+			: dispatch(deleteFromCart(id, props.price, quantityInCart));
 	};
 
 	return (
@@ -55,7 +66,7 @@ const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 								<CardButton
 									faIcon={faPlus}
 									color="#ffffff"
-									onClick={handleClickPlus}
+									onClick={() => handleClickPlus(userId)}
 								/>
 							) : (
 								<>
@@ -63,7 +74,9 @@ const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 									<CardButton
 										faIcon={faCheck}
 										color="#65ed65"
-										onClick={() => handleClickDelete(props.id)}
+										onClick={() =>
+											handleClickDelete(props.id, userId)
+										}
 									/>
 								</>
 							)}

@@ -23,6 +23,7 @@ const HeaderContainer = ({ className, ...props }) => {
 	const onLogout = () => {
 		dispatch(logout());
 		sessionStorage.removeItem('userData');
+		sessionStorage.setItem('cartData', JSON.stringify(cart.devices));
 	};
 	return (
 		<header className={className}>
@@ -130,6 +131,8 @@ export const Header = styled(HeaderContainer)`
 		flex-direction: column;
 		position: relative;
 		cursor: pointer;
+		padding-right: 10px;
+
 		&:hover {
 			color: #dfdfdf;
 		}
@@ -137,7 +140,7 @@ export const Header = styled(HeaderContainer)`
 
 	.exit {
 		position: absolute;
-		left: 34px;
+		left: 30px;
 		top: -6px;
 	}
 

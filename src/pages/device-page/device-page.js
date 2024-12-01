@@ -3,8 +3,10 @@ import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { cartSelector, selectDevice } from '../../selectors';
+import { cartSelector, selectDevice, userSelector } from '../../selectors';
 import { addCartAsync, deleteFromCartAsync, loadDeviceAsync } from '../../actions';
+import { addCart } from '../../actions/add-to-cart';
+import { deleteFromCart } from '../../actions/delete-from-cart';
 import styled from 'styled-components';
 
 const DevicePageContainer = ({ className }) => {
@@ -15,6 +17,7 @@ const DevicePageContainer = ({ className }) => {
 	const params = useParams();
 	const device = useSelector(selectDevice);
 	const cart = useSelector(cartSelector);
+	const user = useSelector(userSelector);
 
 	useEffect(() => {
 		dispatch(loadDeviceAsync(params.id)).then((deviceData) => {
@@ -23,27 +26,43 @@ const DevicePageContainer = ({ className }) => {
 		});
 	}, [dispatch, params.id]);
 
-	const inCart = cart.devices.some((item) => item.id === device.id);
-	console.log(inCart);
+	const inCart = cart.devices.some((item) => item.deviceId === device.id);
+
+	const cartDevice = {
+		deviceId: device.id,
+		category: device.category,
+		imageUrl: device.imageUrl,
+		name: device.name,
+		price: device.price,
+		quantity: 1,
+	};
 
 	const handleClick = () => {
-		dispatch(
-			addCartAsync({
-				id: device.id,
-				category: device.category,
-				imageUrl: device.imageUrl,
-				name: device.name,
-				price: device.price,
-				quantity: 1,
-			}),
-		);
+		if (user.roleId !== 3) {
+			dispatch(addCartAsync(user.id, cartDevice));
+		} else {
+			dispatch(addCart(cartDevice, device.price));
+			sessionStorage.setItem(
+				'cartData',
+				JSON.stringify([...cart.devices, cartDevice]),
+			);
+		}
 	};
 
 	const onDelete = () => {
 		const cartItemQuantity = cart.devices.find(
-			(item) => item.id === device.id,
+			(item) => item.deviceId === device.id,
 		).quantity;
-		dispatch(deleteFromCartAsync(device.id, device.price, cartItemQuantity));
+		user.roleId !== 3
+			? dispatch(
+					deleteFromCartAsync(
+						device.id,
+						user.id,
+						device.price,
+						cartItemQuantity,
+					),
+				)
+			: dispatch(deleteFromCart(device.id, device.price, device.quantity));
 	};
 
 	if (isLoading) {

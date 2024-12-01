@@ -17,15 +17,25 @@ export const cartReducer = (state = cartState, action) => {
 			return {
 				...state,
 				devices: state.devices.filter(
-					(device) => device.id !== action.payload.id,
+					(device) => device.deviceId !== action.payload.id,
 				),
 				amount: state.amount - action.payload.price * action.payload.quantity,
+				sessionStorage: sessionStorage.cartData
+					? sessionStorage.setItem(
+							'cartData',
+							JSON.stringify(
+								state.devices.filter(
+									(device) => device.deviceId !== action.payload.id,
+								),
+							),
+						)
+					: null,
 			};
 		case ACTION_TYPE.SWITCH_QUANTITY:
 			return {
 				...state,
 				devices: state.devices.map((device) =>
-					device.id === action.payload.id
+					device.deviceId === action.payload.id
 						? {
 								...device,
 								quantity: device.quantity + action.payload.quantity,
@@ -36,19 +46,37 @@ export const cartReducer = (state = cartState, action) => {
 					action.payload.quantity > 0
 						? state.amount + action.payload.price
 						: state.amount - action.payload.price,
-			};
-		case ACTION_TYPE.AMOUNT_DEVICES:
-			return {
-				...state,
-				amount: state.devices.reduce(
-					(sum, device) => sum + device.price * device.quantity,
-					state.amount,
-				),
+				sessionStorage: sessionStorage.cartData
+					? sessionStorage.setItem(
+							'cartData',
+							JSON.stringify(
+								state.devices.map((device) =>
+									device.deviceId === action.payload.id
+										? {
+												...device,
+												quantity:
+													device.quantity +
+													action.payload.quantity,
+											}
+										: device,
+								),
+							),
+						)
+					: null,
 			};
 		case ACTION_TYPE.SET_CART_DATA:
 			return {
 				...state,
 				devices: state.devices.length === 0 ? action.payload : state.devices,
+				amount: action.payload.reduce(
+					(sum, device) => sum + device.price * device.quantity,
+					0,
+				),
+			};
+		case ACTION_TYPE.SET_CART_STORAGE:
+			return {
+				...state,
+				devices: action.payload,
 				amount: action.payload.reduce(
 					(sum, device) => sum + device.price * device.quantity,
 					0,

@@ -1,13 +1,16 @@
 import { CardButton, GreenButton } from '../../components';
 import { faArrowLeft, faArrowRight, faX } from '@fortawesome/free-solid-svg-icons';
 import { CartItem } from '../../components/cart-item/cart-item';
-import { cartSelector } from '../../selectors';
+import { cartSelector, userSelector } from '../../selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 const CartContainer = ({ className, ...props }) => {
 	const dispatch = useDispatch();
 	const cart = useSelector(cartSelector);
+	const user = useSelector(userSelector);
+	const userId = user.id;
+	const userRole = user.roleId;
 
 	return (
 		<div className={className}>
@@ -40,13 +43,15 @@ const CartContainer = ({ className, ...props }) => {
 						<div className="cartItems">
 							{cart.devices.map((item) => (
 								<CartItem
-									key={item.id}
-									id={item.id}
+									key={item.deviceId}
+									id={item.deviceId}
 									name={item.name}
 									price={item.price}
 									img={item.imageUrl}
 									dispatch={dispatch}
 									quantity={item.quantity}
+									userId={userId}
+									userRole={userRole}
 								/>
 							))}
 						</div>

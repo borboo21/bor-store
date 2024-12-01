@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
 	const device = await getDevice(req.params.id);
 
-	res.send({ data: device });
+	res.send({ data: mapDevice(device) });
 });
 
 // добавить девайс

@@ -1,23 +1,28 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { cartSelector } from '../../selectors';
+import { cartSelector, userSelector } from '../../selectors';
 import { switchQuantity, updateQuantity } from '../../actions';
 import styled from 'styled-components';
 
 const CounterItemContainer = ({ className, id, price }) => {
 	const dispatch = useDispatch();
+	const user = useSelector(userSelector);
 	const cart = useSelector(cartSelector);
-	const itemInCart = cart.devices.find((device) => device.id === id);
+	const itemInCart = cart.devices.find((device) => device.deviceId === id);
 	const quantity = itemInCart.quantity;
 
 	const handleIncrease = () => {
 		dispatch(switchQuantity(1, id, price));
-		updateQuantity(id, quantity + 1);
+		if (user.roleId !== 3) {
+			updateQuantity(id, user.id, quantity + 1);
+		}
 	};
 
 	const handleDeacrease = () => {
 		if (quantity > 1) {
 			dispatch(switchQuantity(-1, id, price));
-			updateQuantity(id, quantity + 1);
+			if (user.roleId !== 3) {
+				updateQuantity(id, user.id, quantity + 1);
+			}
 		}
 	};
 

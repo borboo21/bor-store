@@ -6,7 +6,6 @@ export const deviceState = {
 	name: '',
 	imageUrl: '',
 	price: 0,
-	count: 1,
 };
 
 export const deviceReducer = (state = deviceState, action) => {

@@ -9,6 +9,26 @@ async function addDeviceInCart(userId, device) {
 
 	return newItemInCart;
 }
+// add cart from frontend
+async function addCartForUser(userId, cart) {
+	const user = await User.findById(userId);
+	for (const cartItem of cart) {
+		const existingItem = user.cart.find(
+			(userCartItem) => userCartItem.deviceId === cartItem.deviceId,
+		);
+		if (existingItem) {
+			await User.updateOne(
+				{ _id: userId, 'cart.deviceId': cartItem.deviceId },
+				{ $set: { 'cart.$.quantity': cartItem.quantity } },
+			);
+		} else {
+			user.cart.push(cartItem);
+		}
+	}
+	await user.save();
+	return cart;
+}
+
 // delete
 
 async function deleteDeviceInCart(userId, deviceId) {
@@ -34,6 +54,7 @@ async function getCart(userId) {
 
 module.exports = {
 	addDeviceInCart,
+	addCartForUser,
 	deleteDeviceInCart,
 	switchQuantityInCart,
 	getCart,
