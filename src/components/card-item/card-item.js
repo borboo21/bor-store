@@ -5,10 +5,10 @@ import { CounterItem } from '../counter/counter';
 import { addCartAsync, deleteFromCartAsync } from '../../actions';
 import { useSelector } from 'react-redux';
 import { cartSelector, userSelector } from '../../selectors';
-import styled from 'styled-components';
-import Skeleton from '../skeleton/skeleton';
 import { addCart } from '../../actions/add-to-cart';
 import { deleteFromCart } from '../../actions/delete-from-cart';
+import styled from 'styled-components';
+import { SkeletonMain } from '../skeleton';
 
 const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 	const cart = useSelector(cartSelector);
@@ -47,7 +47,7 @@ const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 	return (
 		<div className={className}>
 			{loading ? (
-				<Skeleton />
+				<SkeletonMain />
 			) : (
 				<>
 					<div className="device-image">

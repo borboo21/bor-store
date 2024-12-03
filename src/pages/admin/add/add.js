@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BreadCrumbs, GreenButton, Input } from '../../../components';
 import {
 	faArrowRight,
@@ -7,17 +7,29 @@ import {
 	faRubleSign,
 	faTag,
 } from '@fortawesome/free-solid-svg-icons';
-import styled from 'styled-components';
 import { addDeviceAsync } from '../../../actions';
 import { Image } from './components';
-import { CATEGORIES } from '../../../constants';
+import { CATEGORIES, ROLE } from '../../../constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { checkAccess } from '../../../utils';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../../../selectors';
+import styled from 'styled-components';
+import { PrivateContent } from '../../../components/private-content/private-content';
 
 const AddPageContainer = ({ className }) => {
 	const [imageUrl, setImageUrl] = useState('');
 	const [category, setCategory] = useState('iPhone');
 	const [name, setName] = useState('');
 	const [price, setPrice] = useState(0);
+	const user = useSelector(userSelector);
+
+	useEffect(() => {
+		if (!checkAccess([ROLE.ADMIN], user.roleId)) {
+			console.log(user.roleId);
+			return;
+		}
+	}, [user.roleId]);
 
 	const isValidUrl = (url) => {
 		try {
@@ -40,75 +52,80 @@ const AddPageContainer = ({ className }) => {
 		setPrice(0);
 	};
 
+	const isButtonDisabled = !isValidUrl(imageUrl) || !Boolean(name);
+
 	return (
-		<div className={className}>
-			<BreadCrumbs lastName={'Добавление товара'} />
-			<div className="add-main">
-				{isValidUrl(imageUrl) && (
-					<div className="img-block">
-						<Image
-							width={310}
-							imageUrl={imageUrl}
-							alt={'На странице товара'}
-							description={'На странице товара'}
+		<PrivateContent access={[ROLE.ADMIN]}>
+			<div className={className}>
+				<BreadCrumbs lastName={'Добавление товара'} />
+				<div className="add-main">
+					{isValidUrl(imageUrl) && (
+						<div className="img-block">
+							<Image
+								width={310}
+								imageUrl={imageUrl}
+								alt={'На странице товара'}
+								description={'На странице товара'}
+							/>
+							<Image
+								width={170}
+								imageUrl={imageUrl}
+								alt={'На главной'}
+								description={'На главной'}
+							/>
+							<Image
+								width={90}
+								imageUrl={imageUrl}
+								alt={'Изображение в корзине'}
+								description={'В корзине'}
+							/>
+						</div>
+					)}
+					<div className="input-containers">
+						<Input
+							width={400}
+							value={imageUrl}
+							setValue={setImageUrl}
+							icon={faLink}
+							placeholder={'Вставьте ссылку на изображение'}
 						/>
-						<Image
-							width={170}
-							imageUrl={imageUrl}
-							alt={'На главной'}
-							description={'На главной'}
+						<div className="select-div">
+							<FontAwesomeIcon color="gray" icon={faList} />
+							<select value={category} onChange={onCategoryChange}>
+								{CATEGORIES.map((categoryName, index) => (
+									<option key={index} value={categoryName}>
+										{categoryName}
+									</option>
+								))}
+							</select>
+						</div>
+						<Input
+							width={400}
+							value={name}
+							setValue={setName}
+							icon={faTag}
+							placeholder={'Укажите имя товара'}
 						/>
-						<Image
-							width={90}
-							imageUrl={imageUrl}
-							alt={'Изображение в корзине'}
-							description={'В корзине'}
+						<Input
+							width={400}
+							value={price}
+							setValue={setPrice}
+							icon={faRubleSign}
+							placeholder={'Укажите цену товара'}
 						/>
 					</div>
-				)}
-				<div className="input-containers">
-					<Input
-						width={400}
-						value={imageUrl}
-						setValue={setImageUrl}
-						icon={faLink}
-						placeholder={'Вставьте ссылку на изображение'}
-					/>
-					<div className="select-div">
-						<FontAwesomeIcon color="gray" icon={faList} />
-						<select value={category} onChange={onCategoryChange}>
-							{CATEGORIES.map((categoryName, index) => (
-								<option key={index} value={categoryName}>
-									{categoryName}
-								</option>
-							))}
-						</select>
-					</div>
-					<Input
-						width={400}
-						value={name}
-						setValue={setName}
-						icon={faTag}
-						placeholder={'Укажите имя товара'}
-					/>
-					<Input
-						width={400}
-						value={price}
-						setValue={setPrice}
-						icon={faRubleSign}
-						placeholder={'Укажите цену товара'}
-					/>
+					<GreenButton
+						onClick={() => addDevice(category, name, imageUrl, price)}
+						right={true}
+						place={20}
+						icon={faArrowRight}
+						disabled={isButtonDisabled}
+					>
+						Добавить товар
+					</GreenButton>
 				</div>
-				<GreenButton
-					onClick={() => addDevice(category, name, imageUrl, price)}
-					right={true}
-					place={20}
-					icon={faArrowRight}
-				>
-					Добавить товар
-				</GreenButton>
 			</div>
-		</div>
+		</PrivateContent>
 	);
 };
 
@@ -147,6 +164,7 @@ export const AddPage = styled(AddPageContainer)`
 		padding: 13px;
 		font-size: 16px;
 		width: 300px;
+		cursor: pointer;
 	}
 
 	button {

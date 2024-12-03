@@ -7,7 +7,9 @@ import { cartSelector, selectDevice, userSelector } from '../../selectors';
 import { addCartAsync, deleteFromCartAsync, loadDeviceAsync } from '../../actions';
 import { addCart } from '../../actions/add-to-cart';
 import { deleteFromCart } from '../../actions/delete-from-cart';
+
 import styled from 'styled-components';
+import { SkeletonDevice } from '../../components/skeleton';
 
 const DevicePageContainer = ({ className }) => {
 	const [error, setError] = useState(null);
@@ -20,11 +22,12 @@ const DevicePageContainer = ({ className }) => {
 	const user = useSelector(userSelector);
 
 	useEffect(() => {
+		setIsLoading(true);
 		dispatch(loadDeviceAsync(params.id)).then((deviceData) => {
 			setError(deviceData.error);
 			setIsLoading(false);
 		});
-	}, [dispatch, params.id]);
+	}, [dispatch, params.id, setIsLoading]);
 
 	const inCart = cart.devices.some((item) => item.deviceId === device.id);
 
@@ -65,57 +68,57 @@ const DevicePageContainer = ({ className }) => {
 			: dispatch(deleteFromCart(device.id, device.price, device.quantity));
 	};
 
-	if (isLoading) {
-		return null;
-	}
-
 	return (
 		<div className={className}>
 			<div className="device-page-header">
 				<BreadCrumbs lastName={device.name} />
 			</div>
-			<div className="device-card">
-				<div className="img-block">
-					<img width={310} src={device.imageUrl} alt={device.name} />
-				</div>
-				<div className="description">
-					<h1>{device.name}</h1>
-					<h2>{device.price}₽</h2>
-					<div className="device-info"></div>
-					<div className="buy-container">
-						{!inCart ? (
-							<GreenButton
-								className="inCartButton"
-								inсart={false}
-								onClick={handleClick}
-								right={true}
-								place={20}
-								icon={faArrowRight}
-							>
-								В корзину
-							</GreenButton>
-						) : (
-							<>
+			{isLoading ? (
+				<SkeletonDevice />
+			) : (
+				<div className="device-card">
+					<div className="img-block">
+						<img width={310} src={device.imageUrl} alt={device.name} />
+					</div>
+					<div className="description">
+						<h1>{device.name}</h1>
+						<h2>{device.price}₽</h2>
+						<div className="device-info"></div>
+						<div className="buy-container">
+							{!inCart ? (
 								<GreenButton
-									className="outFromCartButton"
-									inсart={true}
-									onClick={onDelete}
-									left={true}
-									place={200}
-									icon={faArrowLeft}
+									className="inCartButton"
+									inсart={false}
+									onClick={handleClick}
+									right={true}
+									place={20}
+									icon={faArrowRight}
 								>
-									Убрать из корзины
+									В корзину
 								</GreenButton>
-								<CounterItem
-									className="counter"
-									id={device.id}
-									price={device.price}
-								/>
-							</>
-						)}
+							) : (
+								<>
+									<GreenButton
+										className="outFromCartButton"
+										inсart={true}
+										onClick={onDelete}
+										left={true}
+										place={200}
+										icon={faArrowLeft}
+									>
+										Убрать из корзины
+									</GreenButton>
+									<CounterItem
+										className="counter"
+										id={device.id}
+										price={device.price}
+									/>
+								</>
+							)}
+						</div>
 					</div>
 				</div>
-			</div>
+			)}
 		</div>
 	);
 };

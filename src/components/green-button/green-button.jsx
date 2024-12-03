@@ -11,12 +11,19 @@ const GreenButtonContainer = ({
 	icon,
 	inсart,
 	type,
+	disabled,
 	...props
 }) => (
-	<button className={className} onClick={onClick} type={type} {...props}>
-		{left ? <FontAwesomeIcon icon={icon} /> : ''}
+	<button
+		className={className}
+		onClick={onClick}
+		type={type}
+		disabled={disabled}
+		{...props}
+	>
+		{left && !disabled ? <FontAwesomeIcon icon={icon} /> : ''}
 		{children}
-		{right ? <FontAwesomeIcon icon={icon} /> : ''}
+		{right && !disabled ? <FontAwesomeIcon icon={icon} /> : ''}
 	</button>
 );
 
@@ -30,9 +37,10 @@ export const GreenButton = styled(GreenButtonContainer)`
 	color: #fff;
 	font-size: 16px;
 	font-weight: 600;
-	cursor: pointer;
+	cursor: ${({ disabled }) => (disabled ? '' : 'pointer')};
 	transition: background 0.2s ease-in-out;
 	position: relative;
+	opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 
 	&:hover {
 		background-color: ${(props) => (props.inсart ? '#d59454e3' : '#9dd554e3')};

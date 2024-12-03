@@ -87,14 +87,14 @@ export const MainContainer = ({ className }) => {
 					<Button
 						onClick={onSortAsc}
 						icon={faRubleSign}
-						isactive={sortPrice === '&sorting=1'}
+						active={sortPrice === '&sorting=1'}
 					>
 						<FontAwesomeIcon icon={faArrowUp} />
 					</Button>
 					<Button
 						onClick={onSortDesc}
 						icon={faRubleSign}
-						isactive={sortPrice === '&sorting=-1'}
+						active={sortPrice === '&sorting=-1'}
 					>
 						<FontAwesomeIcon icon={faArrowDown} />
 					</Button>

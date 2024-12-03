@@ -131,7 +131,7 @@ export const Header = styled(HeaderContainer)`
 		flex-direction: column;
 		position: relative;
 		cursor: pointer;
-		padding-right: 10px;
+		padding: 0 10px;
 
 		&:hover {
 			color: #dfdfdf;

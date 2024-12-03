@@ -1,13 +1,14 @@
-import styled from 'styled-components';
 import { TableRow } from '../table-row/table-row';
 import { faFloppyDisk, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { request } from '../../../../../utils/request';
-import { URL } from '../../../../../constants';
+import { CATEGORIES } from '../../../../../constants';
+import styled from 'styled-components';
 
 const DeviceRowContainer = ({ className, ...props }) => {
 	const [isEdit, setIsEdit] = useState(false);
+	const [category, setCategory] = useState(props.category);
 	const [newName, setNewName] = useState(props.name);
 	const [newPrice, setNewPrice] = useState(props.price);
 	const [newURL, setNewURL] = useState(props.imageUrl);
@@ -22,8 +23,13 @@ const DeviceRowContainer = ({ className, ...props }) => {
 		setIsEdit((prev) => !prev);
 	};
 
+	const onCategoryChange = ({ target }) => {
+		setCategory(target.value);
+	};
+
 	const onSave = (id, newName, newPrice, newURL) => {
-		request(`${URL}/device/${id}`, 'PATCH', {
+		request(`/device/${id}`, 'PATCH', {
+			category: category,
 			name: newName,
 			price: newPrice,
 			imageUrl: newURL,
@@ -37,7 +43,19 @@ const DeviceRowContainer = ({ className, ...props }) => {
 		<div className={className}>
 			{isEdit ? (
 				<TableRow border={true}>
-					<div className="category-column">iPhone</div>
+					<div className="category-column">
+						<select
+							className="edit-input"
+							value={category}
+							onChange={onCategoryChange}
+						>
+							{CATEGORIES.map((categoryName, index) => (
+								<option key={index} value={categoryName}>
+									{categoryName}
+								</option>
+							))}
+						</select>
+					</div>
 					<div className="name-column">
 						<input
 							className="edit-input"

@@ -46,6 +46,11 @@ async function getDevices(
 	};
 }
 
+// get all devices
+function getAllDevices() {
+	return Device.find();
+}
+
 // get item
 function getDevice(id) {
 	return Device.findById(id);
@@ -56,5 +61,6 @@ module.exports = {
 	editDevice,
 	deleteDevice,
 	getDevice,
+	getAllDevices,
 	getDevices,
 };

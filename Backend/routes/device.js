@@ -9,11 +9,13 @@ const {
 	addDevice,
 	editDevice,
 	deleteDevice,
+	getAllDevices,
 } = require('../controllers/device');
 const mapDevice = require('../helpers/mapDevice');
 
 const router = express.Router({ mergeParams: true });
 
+// получение всех девайсов для главной страницы
 router.get('/', async (req, res) => {
 	const data = await getDevices(
 		req.query.search,
@@ -23,6 +25,11 @@ router.get('/', async (req, res) => {
 		req.query.page,
 	);
 
+	res.send({ data });
+});
+
+router.get('/all', async (req, res) => {
+	const data = await getAllDevices();
 	res.send({ data });
 });
 

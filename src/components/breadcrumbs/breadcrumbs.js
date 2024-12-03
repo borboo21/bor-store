@@ -18,8 +18,9 @@ const BreadCrumbsContainer = ({ className, lastName }) => {
 				</span>
 				{pathNames.map((value, index) => {
 					const to = `/${pathNames.slice(0, index + 1).join('/')}`;
+					const lastKeyIndex = pathNames.length - 1;
 					return (
-						<Link key={index} to={to}>
+						<Link key={index} to={index === lastKeyIndex ? '' : to}>
 							<span className="breadcrumb-separator">/</span>
 							<span className="breadcrumb-item">{value}</span>
 						</Link>

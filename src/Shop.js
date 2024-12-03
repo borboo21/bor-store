@@ -47,6 +47,7 @@ export const Shop = () => {
 	}, [dispatch]);
 
 	const [cartOpened, setCartOpened] = useState(false);
+
 	return (
 		<AppColumn>
 			<Header onClickCart={() => setCartOpened(true)} />

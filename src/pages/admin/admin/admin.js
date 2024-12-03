@@ -3,26 +3,42 @@ import { BreadCrumbs } from '../../../components';
 import { faBorderAll, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { checkAccess } from '../../../utils';
+import { ROLE } from '../../../constants';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../../../selectors';
+import { PrivateContent } from '../../../components/private-content/private-content';
 
 const AdminPageContainer = ({ className }) => {
+	const user = useSelector(userSelector);
+
+	useEffect(() => {
+		if (!checkAccess([ROLE.ADMIN], user.roleId)) {
+			return;
+		}
+	}, [user.roleId]);
+
 	return (
-		<div className={className}>
-			<BreadCrumbs />
-			<div className="admin-panel">
-				<Link to={`/admin/add`}>
-					<div className="add-container">
-						<FontAwesomeIcon icon={faPlus} size="2xl" />
-						<span>Добавить товар</span>
-					</div>
-				</Link>
-				<Link to={`/admin/all`}>
-					<div className="edit-container">
-						<FontAwesomeIcon icon={faBorderAll} size="2xl" />
-						<span>Редактировать товары</span>
-					</div>
-				</Link>
+		<PrivateContent access={[ROLE.ADMIN]}>
+			<div className={className}>
+				<BreadCrumbs />
+				<div className="admin-panel">
+					<Link to={`/admin/add`}>
+						<div className="add-container">
+							<FontAwesomeIcon icon={faPlus} size="2xl" />
+							<span>Добавить товар</span>
+						</div>
+					</Link>
+					<Link to={`/admin/all`}>
+						<div className="edit-container">
+							<FontAwesomeIcon icon={faBorderAll} size="2xl" />
+							<span>Редактировать товары</span>
+						</div>
+					</Link>
+				</div>
 			</div>
-		</div>
+		</PrivateContent>
 	);
 };
 
