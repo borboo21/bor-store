@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import { BreadCrumbs } from '../../../components';
 import { faBorderAll, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +8,7 @@ import { ROLE } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../../selectors';
 import { PrivateContent } from '../../../components/private-content/private-content';
+import styled from 'styled-components';
 
 const AdminPageContainer = ({ className }) => {
 	const user = useSelector(userSelector);

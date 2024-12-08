@@ -1,15 +1,18 @@
-import { BreadCrumbs, CounterItem, GreenButton } from '../../components';
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { cartSelector, selectDevice, userSelector } from '../../selectors';
-import { addCartAsync, deleteFromCartAsync, loadDeviceAsync } from '../../actions';
-import { addCart } from '../../actions/add-to-cart';
-import { deleteFromCart } from '../../actions/delete-from-cart';
-
+import { BreadCrumbs, CounterItem, Error, GreenButton } from '../../components';
+import {
+	addCartAsync,
+	deleteFromCartAsync,
+	loadDeviceAsync,
+	deleteFromCart,
+	addCart,
+} from '../../actions';
+import { SkeletonDevice } from '../../components/loaders';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
-import { SkeletonDevice } from '../../components/skeleton';
 
 const DevicePageContainer = ({ className }) => {
 	const [error, setError] = useState(null);
@@ -42,7 +45,7 @@ const DevicePageContainer = ({ className }) => {
 
 	const handleClick = () => {
 		if (user.roleId !== 3) {
-			dispatch(addCartAsync(user.id, cartDevice));
+			dispatch(addCartAsync(user.id, cartDevice, setIsLoading));
 		} else {
 			dispatch(addCart(cartDevice, device.price));
 			sessionStorage.setItem(
@@ -63,6 +66,7 @@ const DevicePageContainer = ({ className }) => {
 						user.id,
 						device.price,
 						cartItemQuantity,
+						setIsLoading,
 					),
 				)
 			: dispatch(deleteFromCart(device.id, device.price, device.quantity));
@@ -73,7 +77,9 @@ const DevicePageContainer = ({ className }) => {
 			<div className="device-page-header">
 				<BreadCrumbs lastName={device.name} />
 			</div>
-			{isLoading ? (
+			{error ? (
+				<Error error={error} />
+			) : isLoading ? (
 				<SkeletonDevice />
 			) : (
 				<div className="device-card">

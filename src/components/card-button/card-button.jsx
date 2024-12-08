@@ -1,7 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 
-const CardButtonContainer = ({ className, onClick, faIcon, color, ...props }) => (
+const CardButtonContainer = ({
+	className,
+	onClick,
+	faIcon,
+	color,
+	isLoading,
+	...props
+}) => (
 	<button className={className} onClick={onClick} {...props}>
 		<FontAwesomeIcon icon={faIcon} />
 	</button>

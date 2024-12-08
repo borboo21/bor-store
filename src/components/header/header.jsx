@@ -10,7 +10,7 @@ import { HeadLink } from './head-link/head-link';
 import { cartSelector, userSelector } from '../../selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { ItemsInCart } from './items-in-cart/items-in-cart';
-import { logout } from '../../actions';
+import { clearCart, logout, switchModal } from '../../actions';
 import myIcon from './logo/bor-store.png';
 import styled from 'styled-components';
 
@@ -22,9 +22,14 @@ const HeaderContainer = ({ className, ...props }) => {
 
 	const onLogout = () => {
 		dispatch(logout());
+		dispatch(clearCart());
 		sessionStorage.removeItem('userData');
-		sessionStorage.setItem('cartData', JSON.stringify(cart.devices));
 	};
+
+	const onOpenCart = () => {
+		dispatch(switchModal());
+	};
+
 	return (
 		<header className={className}>
 			<div className="logo">
@@ -62,7 +67,7 @@ const HeaderContainer = ({ className, ...props }) => {
 						<HeadLink to="login" icon={faUser} />
 					)}
 				</div>
-				<div className="basket-control" onClick={props.onClickCart}>
+				<div className="basket-control" onClick={onOpenCart}>
 					<FontAwesomeIcon
 						className="basket"
 						icon={faBasketShopping}
@@ -140,7 +145,7 @@ export const Header = styled(HeaderContainer)`
 
 	.exit {
 		position: absolute;
-		left: 30px;
+		left: 40px;
 		top: -6px;
 	}
 

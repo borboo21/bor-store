@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { BreadCrumbs, GreenButton, Input } from '../../../components';
+import {
+	BreadCrumbs,
+	GreenButton,
+	Input,
+	Loader,
+	PrivateContent,
+} from '../../../components';
 import {
 	faArrowRight,
 	faLink,
@@ -15,9 +21,9 @@ import { checkAccess } from '../../../utils';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../../selectors';
 import styled from 'styled-components';
-import { PrivateContent } from '../../../components/private-content/private-content';
 
 const AddPageContainer = ({ className }) => {
+	const [isLoading, setIsLoading] = useState(false);
 	const [imageUrl, setImageUrl] = useState('');
 	const [category, setCategory] = useState('iPhone');
 	const [name, setName] = useState('');
@@ -45,14 +51,20 @@ const AddPageContainer = ({ className }) => {
 	};
 
 	const addDevice = (category, name, imageUrl, price) => {
-		addDeviceAsync(category, name, imageUrl.trim(), Number(price));
+		addDeviceAsync(
+			category,
+			name,
+			imageUrl.trim(),
+			Number(price.replace(/\s/g, '')),
+			setIsLoading,
+		);
 		setImageUrl('');
 		setCategory('');
 		setName('');
 		setPrice(0);
 	};
 
-	const isButtonDisabled = !isValidUrl(imageUrl) || !Boolean(name);
+	const isButtonDisabled = !isValidUrl(imageUrl) || !Boolean(name) || !Number(price);
 
 	return (
 		<PrivateContent access={[ROLE.ADMIN]}>
@@ -114,15 +126,19 @@ const AddPageContainer = ({ className }) => {
 							placeholder={'Укажите цену товара'}
 						/>
 					</div>
-					<GreenButton
-						onClick={() => addDevice(category, name, imageUrl, price)}
-						right={true}
-						place={20}
-						icon={faArrowRight}
-						disabled={isButtonDisabled}
-					>
-						Добавить товар
-					</GreenButton>
+					{isLoading ? (
+						<Loader />
+					) : (
+						<GreenButton
+							onClick={() => addDevice(category, name, imageUrl, price)}
+							right={true}
+							place={20}
+							icon={faArrowRight}
+							disabled={isButtonDisabled}
+						>
+							Добавить товар
+						</GreenButton>
+					)}
 				</div>
 			</div>
 		</PrivateContent>

@@ -1,24 +1,50 @@
-import { CardButton, GreenButton } from '../../components';
-import { faArrowLeft, faArrowRight, faX } from '@fortawesome/free-solid-svg-icons';
-import { CartItem } from '../../components/cart-item/cart-item';
-import { cartSelector, userSelector } from '../../selectors';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { CardButton, GreenButton, CartItem } from '../../components';
+import { cartSelector, userSelector, appSelector } from '../../selectors';
+import { useClickAway } from '@uidotdev/usehooks';
+import { switchModal } from '../../actions';
+import { faArrowLeft, faArrowRight, faX } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
-const CartContainer = ({ className, ...props }) => {
+const CartContainer = ({ className }) => {
+	const [isLoading, setIsLoading] = useState(false);
+
 	const dispatch = useDispatch();
 	const cart = useSelector(cartSelector);
 	const user = useSelector(userSelector);
+	const app = useSelector(appSelector);
 	const userId = user.id;
 	const userRole = user.roleId;
 
+	const onClose = () => dispatch(switchModal());
+
+	const ref = useClickAway(onClose);
+
+	useEffect(() => {
+		if (app.modalIsOpen) {
+			document.body.classList.add('modal-open');
+		} else {
+			document.body.classList.remove('modal-open');
+		}
+		return () => {
+			document.body.classList.remove('modal-open');
+		};
+	}, [app.modalIsOpen]);
+
+	if (!app.modalIsOpen) {
+		return null;
+	}
+
 	return (
 		<div className={className}>
-			<div className="drawer">
-				<div className="cartHeader">
-					<h2 className="cartName">Корзина</h2>
-					<CardButton onClick={props.onClose} faIcon={faX} />
-				</div>
+			<div className="drawer" ref={ref}>
+				{cart.devices.length !== 0 && (
+					<div className="cartHeader">
+						<h2 className="cartName">Корзина</h2>
+						<CardButton onClick={onClose} faIcon={faX} />
+					</div>
+				)}
 				{cart.devices.length === 0 ? (
 					<div className="emptyCart">
 						<img width={120} src="/img/empty-cart.png" alt="empty" />
@@ -32,7 +58,7 @@ const CartContainer = ({ className, ...props }) => {
 							className="cartButton"
 							left={true}
 							place={320}
-							onClick={props.onClose}
+							onClick={onClose}
 							icon={faArrowLeft}
 						>
 							Вернуться назад
@@ -43,15 +69,17 @@ const CartContainer = ({ className, ...props }) => {
 						<div className="cartItems">
 							{cart.devices.map((item) => (
 								<CartItem
+									dispatch={dispatch}
 									key={item.deviceId}
 									id={item.deviceId}
 									name={item.name}
 									price={item.price}
 									img={item.imageUrl}
-									dispatch={dispatch}
 									quantity={item.quantity}
 									userId={userId}
 									userRole={userRole}
+									isLoading={isLoading}
+									setIsLoading={setIsLoading}
 								/>
 							))}
 						</div>
@@ -72,7 +100,7 @@ const CartContainer = ({ className, ...props }) => {
 								className="cartButton"
 								right={true}
 								place={20}
-								onClick={props.onClose}
+								onClick={onClose}
 								icon={faArrowRight}
 							>
 								Оформить заказ
@@ -98,7 +126,7 @@ export const Cart = styled(CartContainer)`
 	.drawer {
 		display: flex;
 		flex-direction: column;
-		position: absolute;
+		position: fixed;
 		width: 420px;
 		right: 0;
 		height: 100%;
@@ -119,6 +147,7 @@ export const Cart = styled(CartContainer)`
 		align-items: center;
 		height: 100%;
 		justify-content: center;
+
 	}
 
 	.emptyCartDescription {
@@ -140,7 +169,8 @@ export const Cart = styled(CartContainer)`
 		flex: 1;
 		overflow: auto;
 		margin-bottom: 40px;
-		height: 55%;
+		height: 63%;
+		padding-right: 10px;
 	}
 
 	.cartItem {

@@ -38,7 +38,7 @@ async function getDevices(
 			.limit(limit)
 			.skip((page - 1) * limit)
 			.sort(sorting ? { price: Number(sorting) } : { name: -1 }),
-		Device.countDocuments({ name: { $regex: search, $options: 'i' } }),
+		Device.countDocuments({ name: { $regex: (search, category), $options: 'i' } }),
 	]);
 	return {
 		devices,

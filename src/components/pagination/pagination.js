@@ -1,20 +1,23 @@
 import styled from 'styled-components';
+import { Button } from '../button/button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight, faForward } from '@fortawesome/free-solid-svg-icons';
 const PaginationContainer = ({ className, page, lastPage, setPage }) => {
 	return (
 		<div className={className}>
-			<button disabled={page === 1} onClick={() => setPage(1)}>
-				В начало
-			</button>
-			<button disabled={page === 1} onClick={() => setPage(page - 1)}>
-				Предыдущая
-			</button>
+			<Button disabled={page === 1} onClick={() => setPage(1)}>
+				<FontAwesomeIcon icon={faForward} rotation={180} />
+			</Button>
+			<Button disabled={page === 1} onClick={() => setPage(page - 1)}>
+				<FontAwesomeIcon icon={faArrowLeft} />
+			</Button>
 			<div className="current-page">Страница:{page}</div>
-			<button disabled={page === lastPage} onClick={() => setPage(page + 1)}>
-				Следующая
-			</button>
-			<button disabled={page === lastPage} onClick={() => setPage(lastPage)}>
-				В конец
-			</button>
+			<Button disabled={page === lastPage} onClick={() => setPage(page + 1)}>
+				<FontAwesomeIcon icon={faArrowRight} />
+			</Button>
+			<Button disabled={page === lastPage} onClick={() => setPage(lastPage)}>
+				<FontAwesomeIcon icon={faForward} />
+			</Button>
 		</div>
 	);
 };
@@ -25,13 +28,10 @@ export const Pagination = styled(PaginationContainer)`
 	width: 100%;
 	margin: 10px 0;
 	padding: 0 35px;
+	align-items: center;
 
 	& button {
-		border: 1px solid #ebe5e5;
-		background: white;
-		border-radius: 20px;
 		margin: 0 5px;
-		cursor: pointer;
 	}
 
 	& .current-page {

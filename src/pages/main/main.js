@@ -1,3 +1,9 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
+import { Button, CardItem, Input, Pagination } from '../../components';
+import { request, debounce } from '../../utils';
+import { PAGINATION_LIMIT } from '../../constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
 	faArrowDown,
@@ -5,15 +11,10 @@ import {
 	faMagnifyingGlass,
 	faRubleSign,
 } from '@fortawesome/free-solid-svg-icons';
-import { Button, CardItem, Input, Pagination } from '../../components';
-import { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { request } from '../../utils/request';
-import { debounce } from '../../utils';
-import { useParams } from 'react-router';
 import styled from 'styled-components';
 
 export const MainContainer = ({ className }) => {
+	const params = useParams();
 	const [devices, setDevices] = useState([]);
 	const [category, setCategory] = useState('');
 	const [page, setPage] = useState(1);
@@ -23,30 +24,34 @@ export const MainContainer = ({ className }) => {
 	const [sortPrice, setSortPrice] = useState('');
 	const [isLoading, setIsLoading] = useState(true);
 	const dispatch = useDispatch();
-	const params = useParams();
+
+	const getMain = () =>
+		request(
+			`/device?search=${search}&category=${category}&page=${page}&limit=${PAGINATION_LIMIT}${sortPrice}`,
+		).then(({ data: { devices, lastPage } }) => {
+			setDevices(devices);
+			setLastPage(lastPage);
+			checkCategory();
+			setIsLoading(false);
+		});
+
+	const checkCategory = () => {
+		const prevCategory = category;
+		if (prevCategory !== params.device) {
+			setPage(1);
+		}
+		if (!params.device) {
+			console.log(params.device);
+			setPage(page);
+			setCategory('');
+		} else {
+			setCategory(params.device);
+		}
+	};
 
 	useEffect(() => {
 		setIsLoading(true);
-		const getByCategory = () =>
-			request(
-				`/device?search=${search}&category=${category}&page=${page}${sortPrice}`,
-			).then(({ data: { devices, lastPage } }) => {
-				setDevices(devices);
-				setLastPage(lastPage);
-				setPage(1);
-				setIsLoading(false);
-			});
-		const getMain = () =>
-			request(`/device?search=${search}&page=${page}${sortPrice}`).then(
-				({ data: { devices, lastPage } }) => {
-					setDevices(devices);
-					setLastPage(lastPage);
-					setIsLoading(false);
-				},
-			);
-
-		setCategory(params.device);
-		params.device ? getByCategory() : getMain();
+		getMain();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, category, page, sortPrice, shouldSearch, params]);
 
@@ -113,6 +118,7 @@ export const MainContainer = ({ className }) => {
 							id={item._id}
 							onPlus={item.onPlus}
 							loading={isLoading}
+							setIsLoading={setIsLoading}
 						/>
 					))
 				) : (

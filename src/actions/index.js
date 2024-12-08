@@ -12,3 +12,8 @@ export * from './logout';
 export * from './delete-from-cart';
 export * from './add-to-cart';
 export * from './set-cart-data';
+export * from './load-cart-async';
+export * from './set-cart-storage';
+export * from './upload-cart-async';
+export * from './clear-cart';
+export * from './switch-modal';

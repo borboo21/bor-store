@@ -8,12 +8,14 @@ import { cartSelector, userSelector } from '../../selectors';
 import { addCart } from '../../actions/add-to-cart';
 import { deleteFromCart } from '../../actions/delete-from-cart';
 import styled from 'styled-components';
-import { SkeletonMain } from '../skeleton';
+import { Loader, SkeletonMain } from '../loaders';
+import { useState } from 'react';
 
 const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 	const cart = useSelector(cartSelector);
 	const user = useSelector(userSelector);
 	const userId = user.id;
+	const [isLoading, setIsLoading] = useState(false);
 
 	const inCart = cart.devices.some((device) => device.deviceId === props.id);
 
@@ -28,7 +30,7 @@ const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 
 	const handleClickPlus = (userId) => {
 		if (user.roleId !== 3) {
-			dispatch(addCartAsync(userId, device));
+			dispatch(addCartAsync(userId, device, setIsLoading));
 		} else {
 			dispatch(addCart(device, props.price));
 			sessionStorage.setItem('cartData', JSON.stringify([...cart.devices, device]));
@@ -40,7 +42,15 @@ const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 			(cartItem) => cartItem.deviceId === id,
 		).quantity;
 		user.roleId !== 3
-			? dispatch(deleteFromCartAsync(id, userId, props.price, quantityInCart))
+			? dispatch(
+					deleteFromCartAsync(
+						id,
+						userId,
+						props.price,
+						quantityInCart,
+						setIsLoading,
+					),
+				)
 			: dispatch(deleteFromCart(id, props.price, quantityInCart));
 	};
 
@@ -63,11 +73,18 @@ const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 								<b>{props.price}₽</b>
 							</div>
 							{!inCart ? (
-								<CardButton
-									faIcon={faPlus}
-									color="#ffffff"
-									onClick={() => handleClickPlus(userId)}
-								/>
+								isLoading ? (
+									<Loader />
+								) : (
+									<CardButton
+										faIcon={faPlus}
+										color="#ffffff"
+										onClick={() => handleClickPlus(userId)}
+										isLoading={isLoading}
+									/>
+								)
+							) : isLoading ? (
+								<Loader />
 							) : (
 								<>
 									<CounterItem id={props.id} price={props.price} />
@@ -77,6 +94,7 @@ const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 										onClick={() =>
 											handleClickDelete(props.id, userId)
 										}
+										isLoading={isLoading}
 									/>
 								</>
 							)}

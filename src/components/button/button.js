@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 
-const ButtonContainer = ({ className, onClick, children, icon, isActive }) => (
-	<button className={className} onClick={onClick} active={isActive}>
+const ButtonContainer = ({ className, onClick, children, icon, isActive, disabled }) => (
+	<button className={className} onClick={onClick} active={isActive} disabled={disabled}>
 		{children}
 		{icon ? <FontAwesomeIcon icon={icon} /> : ''}
 	</button>
@@ -11,20 +11,18 @@ const ButtonContainer = ({ className, onClick, children, icon, isActive }) => (
 export const Button = styled(ButtonContainer)`
 		border: 1px solid #ebe5e5;
 		border-radius: 10px;
-		margin: 0 10px 0 10px;
+		margin: 0 5px 0 5px;
 		width: 60px;
 		height: 45px;
-		background-color: #ffffff;
-		cursor: pointer;
+		cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
 		background-color: ${({ active }) => (active ? '#ebe5e5' : '#ffffff')};
-
-
 		opacity: 0.5;
 		transition: opacity 0.2s ease-in-out;
 
 		&: hover {
 			opacity: 1;
 		}
+
 		&: active {
 			background-color: #ebe5e5;
 		}

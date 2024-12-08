@@ -13,6 +13,11 @@ body {
 	position: relative;
 }
 
+
+body.modal-open {
+	overflow: hidden;
+}
+
 html,
 body,
 #root {

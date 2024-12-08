@@ -2,12 +2,21 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 import { CardButton } from '../card-button/card-button';
 import { CounterItem } from '../counter/counter';
 import { deleteFromCart, deleteFromCartAsync } from '../../actions';
+import { Loader } from '../loaders';
 import styled from 'styled-components';
 
 const cartItemContainer = ({ className, dispatch, userId, userRole, ...props }) => {
 	const handleClickX = () => {
 		userRole !== 3
-			? dispatch(deleteFromCartAsync(props.id, userId, props.price, props.quantity))
+			? dispatch(
+					deleteFromCartAsync(
+						props.id,
+						userId,
+						props.price,
+						props.quantity,
+						props.setIsLoading,
+					),
+				)
 			: dispatch(deleteFromCart(props.id, props.price, props.quantity));
 	};
 
@@ -23,7 +32,11 @@ const cartItemContainer = ({ className, dispatch, userId, userRole, ...props }) 
 					quantity={props.quantity}
 				/>
 			</div>
-			<CardButton faIcon={faX} onClick={handleClickX} />
+			{props.isLoading ? (
+				<Loader />
+			) : (
+				<CardButton faIcon={faX} onClick={handleClickX} />
+			)}
 		</div>
 	);
 };

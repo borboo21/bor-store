@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { request } from '../../../../../utils/request';
 import { CATEGORIES } from '../../../../../constants';
 import styled from 'styled-components';
+import { Button } from '../../../../../components';
 
 const DeviceRowContainer = ({ className, ...props }) => {
 	const [isEdit, setIsEdit] = useState(false);
@@ -77,6 +78,13 @@ const DeviceRowContainer = ({ className, ...props }) => {
 							value={newURL}
 						/>
 					</div>
+					<Button
+						onClick={() =>
+							onSave(props.id, newName, Number(newPrice), newURL)
+						}
+					>
+						<FontAwesomeIcon icon={faFloppyDisk} size="xl" />
+					</Button>
 				</TableRow>
 			) : (
 				<TableRow border={true}>
@@ -84,22 +92,15 @@ const DeviceRowContainer = ({ className, ...props }) => {
 					<div className="name-column">{props.name}</div>
 					<div className="price-column">{props.price}</div>
 					<div className="url-column">{symbolLengthBlock(props.imageUrl)}</div>
+					<Button onClick={handleEditClick} edit={true}>
+						<FontAwesomeIcon icon={faPen} size="xl" />
+					</Button>
+					<Button onClick={props.onDelete} del={true}>
+						<FontAwesomeIcon icon={faTrash} size="xl" />
+					</Button>
 				</TableRow>
 			)}
-			<div className="controls">
-				{isEdit ? (
-					<FontAwesomeIcon
-						icon={faFloppyDisk}
-						onClick={() =>
-							onSave(props.id, newName, Number(newPrice), newURL)
-						}
-						size="xl"
-					/>
-				) : (
-					<FontAwesomeIcon icon={faPen} onClick={handleEditClick} size="xl" />
-				)}
-				<FontAwesomeIcon icon={faTrash} onClick={props.onDelete} size="xl" />
-			</div>
+			<div className="controls"></div>
 		</div>
 	);
 };
@@ -110,8 +111,8 @@ export const DeviceRow = styled(DeviceRowContainer)`
 	font-size: 16px;
 	width: 550px;
 
-	.controls {
-		margin-left: 10px;
+	button {
+		margin-bottom: 5px;
 	}
 
 	.edit-input {

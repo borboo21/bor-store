@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux';
 import { userSelector } from '../../../selectors';
 import { checkAccess } from '../../../utils';
 import { ROLE } from '../../../constants';
-import styled from 'styled-components';
 import { PrivateContent } from '../../../components/private-content/private-content';
+import styled from 'styled-components';
 
 const AllPageContainer = ({ className }) => {
 	const [device, setDevice] = useState([]);
@@ -48,7 +48,7 @@ const AllPageContainer = ({ className }) => {
 							<div className="category-column">Категория</div>
 							<div className="name-column">Название</div>
 							<div className="price-column">Цена</div>
-							<div className="url-column">Ссылка на картинку</div>
+							<div className="url-column">Ссылка</div>
 						</div>
 					</TableRow>
 					{device.map(({ category, _id, imageUrl, name, price }) => (
@@ -74,7 +74,7 @@ export const AllPage = styled(AllPageContainer)`
 	display: flex;
 	flex-direction: column;
 	margin: 0 auto;
-	font-size: 18px;
+	font-size: 16px;
 
 	.all-page-header {
 		padding-bottom: 20px;

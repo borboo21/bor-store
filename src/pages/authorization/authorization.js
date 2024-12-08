@@ -5,15 +5,14 @@ import { Link, Navigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AuthFormError, GreenButton } from '../../components';
+import { setUser, uploadCartAsync, loadCartAsync } from '../../actions';
 import { useResetForm } from '../../hooks';
-import { setUser } from '../../actions';
 import { selectUserRole } from '../../selectors';
 import { ROLE } from '../../constants';
 import { request } from '../../utils/request';
-import { faArrowRight, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRight, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
-import { uploadCartAsync } from '../../actions/upload-cart-async';
 
 const authFormSchema = yup.object().shape({
 	login: yup
@@ -46,7 +45,6 @@ const AuthorizationContainer = ({ className }) => {
 		reset,
 		handleSubmit,
 		formState: { errors },
-		getValues,
 	} = useForm({
 		defaultValues: {
 			login: '',
@@ -69,8 +67,8 @@ const AuthorizationContainer = ({ className }) => {
 				setServerError(`Ошибка запроса: ${error}`);
 				return;
 			}
-
 			dispatch(setUser(user));
+			dispatch(loadCartAsync(user.id));
 			sessionStorage.setItem('userData', JSON.stringify(user));
 			if (sessionStorage.cartData) {
 				uploadCartAsync(user.id, JSON.parse(sessionStorage.getItem('cartData')));
@@ -85,7 +83,6 @@ const AuthorizationContainer = ({ className }) => {
 	if (roleId !== ROLE.GUEST) {
 		return <Navigate to="/" />;
 	}
-	console.log(getValues());
 
 	return (
 		<div className={className}>

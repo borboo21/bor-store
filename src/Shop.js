@@ -1,13 +1,13 @@
 import { Route, Routes } from 'react-router';
 import { Footer, Header } from './components';
 import { Authorization, Cart, DevicePage, Main, Registration } from './pages';
-import { useLayoutEffect, useState } from 'react';
-import styled from 'styled-components';
+import { useLayoutEffect } from 'react';
 import { AdminPage, AddPage, AllPage } from './pages/admin';
 import { useDispatch } from 'react-redux';
 import { setUser } from './actions';
 import { setCartStorage } from './actions/set-cart-storage';
 import { loadCartAsync } from './actions/load-cart-async';
+import styled from 'styled-components';
 
 const AppColumn = styled.div`
 	display: flex;
@@ -46,12 +46,10 @@ export const Shop = () => {
 		}
 	}, [dispatch]);
 
-	const [cartOpened, setCartOpened] = useState(false);
-
 	return (
 		<AppColumn>
-			<Header onClickCart={() => setCartOpened(true)} />
-			{cartOpened && <Cart onClose={() => setCartOpened(false)} />}
+			<Header />
+			<Cart />
 			<Page>
 				<Routes>
 					<Route path="/" element={<Main />} />
