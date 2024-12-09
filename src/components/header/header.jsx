@@ -14,7 +14,7 @@ import { clearCart, logout, switchModal } from '../../actions';
 import myIcon from './logo/bor-store.png';
 import styled from 'styled-components';
 
-const HeaderContainer = ({ className, ...props }) => {
+const HeaderContainer = ({ className }) => {
 	const dispatch = useDispatch();
 	const cart = useSelector(cartSelector);
 	const user = useSelector(userSelector);
@@ -118,11 +118,11 @@ export const Header = styled(HeaderContainer)`
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		cursor: pointer;
 		padding-left: 10px;
 	}
 
 	& .basket {
+		cursor: pointer;
 		padding: 3px 0;
 
 		&:hover {

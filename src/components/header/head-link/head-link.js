@@ -19,7 +19,6 @@ const LinkContainer = ({ className, to, children, icon, size }) => (
 
 export const HeadLink = styled(LinkContainer)`
 	padding: 0 10px;
-	cursor: pointer;
 	display: flex;
 	align-items: center;
 
@@ -32,7 +31,7 @@ export const HeadLink = styled(LinkContainer)`
 		align-items: center;
 		color: #ffff;
 		flex-direction: column;
-
+		cursor: pointer;
 		&:hover {
 			color: #dfdfdf;
 		}
