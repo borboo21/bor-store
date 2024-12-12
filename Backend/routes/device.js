@@ -1,4 +1,3 @@
-// Вывод списка девайсов, поиск, категории, сортировка, пагинация
 const express = require('express');
 const authenticated = require('../middlewares/authenticated');
 const hasRole = require('../middlewares/hasRole');
@@ -15,7 +14,7 @@ const mapDevice = require('../helpers/mapDevice');
 
 const router = express.Router({ mergeParams: true });
 
-// получение всех девайсов для главной страницы
+// Вывод списка девайсов, поиск, категории, сортировка, пагинация
 router.get('/', async (req, res) => {
 	const data = await getDevices(
 		req.query.search,
@@ -28,6 +27,7 @@ router.get('/', async (req, res) => {
 	res.send({ data });
 });
 
+// Получение всех девайсов
 router.get('/all', async (req, res) => {
 	const data = await getAllDevices();
 	res.send({ data });

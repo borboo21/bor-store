@@ -1,5 +1,5 @@
 import { BreadCrumbs } from '../../../components';
-import { faBorderAll, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faBorderAll, faPlus, faRubleSign } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -36,6 +36,12 @@ const AdminPageContainer = ({ className }) => {
 							<span>Редактировать товары</span>
 						</div>
 					</Link>
+					<Link to={`/admin/orders`}>
+						<div className="edit-container">
+							<FontAwesomeIcon icon={faRubleSign} size="2xl" />
+							<span>Список заказов</span>
+						</div>
+					</Link>
 				</div>
 			</div>
 		</PrivateContent>
@@ -50,6 +56,8 @@ export const AdminPage = styled(AdminPageContainer)`
 		width: 500px;
 		height: 100%;
 		justify-content: space-around;
+		flex-direction: row;
+		flex-wrap: wrap;
 	}
 
 	.add-container {

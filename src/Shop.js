@@ -1,12 +1,21 @@
-import { Route, Routes } from 'react-router';
-import { Footer, Header } from './components';
-import { Authorization, Cart, DevicePage, Main, Registration } from './pages';
 import { useLayoutEffect } from 'react';
-import { AdminPage, AddPage, AllPage } from './pages/admin';
 import { useDispatch } from 'react-redux';
-import { setUser } from './actions';
-import { setCartStorage } from './actions/set-cart-storage';
-import { loadCartAsync } from './actions/load-cart-async';
+import { Route, Routes } from 'react-router';
+import { Error, Footer, Header } from './components';
+import {
+	AddPage,
+	AdminPage,
+	AllPage,
+	Authorization,
+	Cart,
+	DevicePage,
+	Main,
+	Orders,
+	Registration,
+} from './pages';
+import { loadCartAsync, setCartStorage, setUser } from './actions';
+
+import { ERROR } from './constants';
 import styled from 'styled-components';
 
 const AppColumn = styled.div`
@@ -56,10 +65,12 @@ export const Shop = () => {
 					<Route path="/admin" element={<AdminPage />} />
 					<Route path="/admin/all" element={<AllPage />} />
 					<Route path="/admin/add" element={<AddPage />} />
+					<Route path="/admin/orders" element={<Orders />} />
 					<Route path="/login" element={<Authorization />} />
 					<Route path="/register" element={<Registration />} />
 					<Route path="/:device" element={<Main />} />
 					<Route path="/:device/:id" element={<DevicePage />} />
+					<Route path="*" element={<Error error={ERROR.PAGE_NOT_EXIST} />} />
 				</Routes>
 			</Page>
 			<Footer />

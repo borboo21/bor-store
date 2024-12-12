@@ -32,6 +32,8 @@ const BreadCrumbsContainer = ({ className, lastName }) => {
 };
 
 export const BreadCrumbs = styled(BreadCrumbsContainer)`
+	padding-bottom: 20px;
+
 	.breadcrumb-item {
 		color: #9a9a9a;
 		font-size: 12px;

@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { CardButton, GreenButton, CartItem } from '../../components';
 import { cartSelector, userSelector, appSelector } from '../../selectors';
 import { useClickAway } from '@uidotdev/usehooks';
-import { switchModal } from '../../actions';
+import { clearCart, loadCartAsync, switchModal, takeOrder } from '../../actions';
 import { faArrowLeft, faArrowRight, faX } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
@@ -18,6 +19,12 @@ const CartContainer = ({ className }) => {
 	const userRole = user.roleId;
 
 	const onClose = () => dispatch(switchModal());
+	const onTakeOrder = () => {
+		takeOrder(userId);
+		dispatch(clearCart());
+		loadCartAsync();
+		onClose();
+	};
 
 	const ref = useClickAway(onClose);
 
@@ -96,15 +103,30 @@ const CartContainer = ({ className }) => {
 									<b>{Math.floor(cart.amount * 0.02)}₽</b>
 								</li>
 							</ul>
-							<GreenButton
-								className="cartButton"
-								right={true}
-								place={20}
-								onClick={onClose}
-								icon={faArrowRight}
-							>
-								Оформить заказ
-							</GreenButton>
+							{userId ? (
+								<GreenButton
+									className="cartButton"
+									right={true}
+									place={20}
+									onClick={onTakeOrder}
+									icon={faArrowRight}
+								>
+									Оформить заказ
+								</GreenButton>
+							) : (
+								<span className="not-user-description">
+									<Link to={'/login'} onClick={onClose}>
+										{' '}
+										Войдите
+									</Link>{' '}
+									или{' '}
+									<Link to={'/register'} onClick={onClose}>
+										{' '}
+										зарегистрируйтесь
+									</Link>
+									, чтобы сделать заказ!
+								</span>
+							)}
 						</div>
 					</div>
 				)}
@@ -165,6 +187,13 @@ export const Cart = styled(CartContainer)`
 		padding-bottom: 15px;
 	}
 
+	.not-user-description {
+		font-size: 18px;
+		a {
+			text-decoration: underline;
+		}
+	}
+
 	.cartItems {
 		flex: 1;
 		overflow: auto;
@@ -193,6 +222,7 @@ export const Cart = styled(CartContainer)`
 	}
 
 	.cartTotalBlock {
+	text-align: center;
 		ul {
 			padding-inline-start: 0px;
 			margin-bottom: 40px;
