@@ -41,7 +41,6 @@ export const MainContainer = ({ className }) => {
 			setPage(1);
 		}
 		if (!params.device) {
-			console.log(params.device);
 			setPage(page);
 			setCategory('');
 		} else {

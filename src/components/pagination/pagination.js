@@ -11,7 +11,7 @@ const PaginationContainer = ({ className, page, lastPage, setPage }) => {
 			<Button disabled={page === 1} onClick={() => setPage(page - 1)}>
 				<FontAwesomeIcon icon={faArrowLeft} />
 			</Button>
-			<div className="current-page">Страница:{page}</div>
+			<div className="current-page">Страница: {page}</div>
 			<Button disabled={page === lastPage} onClick={() => setPage(page + 1)}>
 				<FontAwesomeIcon icon={faArrowRight} />
 			</Button>
@@ -44,5 +44,6 @@ export const Pagination = styled(PaginationContainer)`
 		text-align: center;
 		border: 1px solid #ebe5e5;
 		border-radius: 20px;
+		font-size: 16px;
 	}
 `;

@@ -1,15 +1,18 @@
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { CardButton } from '../card-button/card-button';
-import { Link } from 'react-router-dom';
 import { CounterItem } from '../counter/counter';
-import { addCartAsync, deleteFromCartAsync } from '../../actions';
-import { useSelector } from 'react-redux';
+import {
+	addCart,
+	addCartAsync,
+	deleteFromCart,
+	deleteFromCartAsync,
+} from '../../actions';
 import { cartSelector, userSelector } from '../../selectors';
-import { addCart } from '../../actions/add-to-cart';
-import { deleteFromCart } from '../../actions/delete-from-cart';
-import styled from 'styled-components';
 import { Loader, SkeletonMain } from '../loaders';
 import { useState } from 'react';
+import styled from 'styled-components';
 
 const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 	const cart = useSelector(cartSelector);
@@ -61,7 +64,7 @@ const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 			) : (
 				<>
 					<div className="device-image">
-						<Link to={`/${props.category}/${props.id}`}>
+						<Link to={`/device/${props.category}/${props.id}`}>
 							<img width={170} src={props.imageUrl} alt="device" />
 						</Link>
 					</div>

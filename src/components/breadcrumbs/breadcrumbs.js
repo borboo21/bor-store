@@ -8,6 +8,7 @@ const BreadCrumbsContainer = ({ className, lastName }) => {
 	if (lastName) {
 		pathNames[pathNames.length - 1] = lastName;
 	}
+
 	return (
 		<div className={className}>
 			<nav aria-label="breadcrumb">
@@ -17,14 +18,18 @@ const BreadCrumbsContainer = ({ className, lastName }) => {
 					</Link>
 				</span>
 				{pathNames.map((value, index) => {
-					const to = `/${pathNames.slice(0, index + 1).join('/')}`;
-					const lastKeyIndex = pathNames.length - 1;
-					return (
-						<Link key={index} to={index === lastKeyIndex ? '' : to}>
-							<span className="breadcrumb-separator">/</span>
-							<span className="breadcrumb-item">{value}</span>
-						</Link>
-					);
+					if (value !== 'device') {
+						const to = `/${pathNames.slice(0, index + 1).join('/')}`;
+						const lastKeyIndex = pathNames.length - 1;
+						return (
+							<Link key={index} to={index === lastKeyIndex ? '' : to}>
+								<span className="breadcrumb-separator">/</span>
+								<span className="breadcrumb-item">{value}</span>
+							</Link>
+						);
+					} else {
+						return null;
+					}
 				})}
 			</nav>
 		</div>

@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { CardButton, GreenButton, CartItem } from '../../components';
+import { CardButton, CartItem } from '../../components';
 import { cartSelector, userSelector, appSelector } from '../../selectors';
 import { loadCartAsync, switchCartModal, takeOrder } from '../../actions';
+import { CartSendOrder, CartTotalBlock, EmptyCart } from './components';
 import { useClickAway } from '@uidotdev/usehooks';
-import { faArrowLeft, faArrowRight, faX } from '@fortawesome/free-solid-svg-icons';
+import { faX } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
 const CartContainer = ({ className }) => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [isOrdered, setIsOrdered] = useState(false);
 
 	const dispatch = useDispatch();
 	const cart = useSelector(cartSelector);
@@ -18,10 +19,14 @@ const CartContainer = ({ className }) => {
 	const userId = user.id;
 	const userRole = user.roleId;
 
-	const onClose = () => dispatch(switchCartModal());
+	const onClose = () => {
+		dispatch(switchCartModal());
+		setIsOrdered(false);
+	};
 
 	const onTakeOrder = () => {
 		dispatch(takeOrder(userId));
+		setIsOrdered(true);
 		loadCartAsync();
 	};
 
@@ -46,33 +51,18 @@ const CartContainer = ({ className }) => {
 		<div className={className}>
 			<div className="drawer" ref={ref}>
 				{cart.devices.length !== 0 && (
-					<div className="cartHeader">
-						<h2 className="cartName">Корзина</h2>
+					<div className="cart-header">
+						<h2 className="cart-name">Корзина</h2>
 						<CardButton onClick={onClose} faIcon={faX} />
 					</div>
 				)}
-				{cart.devices.length === 0 ? (
-					<div className="emptyCart">
-						<img width={120} src="/img/empty-cart.png" alt="empty" />
-						<div className="emptyCartDescription">
-							<b className="empty-text">Корзина пустая</b>
-							<span className="empty-description">
-								Добавь любой девайс, чтобы сделать заказ!
-							</span>
-						</div>
-						<GreenButton
-							className="cartButton"
-							left={true}
-							place={320}
-							onClick={onClose}
-							icon={faArrowLeft}
-						>
-							Вернуться назад
-						</GreenButton>
-					</div>
+				{isOrdered ? (
+					<CartSendOrder />
+				) : cart.devices.length === 0 ? (
+					<EmptyCart onClose={onClose} />
 				) : (
 					<>
-						<div className="cartItems">
+						<div className="cart-items">
 							{cart.devices.map((item) => (
 								<CartItem
 									dispatch={dispatch}
@@ -89,44 +79,12 @@ const CartContainer = ({ className }) => {
 								/>
 							))}
 						</div>
-						<div className="cartTotalBlock">
-							<ul>
-								<li className="sum">
-									<span>Итого:</span>
-									<div></div>
-									<b>{cart.amount}₽</b>
-								</li>
-								<li className="bonus">
-									<span>Бонусов к начислению:</span>
-									<div></div>
-									<b>{Math.floor(cart.amount * 0.02)}₽</b>
-								</li>
-							</ul>
-							{userId ? (
-								<GreenButton
-									className="cartButton"
-									right={true}
-									place={20}
-									onClick={onTakeOrder}
-									icon={faArrowRight}
-								>
-									Оформить заказ
-								</GreenButton>
-							) : (
-								<span className="not-user-description">
-									<Link to={'/login'} onClick={onClose}>
-										{' '}
-										Войдите
-									</Link>{' '}
-									или{' '}
-									<Link to={'/register'} onClick={onClose}>
-										{' '}
-										зарегистрируйтесь
-									</Link>
-									, чтобы сделать заказ!
-								</span>
-							)}
-						</div>
+						<CartTotalBlock
+							cart={cart}
+							userId={userId}
+							onClose={onClose}
+							onTakeOrder={onTakeOrder}
+						/>
 					</>
 				)}
 			</div>
@@ -142,7 +100,7 @@ export const Cart = styled(CartContainer)`
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 1;
-	overFlow: hidden;
+	overflow: hidden;
 
 	.drawer {
 		display: flex;
@@ -156,91 +114,22 @@ export const Cart = styled(CartContainer)`
 		padding: 30px;
 	}
 
-	.cartHeader {
+	.cart-header {
 		display: flex;
 		align-items: center;
-    	justify-content: space-between;
+		justify-content: space-between;
 	}
 
-	.emptyCart {
+	.cart-name {
 		display: flex;
-		flex-direction: column;
-		align-items: center;
-		height: 100%;
-		justify-content: center;
+		justify-content: space-between;
+		margin: 0 0 30px 0;
 	}
 
-	.emptyCartDescription {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	.empty-text {
-		padding: 15px;
-    	font-size: 22px;
-	}
-
-	.empty-description {
-		padding-bottom: 15px;
-	}
-
-	.not-user-description {
-		font-size: 18px;
-		a {
-			text-decoration: underline;
-		}
-	}
-
-	.cartItems {
+	.cart-items {
 		flex: 1;
 		overflow: auto;
 		margin-bottom: 40px;
 		padding-right: 10px;
-	}
-
-	.cartItem {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		border: 1px solid #ebe5e5;
-		border-radius: 20px;
-		padding: 20px;
-		margin-bottom: 20px;
-		}
-
-	.deviceInfo {
-		margin-right: 10px;
-		font-size: 16px;
-	}
-
-	.deviceName {
-		margin-bottom: 5px;
-	}
-
-	.cartTotalBlock {
-	text-align: center;
-		ul {
-			padding-inline-start: 0px;
-			margin-bottom: 40px;
-		}
-		li {
-			display: flex;
-			align-items: flex-end;
-			margin-bottom: 20px;
-		}
-		div {
-			flex: 1;
-			height: 1px;
-			border-bottom: 1px dashed #dfdfdf;
-			position: relative;
-			top: -4px;
-			margin: 0 7px;
-		}
-
-	.cartName {
-		display: flex;
-		justify-content: space-between;
-		margin: 0 0 30px 0;
 	}
 `;

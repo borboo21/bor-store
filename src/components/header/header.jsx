@@ -59,9 +59,12 @@ const HeaderContainer = ({ className }) => {
 					{user.roleId === 0 ? <HeadLink to="admin" icon={faGear} /> : ''}
 					{user.login ? (
 						<div className="user" onClick={onLogout} icon={faUser}>
-							<FontAwesomeIcon icon={faUser} size="xl" />
-							<FontAwesomeIcon className="exit" icon={faXmark} size="xs" />
-							<span>{user.login}</span>
+							<div className="exit">
+								<FontAwesomeIcon icon={faUser} size="xl" />
+								<FontAwesomeIcon icon={faXmark} size="xs" />
+							</div>
+
+							<span className="user-name">{user.login}</span>
 						</div>
 					) : (
 						<HeadLink to="login" icon={faUser} />
@@ -132,7 +135,6 @@ export const Header = styled(HeaderContainer)`
 
 	.user {
 		display: flex;
-		position: relative;
 		flex-direction: column;
 		position: relative;
 		cursor: pointer;
@@ -144,9 +146,9 @@ export const Header = styled(HeaderContainer)`
 	}
 
 	.exit {
-		position: absolute;
-		left: 40px;
-		top: -6px;
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
 	}
 
 	.amount {

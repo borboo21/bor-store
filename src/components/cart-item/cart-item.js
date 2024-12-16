@@ -23,8 +23,8 @@ const cartItemContainer = ({ className, dispatch, userId, userRole, ...props }) 
 	return (
 		<div className={className}>
 			<img width={90} src={props.img} alt="device" />
-			<div className="deviceInfo">
-				<p className="deviceName">{props.name}</p>
+			<div className="device-info">
+				<p className="device-name">{props.name}</p>
 				<b>{props.price}₽</b>
 				<CounterItem
 					id={props.id}
@@ -47,11 +47,10 @@ export const CartItem = styled(cartItemContainer)`
 	justify-content: space-between;
 	border: 1px solid #ebe5e5;
 	border-radius: 20px;
-	overflow: hidden;
 	padding: 20px;
 	margin-bottom: 20px;
 
-	.deviceInfo {
+	.device-info {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -61,7 +60,7 @@ export const CartItem = styled(cartItemContainer)`
 		font-size: 16px;
 	}
 
-	.deviceName {
+	.device-name {
 		margin-bottom: 5px;
 	}
 `;

@@ -7,7 +7,6 @@ function getAllOrders() {
 
 async function takeOrder(userId) {
 	const user = await User.findById(userId);
-	console.log(user);
 	const order = new Order({
 		userId: user._id,
 		login: user.login,

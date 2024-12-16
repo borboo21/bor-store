@@ -32,7 +32,6 @@ const AddPageContainer = ({ className }) => {
 
 	useEffect(() => {
 		if (!checkAccess([ROLE.ADMIN], user.roleId)) {
-			console.log(user.roleId);
 			return;
 		}
 	}, [user.roleId]);
@@ -59,7 +58,7 @@ const AddPageContainer = ({ className }) => {
 			setIsLoading,
 		);
 		setImageUrl('');
-		setCategory('');
+		setCategory('iPhone');
 		setName('');
 		setPrice(0);
 	};

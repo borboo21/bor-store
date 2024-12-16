@@ -9,7 +9,7 @@ import { setUser, uploadCartAsync, loadCartAsync } from '../../actions';
 import { useResetForm } from '../../hooks';
 import { selectUserRole } from '../../selectors';
 import { ROLE } from '../../constants';
-import { request } from '../../utils/request';
+import { request } from '../../utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';

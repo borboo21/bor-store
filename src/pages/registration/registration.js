@@ -6,14 +6,13 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AuthFormError, GreenButton } from '../../components';
 import { useResetForm } from '../../hooks';
-import { setUser } from '../../actions';
+import { setUser, uploadCartAsync } from '../../actions';
 import { selectUserRole } from '../../selectors';
 import { ROLE } from '../../constants';
-import { request } from '../../utils/request';
-import styled from 'styled-components';
+import { request } from '../../utils';
 import { faArrowRight, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { uploadCartAsync } from '../../actions/upload-cart-async';
+import styled from 'styled-components';
 
 const regFormSchema = yup.object().shape({
 	login: yup

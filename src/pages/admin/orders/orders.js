@@ -1,11 +1,11 @@
-import styled from 'styled-components';
-import { BreadCrumbs, PrivateContent } from '../../../components';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { BreadCrumbs, PrivateContent } from '../../../components';
+import { userSelector } from '../../../selectors';
 import { checkAccess, request } from '../../../utils';
 import { Order } from './components';
 import { ROLE } from '../../../constants';
-import { useSelector } from 'react-redux';
-import { userSelector } from '../../../selectors';
+import styled from 'styled-components';
 
 const OrdersContainer = ({ className }) => {
 	const user = useSelector(userSelector);
@@ -17,7 +17,6 @@ const OrdersContainer = ({ className }) => {
 		request(`/order/all`).then((ordersRes) => {
 			if (ordersRes.error) {
 				setError(ordersRes.error);
-				console.log(ordersRes.error);
 				return;
 			}
 			setOrderInfo(ordersRes.data);

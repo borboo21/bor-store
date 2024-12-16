@@ -12,7 +12,7 @@ const LinkContainer = ({ className, to, children, icon, size }) => (
 				</Link>
 			</>
 		) : (
-			<Link to={`/${to}`}>{children}</Link>
+			<Link to={`/device/${to}`}>{children}</Link>
 		)}
 	</div>
 );

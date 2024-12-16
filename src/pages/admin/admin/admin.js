@@ -1,13 +1,12 @@
-import { BreadCrumbs } from '../../../components';
-import { faBorderAll, faPlus, faRubleSign } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { BreadCrumbs, PrivateContent } from '../../../components';
 import { checkAccess } from '../../../utils';
 import { ROLE } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { userSelector } from '../../../selectors';
-import { PrivateContent } from '../../../components/private-content/private-content';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBorderAll, faPlus, faRubleSign } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
 const AdminPageContainer = ({ className }) => {

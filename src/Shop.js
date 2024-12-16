@@ -14,7 +14,6 @@ import {
 	Registration,
 } from './pages';
 import { loadCartAsync, setCartStorage, setUser } from './actions';
-
 import { ERROR } from './constants';
 import styled from 'styled-components';
 
@@ -68,8 +67,8 @@ export const Shop = () => {
 					<Route path="/admin/orders" element={<Orders />} />
 					<Route path="/login" element={<Authorization />} />
 					<Route path="/register" element={<Registration />} />
-					<Route path="/:device" element={<Main />} />
-					<Route path="/:device/:id" element={<DevicePage />} />
+					<Route path="/device/:device" element={<Main />} />
+					<Route path="/device/:device/:id" element={<DevicePage />} />
 					<Route path="*" element={<Error error={ERROR.PAGE_NOT_EXIST} />} />
 				</Routes>
 			</Page>

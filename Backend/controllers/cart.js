@@ -27,7 +27,6 @@ async function addCartForUser(userId, cart) {
 }
 
 // delete
-
 async function deleteDeviceInCart(userId, deviceId) {
 	await User.findByIdAndUpdate(userId, { $pull: { cart: { deviceId } } });
 }

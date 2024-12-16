@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { request } from '../../../../../utils/request';
 import { CATEGORIES } from '../../../../../constants';
-import styled from 'styled-components';
 import { Button } from '../../../../../components';
+import styled from 'styled-components';
 
 const DeviceRowContainer = ({ className, ...props }) => {
 	const [isEdit, setIsEdit] = useState(false);
@@ -108,7 +108,7 @@ const DeviceRowContainer = ({ className, ...props }) => {
 export const DeviceRow = styled(DeviceRowContainer)`
 	display: flex;
 	margin-top: 10px;
-	font-size: 16px;
+	font-size: 14px;
 	width: 550px;
 
 	button {

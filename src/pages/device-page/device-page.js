@@ -12,8 +12,8 @@ import {
 } from '../../actions';
 import { Loader, SkeletonDevice } from '../../components/loaders';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import { ERROR } from '../../constants';
 import styled from 'styled-components';
-import { CATEGORIES } from '../../constants';
 
 const DevicePageContainer = ({ className }) => {
 	const [error, setError] = useState(null);
@@ -25,22 +25,16 @@ const DevicePageContainer = ({ className }) => {
 	const device = useSelector(selectDevice);
 	const cart = useSelector(cartSelector);
 	const user = useSelector(userSelector);
-	console.log(params);
-
-	const verifyCategory = CATEGORIES.some((item) => item === params.device);
 
 	useEffect(() => {
-		if (!verifyCategory) {
-			setError('Неверная категория');
-			return;
-		}
 		setIsLoadingSkeleton(true);
 		dispatch(loadDeviceAsync(params.id)).then((deviceData) => {
-			console.log(deviceData);
-			setError(deviceData.error);
+			if (deviceData.error) {
+				setError(ERROR.DEVICE_NOT_FOUND);
+			}
 			setIsLoadingSkeleton(false);
 		});
-	}, [dispatch, params.id, setIsLoadingSkeleton, verifyCategory]);
+	}, [dispatch, params.id, setIsLoadingSkeleton]);
 
 	const inCart = cart.devices.some((item) => item.deviceId === device.id);
 
@@ -98,7 +92,6 @@ const DevicePageContainer = ({ className }) => {
 						<div className="description">
 							<h1>{device.name}</h1>
 							<h2>{device.price}₽</h2>
-							<div className="device-info"></div>
 							<div className="buy-container">
 								{!inCart ? (
 									!isLoadingSpinner ? (
@@ -172,8 +165,8 @@ export const DevicePage = styled(DevicePageContainer)`
 		flex-direction: row;
 		align-items: center;
 	}
+
 	.counter {
 		padding-left: 20px;
-	}
 	}
 `;

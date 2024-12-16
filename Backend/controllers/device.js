@@ -59,7 +59,6 @@ async function getAllDevices() {
 async function getDevice(id) {
 	const oneDevice = await Device.findById(id);
 	if (!oneDevice) {
-		console.log(oneDevice);
 		throw new Error('Device not found');
 	}
 	return oneDevice;

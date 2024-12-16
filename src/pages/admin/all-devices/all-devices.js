@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DeviceRow, TableRow } from './components';
 import { BreadCrumbs, PrivateContent } from '../../../components';
 import { selectModalIsOpen, userSelector } from '../../../selectors';
-import { request } from '../../../utils/request';
-import { checkAccess } from '../../../utils';
+import { checkAccess, request } from '../../../utils';
 import { ROLE } from '../../../constants';
 import { CLOSE_MODAL, openModal } from '../../../actions';
 import styled from 'styled-components';
@@ -42,7 +41,7 @@ const AllPageContainer = ({ className }) => {
 		return () => {
 			document.body.classList.remove('modal-open');
 		};
-	}, [isOpen, user.roleId]);
+	}, [isOpen, user.roleId, shouldUpdateDeviceList]);
 
 	const onDelete = (deviceId) => {
 		dispatch(
@@ -96,7 +95,7 @@ const AllPageContainer = ({ className }) => {
 export const AllPage = styled(AllPageContainer)`
 	display: flex;
 	flex-direction: column;
-	font-size: 16px;
+	font-size: 15px;
 
 	.all-page-header {
 		margin-left: 20px;
