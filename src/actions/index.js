@@ -16,5 +16,7 @@ export * from './load-cart-async';
 export * from './set-cart-storage';
 export * from './upload-cart-async';
 export * from './clear-cart';
-export * from './switch-modal';
+export * from './switch-cart-modal';
 export * from './take-order-async';
+export * from './close_modal';
+export * from './open-modal';

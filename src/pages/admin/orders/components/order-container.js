@@ -1,6 +1,11 @@
+import moment from 'moment/moment';
 import styled from 'styled-components';
 
 const OrderContainer = ({ className, ...props }) => {
+	function formatDate(isoDate) {
+		return moment(isoDate).format('DD.MM.YYYY HH:mm');
+	}
+
 	return (
 		<div className={className}>
 			<div className="header">
@@ -20,7 +25,7 @@ const OrderContainer = ({ className, ...props }) => {
 			<div className="base">
 				<div className="info">
 					<span className="name">{props.login}</span>
-					<span className="date">{props.createdAt}</span>
+					<span className="date">{formatDate(props.createdAt)}</span>
 				</div>
 				<div className="vertical-line"></div>
 				<div className="second">

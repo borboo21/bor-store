@@ -47,13 +47,22 @@ async function getDevices(
 }
 
 // get all devices
-function getAllDevices() {
-	return Device.find();
+async function getAllDevices() {
+	const allDevices = await Device.find();
+	if (!allDevices) {
+		throw new Error('Devices not found');
+	}
+	return allDevices;
 }
 
 // get item
-function getDevice(id) {
-	return Device.findById(id);
+async function getDevice(id) {
+	const oneDevice = await Device.findById(id);
+	if (!oneDevice) {
+		console.log(oneDevice);
+		throw new Error('Device not found');
+	}
+	return oneDevice;
 }
 
 module.exports = {

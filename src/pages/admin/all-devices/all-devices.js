@@ -1,39 +1,62 @@
-import { BreadCrumbs } from '../../../components';
-import { DeviceRow, TableRow } from './components';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { DeviceRow, TableRow } from './components';
+import { BreadCrumbs, PrivateContent } from '../../../components';
+import { selectModalIsOpen, userSelector } from '../../../selectors';
 import { request } from '../../../utils/request';
-import { useSelector } from 'react-redux';
-import { userSelector } from '../../../selectors';
 import { checkAccess } from '../../../utils';
 import { ROLE } from '../../../constants';
-import { PrivateContent } from '../../../components/private-content/private-content';
+import { CLOSE_MODAL, openModal } from '../../../actions';
 import styled from 'styled-components';
 
 const AllPageContainer = ({ className }) => {
+	const dispatch = useDispatch();
+	const isOpen = useSelector(selectModalIsOpen);
 	const [device, setDevice] = useState([]);
 	const [error, setError] = useState(null);
 	const [shouldUpdateDeviceList, setShouldUpdateDeviceList] = useState(false);
 
 	const user = useSelector(userSelector);
 
-	useEffect(() => {
-		if (!checkAccess([ROLE.ADMIN], user.roleId)) {
-			return;
-		}
+	const getAll = () =>
 		request('/device/all').then((deviceRes) => {
-			console.log(deviceRes.data);
 			if (deviceRes.error) {
 				setError(deviceRes.error);
 				return;
 			}
 			setDevice(deviceRes.data);
 		});
-	}, [shouldUpdateDeviceList, user.roleId]);
+
+	useEffect(() => {
+		if (!checkAccess([ROLE.ADMIN], user.roleId)) {
+			return;
+		}
+
+		getAll();
+
+		if (isOpen) {
+			document.body.classList.add('modal-open');
+		} else {
+			document.body.classList.remove('modal-open');
+		}
+		return () => {
+			document.body.classList.remove('modal-open');
+		};
+	}, [isOpen, user.roleId]);
 
 	const onDelete = (deviceId) => {
-		request(`/device/${deviceId}`, 'DELETE').then(() => {
-			setShouldUpdateDeviceList(!shouldUpdateDeviceList);
-		});
+		dispatch(
+			openModal({
+				text: 'Удалить товар?',
+				onConfirm: () => {
+					request(`/device/${deviceId}`, 'DELETE').then(() => {
+						setShouldUpdateDeviceList(!shouldUpdateDeviceList);
+					});
+					dispatch(CLOSE_MODAL);
+				},
+				onCancel: () => dispatch(CLOSE_MODAL),
+			}),
+		);
 	};
 
 	return (
@@ -73,15 +96,15 @@ const AllPageContainer = ({ className }) => {
 export const AllPage = styled(AllPageContainer)`
 	display: flex;
 	flex-direction: column;
-	margin: 0 auto;
 	font-size: 16px;
 
 	.all-page-header {
-		padding-bottom: 20px;
+		margin-left: 20px;
 	}
 	.all-page-main {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		margin-bottom: 20px;
 	}
 `;

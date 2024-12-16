@@ -1,13 +1,10 @@
-const CartItem = require('../models/Cart');
 const User = require('../models/user');
 
 // add
 async function addDeviceInCart(userId, device) {
-	const newItemInCart = await CartItem.create(device);
-
 	await User.findByIdAndUpdate(userId, { $push: { cart: device } });
 
-	return newItemInCart;
+	return device;
 }
 // add cart from frontend
 async function addCartForUser(userId, cart) {
@@ -32,7 +29,6 @@ async function addCartForUser(userId, cart) {
 // delete
 
 async function deleteDeviceInCart(userId, deviceId) {
-	await CartItem.deleteOne({ deviceId: deviceId });
 	await User.findByIdAndUpdate(userId, { $pull: { cart: { deviceId } } });
 }
 

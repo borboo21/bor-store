@@ -21,7 +21,7 @@ const CounterItemContainer = ({ className, id, price }) => {
 		if (quantity > 1) {
 			dispatch(switchQuantity(-1, id, price));
 			if (user.roleId !== 3) {
-				updateQuantity(id, user.id, quantity + 1);
+				updateQuantity(id, user.id, quantity - 1);
 			}
 		}
 	};

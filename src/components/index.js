@@ -13,3 +13,4 @@ export * from './auth-form-error/auth-form-error';
 export * from './error/error';
 export * from './cart-item/cart-item';
 export * from './private-content/private-content';
+export * from './modal/modal';

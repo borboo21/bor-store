@@ -1,7 +1,7 @@
 import { useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router';
-import { Error, Footer, Header } from './components';
+import { Error, Footer, Header, Modal } from './components';
 import {
 	AddPage,
 	AdminPage,
@@ -73,6 +73,7 @@ export const Shop = () => {
 					<Route path="*" element={<Error error={ERROR.PAGE_NOT_EXIST} />} />
 				</Routes>
 			</Page>
+			<Modal />
 			<Footer />
 		</AppColumn>
 	);

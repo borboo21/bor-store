@@ -10,7 +10,7 @@ import { HeadLink } from './head-link/head-link';
 import { cartSelector, userSelector } from '../../selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { ItemsInCart } from './items-in-cart/items-in-cart';
-import { clearCart, logout, switchModal } from '../../actions';
+import { clearCart, logout, switchCartModal } from '../../actions';
 import myIcon from './logo/bor-store.png';
 import styled from 'styled-components';
 
@@ -27,7 +27,7 @@ const HeaderContainer = ({ className }) => {
 	};
 
 	const onOpenCart = () => {
-		dispatch(switchModal());
+		dispatch(switchCartModal());
 	};
 
 	return (

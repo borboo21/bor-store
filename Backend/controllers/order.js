@@ -2,7 +2,7 @@ const Order = require('../models/Order');
 const User = require('../models/user');
 
 function getAllOrders() {
-	return Order.find();
+	return Order.find().sort({ createdAt: -1 });
 }
 
 async function takeOrder(userId) {

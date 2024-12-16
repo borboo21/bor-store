@@ -3,3 +3,7 @@ export * from './cart-selector';
 export * from './select-user-role';
 export * from './user-selector';
 export * from './app-selector';
+export * from './select-modal-is-open';
+export * from './select-modal-on-cancel';
+export * from './select-modal-on-confirm';
+export * from './select-modal-text';

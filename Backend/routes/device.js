@@ -29,15 +29,22 @@ router.get('/', async (req, res) => {
 
 // Получение всех девайсов
 router.get('/all', async (req, res) => {
-	const data = await getAllDevices();
-	res.send({ data });
+	try {
+		const data = await getAllDevices();
+		res.send({ data });
+	} catch (e) {
+		res.send({ error: e.message || 'Unknown error' });
+	}
 });
 
 // получение одного девайса
 router.get('/:id', async (req, res) => {
-	const device = await getDevice(req.params.id);
-
-	res.send({ data: mapDevice(device) });
+	try {
+		const device = await getDevice(req.params.id);
+		res.send({ data: mapDevice(device) });
+	} catch (e) {
+		res.send({ error: e.message || 'Unknown error' });
+	}
 });
 
 // добавить девайс

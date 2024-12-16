@@ -10,27 +10,37 @@ import {
 	deleteFromCart,
 	addCart,
 } from '../../actions';
-import { SkeletonDevice } from '../../components/loaders';
+import { Loader, SkeletonDevice } from '../../components/loaders';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
+import { CATEGORIES } from '../../constants';
 
 const DevicePageContainer = ({ className }) => {
 	const [error, setError] = useState(null);
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoadingSkeleton, setIsLoadingSkeleton] = useState(true);
+	const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
 
 	const dispatch = useDispatch();
 	const params = useParams();
 	const device = useSelector(selectDevice);
 	const cart = useSelector(cartSelector);
 	const user = useSelector(userSelector);
+	console.log(params);
+
+	const verifyCategory = CATEGORIES.some((item) => item === params.device);
 
 	useEffect(() => {
-		setIsLoading(true);
+		if (!verifyCategory) {
+			setError('Неверная категория');
+			return;
+		}
+		setIsLoadingSkeleton(true);
 		dispatch(loadDeviceAsync(params.id)).then((deviceData) => {
+			console.log(deviceData);
 			setError(deviceData.error);
-			setIsLoading(false);
+			setIsLoadingSkeleton(false);
 		});
-	}, [dispatch, params.id, setIsLoading]);
+	}, [dispatch, params.id, setIsLoadingSkeleton, verifyCategory]);
 
 	const inCart = cart.devices.some((item) => item.deviceId === device.id);
 
@@ -45,7 +55,7 @@ const DevicePageContainer = ({ className }) => {
 
 	const handleClick = () => {
 		if (user.roleId !== 3) {
-			dispatch(addCartAsync(user.id, cartDevice, setIsLoading));
+			dispatch(addCartAsync(user.id, cartDevice, setIsLoadingSpinner));
 		} else {
 			dispatch(addCart(cartDevice, device.price));
 			sessionStorage.setItem(
@@ -66,7 +76,7 @@ const DevicePageContainer = ({ className }) => {
 						user.id,
 						device.price,
 						cartItemQuantity,
-						setIsLoading,
+						setIsLoadingSpinner,
 					),
 				)
 			: dispatch(deleteFromCart(device.id, device.price, device.quantity));
@@ -74,56 +84,62 @@ const DevicePageContainer = ({ className }) => {
 
 	return (
 		<div className={className}>
-			<div className="device-page-header">
-				<BreadCrumbs lastName={device.name} />
-			</div>
 			{error ? (
 				<Error error={error} />
-			) : isLoading ? (
+			) : isLoadingSkeleton ? (
 				<SkeletonDevice />
 			) : (
-				<div className="device-card">
-					<div className="img-block">
-						<img width={310} src={device.imageUrl} alt={device.name} />
-					</div>
-					<div className="description">
-						<h1>{device.name}</h1>
-						<h2>{device.price}₽</h2>
-						<div className="device-info"></div>
-						<div className="buy-container">
-							{!inCart ? (
-								<GreenButton
-									className="inCartButton"
-									inсart={false}
-									onClick={handleClick}
-									right={true}
-									place={20}
-									icon={faArrowRight}
-								>
-									В корзину
-								</GreenButton>
-							) : (
-								<>
-									<GreenButton
-										className="outFromCartButton"
-										inсart={true}
-										onClick={onDelete}
-										left={true}
-										place={200}
-										icon={faArrowLeft}
-									>
-										Убрать из корзины
-									</GreenButton>
-									<CounterItem
-										className="counter"
-										id={device.id}
-										price={device.price}
-									/>
-								</>
-							)}
+				<>
+					<BreadCrumbs lastName={device.name} />
+					<div className="device-card">
+						<div className="img-block">
+							<img width={310} src={device.imageUrl} alt={device.name} />
+						</div>
+						<div className="description">
+							<h1>{device.name}</h1>
+							<h2>{device.price}₽</h2>
+							<div className="device-info"></div>
+							<div className="buy-container">
+								{!inCart ? (
+									!isLoadingSpinner ? (
+										<GreenButton
+											className="inCartButton"
+											inсart={false}
+											onClick={handleClick}
+											right={true}
+											place={20}
+											icon={faArrowRight}
+										>
+											В корзину
+										</GreenButton>
+									) : (
+										<Loader />
+									)
+								) : !isLoadingSpinner ? (
+									<>
+										<GreenButton
+											className="outFromCartButton"
+											inсart={true}
+											onClick={onDelete}
+											left={true}
+											place={200}
+											icon={faArrowLeft}
+										>
+											Убрать из корзины
+										</GreenButton>
+										<CounterItem
+											className="counter"
+											id={device.id}
+											price={device.price}
+										/>
+									</>
+								) : (
+									<Loader />
+								)}
+							</div>
 						</div>
 					</div>
-				</div>
+				</>
 			)}
 		</div>
 	);
@@ -133,11 +149,6 @@ export const DevicePage = styled(DevicePageContainer)`
 	.device-card {
 		display: flex;
 		align-items: center;
-	}
-
-	.device-page-header {
-		display: flex;
-		padding-bottom: 40px;
 	}
 
 	.img-block {

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { CardButton, GreenButton, CartItem } from '../../components';
 import { cartSelector, userSelector, appSelector } from '../../selectors';
+import { loadCartAsync, switchCartModal, takeOrder } from '../../actions';
 import { useClickAway } from '@uidotdev/usehooks';
-import { clearCart, loadCartAsync, switchModal, takeOrder } from '../../actions';
 import { faArrowLeft, faArrowRight, faX } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
@@ -18,18 +18,17 @@ const CartContainer = ({ className }) => {
 	const userId = user.id;
 	const userRole = user.roleId;
 
-	const onClose = () => dispatch(switchModal());
+	const onClose = () => dispatch(switchCartModal());
+
 	const onTakeOrder = () => {
-		takeOrder(userId);
-		dispatch(clearCart());
+		dispatch(takeOrder(userId));
 		loadCartAsync();
-		onClose();
 	};
 
 	const ref = useClickAway(onClose);
 
 	useEffect(() => {
-		if (app.modalIsOpen) {
+		if (app.modalCartIsOpen) {
 			document.body.classList.add('modal-open');
 		} else {
 			document.body.classList.remove('modal-open');
@@ -37,9 +36,9 @@ const CartContainer = ({ className }) => {
 		return () => {
 			document.body.classList.remove('modal-open');
 		};
-	}, [app.modalIsOpen]);
+	}, [app.modalCartIsOpen]);
 
-	if (!app.modalIsOpen) {
+	if (!app.modalCartIsOpen) {
 		return null;
 	}
 
@@ -72,7 +71,7 @@ const CartContainer = ({ className }) => {
 						</GreenButton>
 					</div>
 				) : (
-					<div>
+					<>
 						<div className="cartItems">
 							{cart.devices.map((item) => (
 								<CartItem
@@ -128,7 +127,7 @@ const CartContainer = ({ className }) => {
 								</span>
 							)}
 						</div>
-					</div>
+					</>
 				)}
 			</div>
 		</div>
@@ -169,7 +168,6 @@ export const Cart = styled(CartContainer)`
 		align-items: center;
 		height: 100%;
 		justify-content: center;
-
 	}
 
 	.emptyCartDescription {
@@ -198,7 +196,6 @@ export const Cart = styled(CartContainer)`
 		flex: 1;
 		overflow: auto;
 		margin-bottom: 40px;
-		height: 63%;
 		padding-right: 10px;
 	}
 

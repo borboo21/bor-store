@@ -2,7 +2,13 @@ import { ACTION_TYPE } from '../actions';
 
 export const initialAppState = {
 	wasLogout: false,
-	modalIsOpen: false,
+	modalCartIsOpen: false,
+	modal: {
+		isOpen: false,
+		text: '',
+		onConfirm: () => {},
+		onCancel: () => {},
+	},
 };
 
 export const appReducer = (state = initialAppState, action) => {
@@ -12,11 +18,22 @@ export const appReducer = (state = initialAppState, action) => {
 				...state,
 				wasLogout: !state.wasLogout,
 			};
-		case ACTION_TYPE.SWITCH_MODAL:
+		case ACTION_TYPE.SWITCH_CART_MODAL:
 			return {
 				...state,
-				modalIsOpen: !state.modalIsOpen,
+				modalCartIsOpen: !state.modalCartIsOpen,
 			};
+		case ACTION_TYPE.OPEN_MODAL:
+			return {
+				...state,
+				modal: {
+					...state.modal,
+					...action.payload,
+					isOpen: true,
+				},
+			};
+		case ACTION_TYPE.CLOSE_MODAL:
+			return initialAppState;
 		default:
 			return state;
 	}
