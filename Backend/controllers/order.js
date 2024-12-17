@@ -1,5 +1,5 @@
 const Order = require('../models/Order');
-const User = require('../models/user');
+const User = require('../models/User');
 
 function getAllOrders() {
 	return Order.find().sort({ createdAt: -1 });

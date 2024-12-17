@@ -1,5 +1,5 @@
 const { verify } = require('../helpers/token');
-const User = require('../models/user');
+const User = require('../models/User');
 
 module.exports = async function (req, res, next) {
 	const tokenData = verify(req.cookies.token);
