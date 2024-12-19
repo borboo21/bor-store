@@ -57,7 +57,7 @@ const CartContainer = ({ className }) => {
 					</div>
 				)}
 				{isOrdered ? (
-					<CartSendOrder />
+					<CartSendOrder onClose={onClose} />
 				) : cart.devices.length === 0 ? (
 					<EmptyCart onClose={onClose} />
 				) : (
