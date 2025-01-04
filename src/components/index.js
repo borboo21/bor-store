@@ -14,3 +14,4 @@ export * from './error/error';
 export * from './cart-item/cart-item';
 export * from './private-content/private-content';
 export * from './modal/modal';
+export * from './navigation/navigation';

@@ -92,11 +92,19 @@ const DeviceRowContainer = ({ className, ...props }) => {
 					<div className="name-column">{props.name}</div>
 					<div className="price-column">{props.price}</div>
 					<div className="url-column">{symbolLengthBlock(props.imageUrl)}</div>
-					<Button onClick={handleEditClick} edit={true}>
-						<FontAwesomeIcon icon={faPen} size="xl" />
+					<Button
+						className="all-device-button"
+						onClick={handleEditClick}
+						edit={true}
+					>
+						<FontAwesomeIcon icon={faPen} className="pen" size="xl" />
 					</Button>
-					<Button onClick={props.onDelete} del={true}>
-						<FontAwesomeIcon icon={faTrash} size="xl" />
+					<Button
+						className="all-device-button"
+						onClick={props.onDelete}
+						del={true}
+					>
+						<FontAwesomeIcon icon={faTrash} className="trash" size="xl" />
 					</Button>
 				</TableRow>
 			)}
@@ -109,7 +117,7 @@ export const DeviceRow = styled(DeviceRowContainer)`
 	display: flex;
 	margin-top: 10px;
 	font-size: 14px;
-	width: 550px;
+	width: 100%;
 
 	button {
 		margin-bottom: 5px;
@@ -117,14 +125,39 @@ export const DeviceRow = styled(DeviceRowContainer)`
 
 	.edit-input {
 		width: -webkit-fill-available;
-		border-radius: 20px;
+		border-radius: 10px;
 		border: 1px solid gray;
 		height: 30px;
 		padding: 0 5px;
 	}
 
 	svg {
-		padding-bottom: 10px;
+		padding-bottom: 5px;
 		cursor: pointer;
+	}
+
+	@media (max-width: 830px) {
+		.edit-input {
+			font-size: 10px;
+			width: 65px;
+		}
+	}
+
+	@media (max-width: 500px) {
+		.pen {
+			width: 15px;
+		}
+		.trash {
+			width: 15px;
+		}
+		.all-device-button {
+			width: 30px;
+			height: 35px;
+		}
+
+		.edit-input {
+			font-size: 8px;
+			width: 55px;
+		}
 	}
 `;

@@ -20,3 +20,4 @@ export * from './switch-cart-modal';
 export * from './take-order-async';
 export * from './close_modal';
 export * from './open-modal';
+export * from './switch-navigation-modal';

@@ -3,6 +3,7 @@ import { ACTION_TYPE } from '../actions';
 export const initialAppState = {
 	wasLogout: false,
 	modalCartIsOpen: false,
+	modalNavigationIsOpen: false,
 	modal: {
 		isOpen: false,
 		text: '',
@@ -22,6 +23,11 @@ export const appReducer = (state = initialAppState, action) => {
 			return {
 				...state,
 				modalCartIsOpen: !state.modalCartIsOpen,
+			};
+		case ACTION_TYPE.SWITCH_NAVIGATION_MODAL:
+			return {
+				...state,
+				modalNavigationIsOpen: !state.modalNavigationIsOpen,
 			};
 		case ACTION_TYPE.OPEN_MODAL:
 			return {

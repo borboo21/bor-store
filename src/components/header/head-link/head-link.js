@@ -7,7 +7,7 @@ const LinkContainer = ({ className, to, children, icon, size }) => (
 		{icon ? (
 			<>
 				<Link to={`/${to}`}>
-					<FontAwesomeIcon icon={icon} size={children ? 'xl' : '2xl'} />
+					<FontAwesomeIcon icon={icon} size={size} />
 					{children}
 				</Link>
 			</>

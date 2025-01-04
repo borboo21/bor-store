@@ -1,7 +1,7 @@
 import { useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router';
-import { Error, Footer, Header, Modal } from './components';
+import { Error, Footer, Header, Modal, Navigation } from './components';
 import {
 	AddPage,
 	AdminPage,
@@ -33,6 +33,10 @@ const Page = styled.div`
 	justify-content: space-around;
 	padding: 120px 0px 20px;
 	width: 1200px;
+	@media (max-width: 1200px) {
+		grid-template-columns: auto auto;
+		width: 100%;
+	}
 `;
 
 export const Shop = () => {
@@ -72,6 +76,7 @@ export const Shop = () => {
 					<Route path="*" element={<Error error={ERROR.PAGE_NOT_EXIST} />} />
 				</Routes>
 			</Page>
+			<Navigation />
 			<Modal />
 			<Footer />
 		</AppColumn>

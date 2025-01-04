@@ -157,7 +157,7 @@ export const DevicePage = styled(DevicePageContainer)`
 		justify-content: space-evenly;
 		box-shadow: 0 0 24px 0 rgba(27, 30, 37, 0.08);
 		border-radius: 20px;
-		padding: 0 30px 30px 30px;
+		padding-left: 20px;
 	}
 
 	.buy-container {
@@ -168,5 +168,15 @@ export const DevicePage = styled(DevicePageContainer)`
 
 	.counter {
 		padding-left: 20px;
+	}
+
+	@media (max-width: 800px) {
+		.device-card {
+			flex-direction: column;
+		}
+		.description {
+			width: 350px;
+			margin-top: 30px;
+		}
 	}
 `;

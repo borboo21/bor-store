@@ -8,6 +8,7 @@ export const TableRow = styled(TableRowContainer)`
 	display: flex;
 	align-items: center;
 	border-bottom: ${({ border }) => (border ? '1px solid #ebe5e5;' : 'none')};
+	width: 100%;
 
 	& > div {
 		display: flex;
@@ -19,7 +20,6 @@ export const TableRow = styled(TableRowContainer)`
 		display: flex;
 		justify-content: flex-start;
 		width: 100px;
-		margin-left: 10px;
 	}
 
 	& .name-column {
@@ -38,5 +38,39 @@ export const TableRow = styled(TableRowContainer)`
 		display: flex;
 		justify-content: center;
 		width: 200px;
+	}
+
+	@media (max-width: 830px) {
+		font-size: 10px;
+
+		.category-column {
+			width: 50px;
+		}
+		.name-column {
+			width: 130px;
+		}
+		.price-column {
+			width: 40px;
+		}
+		.url-column {
+			width: 130px;
+		}
+	}
+
+	@media (max-width: 430px) {
+		font-size: 8px;
+
+		.category-column {
+			width: 40px;
+		}
+		.name-column {
+			width: 110px;
+		}
+		.price-column {
+			width: 25px;
+		}
+		.url-column {
+			width: 110px;
+		}
 	}
 `;
