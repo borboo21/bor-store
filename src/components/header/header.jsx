@@ -38,7 +38,12 @@ const HeaderContainer = ({ className }) => {
 	return (
 		<header className={className}>
 			<div className="navigation-button">
-				<FontAwesomeIcon icon={faBars} size="xl" onClick={onOpenNavigation} />
+				<FontAwesomeIcon
+					className="navigation-bars"
+					icon={faBars}
+					size="xl"
+					onClick={onOpenNavigation}
+				/>
 			</div>
 			<div className="logo">
 				<Link to="/">
@@ -181,6 +186,12 @@ export const Header = styled(HeaderContainer)`
 			align-items: center;
 			width: 100px;
 			justify-content: center;
+		}
+		.navigation-bars {
+			cursor: pointer;
+			&:hover {
+				color: #dfdfdf;
+			}
 		}
 	}
 
