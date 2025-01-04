@@ -23,6 +23,7 @@ export const CartSendOrder = styled(CartSendOrderContainer)`
 	align-items: center;
 	height: 100%;
 	justify-content: center;
+	text-align: center;
 
 	.cart-description {
 		display: flex;

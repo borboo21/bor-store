@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+	faBars,
 	faBasketShopping,
 	faGear,
 	faUser,
@@ -10,7 +11,7 @@ import { HeadLink } from './head-link/head-link';
 import { cartSelector, userSelector } from '../../selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { ItemsInCart } from './items-in-cart/items-in-cart';
-import { clearCart, logout, switchCartModal } from '../../actions';
+import { clearCart, logout, switchCartModal, switchNavigationModal } from '../../actions';
 import myIcon from './logo/bor-store.png';
 import styled from 'styled-components';
 
@@ -30,8 +31,15 @@ const HeaderContainer = ({ className }) => {
 		dispatch(switchCartModal());
 	};
 
+	const onOpenNavigation = () => {
+		dispatch(switchNavigationModal());
+	};
+
 	return (
 		<header className={className}>
+			<div className="navigation-button">
+				<FontAwesomeIcon icon={faBars} size="xl" onClick={onOpenNavigation} />
+			</div>
 			<div className="logo">
 				<Link to="/">
 					<img className="icon" src={myIcon} alt="icon" />
@@ -56,27 +64,32 @@ const HeaderContainer = ({ className }) => {
 			</div>
 			<div className="control-panel">
 				<div className="icon-container">
-					{user.roleId === 0 ? <HeadLink to="admin" icon={faGear} /> : ''}
+					{user.roleId === 0 ? (
+						<HeadLink to="admin" icon={faGear} size="lg" />
+					) : (
+						''
+					)}
 					{user.login ? (
-						<div className="user" onClick={onLogout} icon={faUser}>
+						<div className="user" onClick={onLogout}>
 							<div className="exit">
-								<FontAwesomeIcon icon={faUser} size="xl" />
+								<FontAwesomeIcon icon={faUser} size="lg" />
 								<FontAwesomeIcon icon={faXmark} size="xs" />
 							</div>
 
 							<span className="user-name">{user.login}</span>
 						</div>
 					) : (
-						<HeadLink to="login" icon={faUser} />
+						<HeadLink to="login" icon={faUser} size="xl" />
 					)}
 				</div>
-				<div className="basket-control" onClick={onOpenCart}>
+				<div className="basket-control">
 					<FontAwesomeIcon
+						onClick={onOpenCart}
 						className="basket"
 						icon={faBasketShopping}
-						size={'2xl'}
+						size={'xl'}
 					/>
-					<ItemsInCart quantity={quantityAmount} />
+					<ItemsInCart className="item-counter" quantity={quantityAmount} />
 				</div>
 			</div>
 		</header>
@@ -103,6 +116,10 @@ export const Header = styled(HeaderContainer)`
 	& .navigation {
 		display: flex;
 		align-items: center;
+	}
+
+	& .navigation-button {
+		display: none;
 	}
 
 	& .control-panel {
@@ -153,5 +170,40 @@ export const Header = styled(HeaderContainer)`
 
 	.amount {
 		font-size: small;
+	}
+
+	@media (max-width: 900px) {
+		.navigation {
+			display: none;
+		}
+		.navigation-button {
+			display: flex;
+			align-items: center;
+			width: 100px;
+			justify-content: center;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.icon {
+			width: 140px;
+		}
+		.control-panel {
+			width: 100px;
+			justify-content: center;
+		}
+		.item-counter {
+			width: 16px;
+			height: 16px;
+			font-size: 12px;
+			left: 25px;
+			top: -11px;
+		}
+		.user {
+			padding: 0px;
+		}
+		.user-name {
+			font-size: 11px;
+		}
 	}
 `;

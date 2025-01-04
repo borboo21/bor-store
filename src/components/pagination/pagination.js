@@ -29,6 +29,9 @@ export const Pagination = styled(PaginationContainer)`
 	margin: 10px 0;
 	padding: 0 35px;
 	align-items: center;
+	@media (max-width: 600px) {
+		padding: 0px;
+	}
 
 	& button {
 		margin: 0 5px;

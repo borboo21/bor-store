@@ -61,9 +61,7 @@ const AllPageContainer = ({ className }) => {
 	return (
 		<PrivateContent access={[ROLE.ADMIN]} error={error}>
 			<div className={className}>
-				<div className="all-page-header">
-					<BreadCrumbs lastName={'Все товары'} />
-				</div>
+				<BreadCrumbs lastName={'Все товары'} />
 				<div className="all-page-main">
 					<TableRow>
 						<div className="table-header">
@@ -97,13 +95,44 @@ export const AllPage = styled(AllPageContainer)`
 	flex-direction: column;
 	font-size: 15px;
 
-	.all-page-header {
-		margin-left: 20px;
-	}
 	.all-page-main {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		margin-bottom: 20px;
+	}
+
+	@media (max-width: 830px) {
+		font-size: 10px;
+
+		.category-column {
+			width: 50px;
+		}
+		.name-column {
+			width: 130px;
+		}
+		.price-column {
+			width: 40px;
+		}
+		.url-column {
+			width: 130px;
+		}
+	}
+
+	@media (max-width: 430px) {
+		font-size: 8px;
+
+		.category-column {
+			width: 40px;
+		}
+		.name-column {
+			width: 110px;
+		}
+		.price-column {
+			width: 25px;
+		}
+		.url-column {
+			width: 110px;
+		}
 	}
 `;

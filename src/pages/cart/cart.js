@@ -132,4 +132,10 @@ export const Cart = styled(CartContainer)`
 		margin-bottom: 40px;
 		padding-right: 10px;
 	}
+
+	@media (max-width: 420px) {
+		.drawer {
+			width: auto;
+		}
+	}
 `;

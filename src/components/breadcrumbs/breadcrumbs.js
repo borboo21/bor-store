@@ -22,10 +22,12 @@ const BreadCrumbsContainer = ({ className, lastName }) => {
 						const to = `/${pathNames.slice(0, index + 1).join('/')}`;
 						const lastKeyIndex = pathNames.length - 1;
 						return (
-							<Link key={index} to={index === lastKeyIndex ? '' : to}>
+							<span key={index}>
 								<span className="breadcrumb-separator">/</span>
-								<span className="breadcrumb-item">{value}</span>
-							</Link>
+								<Link key={index} to={index === lastKeyIndex ? '' : to}>
+									<span className="breadcrumb-item">{value}</span>
+								</Link>
+							</span>
 						);
 					} else {
 						return null;
@@ -37,14 +39,14 @@ const BreadCrumbsContainer = ({ className, lastName }) => {
 };
 
 export const BreadCrumbs = styled(BreadCrumbsContainer)`
-	padding-bottom: 20px;
+	padding: 0 0 20px 20px;
 
 	.breadcrumb-item {
 		color: #9a9a9a;
 		font-size: 12px;
 		font-weight: 400;
 
-		&: hover {
+		&:hover {
 			text-decoration: underline;
 		}
 	}

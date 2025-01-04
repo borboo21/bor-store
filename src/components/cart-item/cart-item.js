@@ -62,5 +62,13 @@ export const CartItem = styled(cartItemContainer)`
 
 	.device-name {
 		margin-bottom: 5px;
+		text-align: center;
+	}
+
+	@media (max-width: 420px) {
+		.device-info {
+			margin: 0 10px 0 10px;
+			font-size: 16px;
+		}
 	}
 `;

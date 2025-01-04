@@ -23,6 +23,7 @@ export const EmptyCart = styled(EmptyCartContainer)`
 	align-items: center;
 	height: 100%;
 	justify-content: center;
+	text-align: center;
 
 	.emptyCartDescription {
 		display: flex;

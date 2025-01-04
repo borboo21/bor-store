@@ -137,14 +137,21 @@ export const MainContainer = ({ className }) => {
 
 export const Main = styled(MainContainer)`
 	.card-container {
-		display: flex;
-		flex-wrap: wrap;
+		display: grid;
+		grid-template-columns: auto auto auto auto;
+		@media (max-width: 1200px) {
+			grid-template-columns: auto auto;
+		}
 	}
 
 	.main-header {
 		padding: 0 0 20px;
 		display: flex;
 		justify-content: center;
+		@media (max-width: 600px) {
+			flex-direction: column;
+			align-items: center;
+		}
 	}
 
 	h5 {
@@ -168,9 +175,15 @@ export const Main = styled(MainContainer)`
 
 	.sort-controls {
 		padding-left: 40px;
+		@media (max-width: 600px) {
+			padding-left: 0px;
+		}
 	}
 
 	.no-device-found {
 		font-size: large;
+		@media (max-width: 600px) {
+			font-size: small;
+		}
 	}
 `;

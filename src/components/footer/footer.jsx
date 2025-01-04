@@ -45,4 +45,8 @@ export const Footer = styled(FooterContainer)`
 		display: flex;
 		flex-direction: column;
 	}
+
+	@media (max-width: 600px) {
+		font-size: 12px;
+	}
 `;

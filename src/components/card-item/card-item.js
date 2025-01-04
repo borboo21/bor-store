@@ -65,15 +65,19 @@ const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 				<>
 					<div className="device-image">
 						<Link to={`/device/${props.category}/${props.id}`}>
-							<img width={170} src={props.imageUrl} alt="device" />
+							<img
+								className="device-png"
+								src={props.imageUrl}
+								alt="device"
+							/>
 						</Link>
 					</div>
 					<div className="card-bottom">
-						<h5>{props.name}</h5>
+						<h5 className="device-name">{props.name}</h5>
 						<div className="buy-panel">
 							<div className="price">
-								<span>Цена:</span>
-								<b>{props.price}₽</b>
+								<span className="price-title">Цена:</span>
+								<b className="price-bold">{props.price}₽</b>
 							</div>
 							{!inCart ? (
 								isLoading ? (
@@ -90,7 +94,11 @@ const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 								<Loader />
 							) : (
 								<>
-									<CounterItem id={props.id} price={props.price} />
+									<CounterItem
+										className="counter-main"
+										id={props.id}
+										price={props.price}
+									/>
 									<CardButton
 										faIcon={faCheck}
 										color="#65ed65"
@@ -122,7 +130,7 @@ export const CardItem = styled(CardItemContainer)`
 		box-shadow 0.2s ease-in-out,
 		transform 0.3s ease-in-out;
 
-	&: hover {
+	hover {
 		box-shadow: 0px 20px 35px rgba(0, 0, 0, 0.06);
 		transform: translateY(-5px);
 	}
@@ -141,5 +149,49 @@ export const CardItem = styled(CardItemContainer)`
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+	}
+
+	.device-png {
+		width: 170px;
+	}
+
+	.device-name {
+		margin: 10px 0 10px 0;
+	}
+
+	@media (max-width: 600px) {
+		width: 145px;
+		margin: 0 20px 20px 20px;
+
+		.device-png {
+			width: 100px;
+		}
+		.device-name {
+			font-size: 10px;
+		}
+		.price-title {
+			font-size: 8px;
+		}
+		.price-bold {
+			font-size: 11px;
+		}
+		.buy-panel {
+			height: 60px;
+		}
+		.counter-main {
+			display: flex;
+			padding: 0 5px 0 5px;
+			flex-direction: column-reverse;
+		}
+		.counter-button {
+			width: 20px;
+			height: 20px;
+			font-size: 10px;
+		}
+		.counter-input {
+			width: 20px;
+			height: 20px;
+			font-size: 10px;
+		}
 	}
 `;
