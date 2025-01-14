@@ -126,11 +126,12 @@ export const CardItem = styled(CardItemContainer)`
 	width: 220px;
 	border-radius: 20px;
 	margin: 0 40px 40px 40px;
+
 	transition:
 		box-shadow 0.2s ease-in-out,
 		transform 0.3s ease-in-out;
 
-	hover {
+	&:hover {
 		box-shadow: 0px 20px 35px rgba(0, 0, 0, 0.06);
 		transform: translateY(-5px);
 	}
