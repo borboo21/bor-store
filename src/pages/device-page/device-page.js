@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
+import { useWindowSize } from '@uidotdev/usehooks';
 import { cartSelector, selectDevice, userSelector } from '../../selectors';
 import { BreadCrumbs, CounterItem, Error, GreenButton } from '../../components';
 import {
@@ -10,7 +11,7 @@ import {
 	deleteFromCart,
 	addCart,
 } from '../../actions';
-import { Loader, SkeletonDevice } from '../../components/loaders';
+import { Loader, SkeletonDevice, SkeletonDeviceMobile } from '../../components/loaders';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ERROR } from '../../constants';
 import styled from 'styled-components';
@@ -25,6 +26,7 @@ const DevicePageContainer = ({ className }) => {
 	const device = useSelector(selectDevice);
 	const cart = useSelector(cartSelector);
 	const user = useSelector(userSelector);
+	const windowSize = useWindowSize();
 
 	useEffect(() => {
 		setIsLoadingSkeleton(true);
@@ -81,7 +83,11 @@ const DevicePageContainer = ({ className }) => {
 			{error ? (
 				<Error error={error} />
 			) : isLoadingSkeleton ? (
-				<SkeletonDevice />
+				windowSize.width >= 800 ? (
+					<SkeletonDevice />
+				) : (
+					<SkeletonDeviceMobile />
+				)
 			) : (
 				<>
 					<BreadCrumbs lastName={device.name} />

@@ -204,11 +204,11 @@ export const Header = styled(HeaderContainer)`
 			justify-content: center;
 		}
 		.item-counter {
-			width: 16px;
-			height: 16px;
+			width: 18px;
+			height: 17px;
 			font-size: 12px;
 			left: 25px;
-			top: -11px;
+			top: -12px;
 		}
 		.user {
 			padding: 0px;

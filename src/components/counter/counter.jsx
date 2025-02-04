@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { cartSelector, userSelector } from '../../selectors';
 import { switchQuantity, updateQuantity } from '../../actions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 
 const CounterItemContainer = ({ className, id, price }) => {
@@ -29,11 +31,11 @@ const CounterItemContainer = ({ className, id, price }) => {
 	return (
 		<div className={className}>
 			<button className="counter-button" onClick={handleDeacrease}>
-				-
+				<FontAwesomeIcon icon={faMinus}></FontAwesomeIcon>
 			</button>
 			<input className="counter-input" value={quantity} readOnly></input>
 			<button className="counter-button" onClick={handleIncrease}>
-				+
+				<FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
 			</button>
 		</div>
 	);
@@ -54,17 +56,16 @@ export const CounterItem = styled(CounterItemContainer)`
 	}
 
 	.counter-button {
-		font-size: 16px;
-		color: #808080;
-		text-align: center;
-		text-decoration: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 11px;
 		width: 24px;
 		height: 24px;
 		background-color: #ffffff;
 		border: 1px solid #f2f2f2;
 		border-radius: 18px;
 		cursor: pointer;
-
 		color: gray;
 		opacity: 0.5;
 		transition: opacity 0.2s ease-in-out;
