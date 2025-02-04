@@ -10,7 +10,8 @@ import {
 	deleteFromCartAsync,
 } from '../../actions';
 import { cartSelector, userSelector } from '../../selectors';
-import { Loader, SkeletonMain } from '../loaders';
+import { Loader, SkeletonMain, SkeletonMainMobile } from '../loaders';
+import { useWindowSize } from '@uidotdev/usehooks';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -19,6 +20,7 @@ const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 	const user = useSelector(userSelector);
 	const userId = user.id;
 	const [isLoading, setIsLoading] = useState(false);
+	const windowSize = useWindowSize();
 
 	const inCart = cart.devices.some((device) => device.deviceId === props.id);
 
@@ -60,7 +62,11 @@ const CardItemContainer = ({ className, dispatch, loading, ...props }) => {
 	return (
 		<div className={className}>
 			{loading ? (
-				<SkeletonMain />
+				windowSize.width <= 600 ? (
+					<SkeletonMainMobile />
+				) : (
+					<SkeletonMain />
+				)
 			) : (
 				<>
 					<div className="device-image">
@@ -181,7 +187,7 @@ export const CardItem = styled(CardItemContainer)`
 		}
 		.counter-main {
 			display: flex;
-			padding: 0 5px 0 5px;
+			margin: 8px 5px 0 5px;
 			flex-direction: column-reverse;
 		}
 		.counter-button {

@@ -84,7 +84,7 @@ export const Order = styled(OrderContainer)`
 		justify-content: center;
 		align-items: center;
 		gap: 10px;
-		font-size: 12px;
+		font-size: 11px;
 		margin-bottom: 15px;
 	}
 
@@ -134,5 +134,55 @@ export const Order = styled(OrderContainer)`
 
 	.fourth {
 		width: 100px;
+	}
+
+	@media (max-width: 968px) {
+		width: 600px;
+		font-size: 9px;
+
+		.second {
+			font-size: 9px;
+			width: 140px;
+		}
+		.head-info {
+			font-size: 8px;
+		}
+		.third-header {
+			width: 50px;
+		}
+		.third-base {
+			width: 70px;
+		}
+		.fourth {
+			width: 50px;
+		}
+		.date {
+			font-size: 7px;
+		}
+	}
+
+	@media (max-width: 600px) {
+		width: 370px;
+		font-size: 7px;
+
+		.second {
+			font-size: 7px;
+			width: 110px;
+		}
+		.head-info {
+			font-size: 6px;
+		}
+		.third-header {
+			width: 30px;
+		}
+		.third-base {
+			width: 43px;
+		}
+		.fourth {
+			width: 30px;
+		}
+		.date {
+			font-size: 7px;
+		}
 	}
 `;

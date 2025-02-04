@@ -94,7 +94,7 @@ const AddPageContainer = ({ className }) => {
 					)}
 					<div className="input-containers">
 						<Input
-							width={400}
+							width={350}
 							value={imageUrl}
 							setValue={setImageUrl}
 							icon={faLink}
@@ -111,14 +111,14 @@ const AddPageContainer = ({ className }) => {
 							</select>
 						</div>
 						<Input
-							width={400}
+							width={350}
 							value={name}
 							setValue={setName}
 							icon={faTag}
 							placeholder={'Укажите имя товара'}
 						/>
 						<Input
-							width={400}
+							width={350}
 							value={price}
 							setValue={setPrice}
 							icon={faRubleSign}
@@ -170,7 +170,7 @@ export const AddPage = styled(AddPageContainer)`
 		border-radius: 10px;
 		padding: 0 15px;
 		margin-bottom: 20px;
-		width: 400px;
+		width: 350px;
 	}
 
 	select {
@@ -180,6 +180,11 @@ export const AddPage = styled(AddPageContainer)`
 		font-size: 16px;
 		width: 300px;
 		cursor: pointer;
+		background: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2ZmZjt9LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHJlY3QgY2xhc3M9ImNscy0xIiB3aWR0aD0iNC45NSIgaGVpZ2h0PSIxMCIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIxLjQxIDQuNjcgMi40OCAzLjE4IDMuNTQgNC42NyAxLjQxIDQuNjciLz48cG9seWdvbiBjbGFzcz0iY2xzLTIiIHBvaW50cz0iMy41NCA1LjMzIDIuNDggNi44MiAxLjQxIDUuMzMgMy41NCA1LjMzIi8+PC9zdmc+)
+			no-repeat 95% 50%;
+		-moz-appearance: none;
+		-webkit-appearance: none;
+		appearance: none;
 	}
 
 	button {

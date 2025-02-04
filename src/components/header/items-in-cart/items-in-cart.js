@@ -9,8 +9,8 @@ const ItemsInCartContainer = ({ className, quantity = 0 }) =>
 
 export const ItemsInCart = styled(ItemsInCartContainer)`
 	position: absolute;
-	width: 20px;
-	height: 20px;
+	width: 22px;
+	height: 21px;
 	background-color: #9dd558;
 	border-radius: 15px;
 	font-size: 15px;
