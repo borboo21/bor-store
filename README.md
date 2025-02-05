@@ -46,4 +46,4 @@
 
 🐳 Docker-контейнеризация
 
-🚀 Деплой на VPS (Ubuntu + Nginx)
+🚀 Деплой на VPS (Ubuntu)
