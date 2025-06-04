@@ -11,11 +11,11 @@ async function addCartForUser(userId, cart) {
 	const user = await User.findById(userId);
 	for (const cartItem of cart) {
 		const existingItem = user.cart.find(
-			(userCartItem) => userCartItem.deviceId === cartItem.deviceId,
+			(userCartItem) => userCartItem.id === cartItem.id,
 		);
 		if (existingItem) {
 			await User.updateOne(
-				{ _id: userId, 'cart.deviceId': cartItem.deviceId },
+				{ _id: userId, 'cart.id': cartItem.id },
 				{ $set: { 'cart.$.quantity': cartItem.quantity } },
 			);
 		} else {
@@ -27,14 +27,14 @@ async function addCartForUser(userId, cart) {
 }
 
 // delete
-async function deleteDeviceInCart(userId, deviceId) {
-	await User.findByIdAndUpdate(userId, { $pull: { cart: { deviceId } } });
+async function deleteDeviceInCart(userId, id) {
+	await User.findByIdAndUpdate(userId, { $pull: { cart: { id } } });
 }
 
 // switch quantity
-async function switchQuantityInCart(deviceId, userId, quantity) {
+async function switchQuantityInCart(id, userId, quantity) {
 	const updateQuantity = { $set: { 'cart.$[elem].quantity': quantity } };
-	const options = { arrayFilters: [{ 'elem.deviceId': deviceId }] };
+	const options = { arrayFilters: [{ 'elem.id': id }] };
 	const user = await User.findOneAndUpdate({ _id: userId }, updateQuantity, options, {
 		new: true,
 	});

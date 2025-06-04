@@ -13,7 +13,7 @@ const router = express.Router({ mergeParams: true });
 
 router.post('/:userId', authenticated, async (req, res) => {
 	const newDeviceInCart = await addDeviceInCart(req.params.userId, {
-		deviceId: req.body.deviceId,
+		id: req.body.id,
 		category: req.body.category,
 		name: req.body.name,
 		price: req.body.price,
@@ -31,7 +31,7 @@ router.delete('/:userId', authenticated, async (req, res) => {
 
 // поменять количество
 router.patch('/:userId', authenticated, async (req, res) => {
-	await switchQuantityInCart(req.body.deviceId, req.params.userId, req.body.quantity);
+	await switchQuantityInCart(req.body.id, req.params.userId, req.body.quantity);
 	res.send({ error: null });
 });
 
