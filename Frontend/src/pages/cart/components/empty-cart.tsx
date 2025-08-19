@@ -1,7 +1,7 @@
-import styled from 'styled-components';
 import { GreenButton } from '../../../components';
+import type { IComponentProps } from '../../../interfaces';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { IComponentProps } from 'interfaces/interface';
+import styled from 'styled-components';
 
 interface IEmptyCart extends IComponentProps {
 	onClose: () => void;

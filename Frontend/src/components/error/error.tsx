@@ -1,5 +1,5 @@
-import { IError } from 'interfaces/interface';
 import styled from 'styled-components';
+import type { IError } from '../../interfaces';
 
 const Div = styled.div`
 	display: flex;

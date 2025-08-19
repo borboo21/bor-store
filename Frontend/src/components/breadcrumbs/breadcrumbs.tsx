@@ -1,7 +1,7 @@
-import { IBreadCrumb } from 'interfaces/interface';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import type { IBreadCrumb } from '../../interfaces/interface';
 
 const BreadCrumbsContainer: React.FC<IBreadCrumb> = ({ className, lastName }) => {
 	const location = useLocation();
@@ -13,7 +13,7 @@ const BreadCrumbsContainer: React.FC<IBreadCrumb> = ({ className, lastName }) =>
 	return (
 		<div className={className}>
 			<nav aria-label="breadcrumb">
-				<span className='breadcrumb-span'>
+				<span className="breadcrumb-span">
 					<Link className="breadcrumb-item" to={'/'}>
 						Главная
 					</Link>

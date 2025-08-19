@@ -3,7 +3,7 @@ import { selectUserRoleIdSelector } from '../../selectors';
 import { checkAccess } from '../../utils';
 import { ERROR } from '../../constants';
 import { Error } from '../error/error';
-import { IPrivateContent } from 'interfaces/interface';
+import type { IPrivateContent } from '../../interfaces';
 
 export const PrivateContent: React.FC<IPrivateContent> = ({
 	children,

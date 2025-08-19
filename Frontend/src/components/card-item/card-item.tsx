@@ -11,11 +11,15 @@ import {
 import { Loader, SkeletonMain, SkeletonMainMobile } from '../loaders';
 import { useWindowSize } from '@uidotdev/usehooks';
 import { useState } from 'react';
-import { addToCart, deleteFromCart } from 'store/slices';
-import { ICardItem } from 'interfaces/interface';
-import { AppDispatch } from 'store/store';
 import styled from 'styled-components';
-import { addCartAsync, deleteFromCartAsync } from 'store/thunks';
+import {
+	addCartAsync,
+	addToCart,
+	deleteFromCart,
+	deleteFromCartAsync,
+	type AppDispatch,
+} from '../../store';
+import type { ICardItem } from '../../interfaces';
 
 const CardItemContainer: React.FC<ICardItem> = ({ className, loading, ...props }) => {
 	const cartDevices = useSelector(cartDevicesSelector);
@@ -52,23 +56,25 @@ const CardItemContainer: React.FC<ICardItem> = ({ className, loading, ...props }
 		const findDevice = cartDevices.find((cartItem) => cartItem.id === id);
 		if (findDevice) {
 			const quantityInCart = findDevice.quantity;
-			roleId !== 3
-				? dispatch(
-						deleteFromCartAsync({
-							id,
-							userId,
-							price: props.price,
-							quantity: quantityInCart,
-							setIsLoadingSpinner,
-						}),
-					)
-				: dispatch(
-						deleteFromCart({
-							id,
-							price: props.price,
-							quantity: quantityInCart,
-						}),
-					);
+			if (roleId !== 3) {
+				dispatch(
+					deleteFromCartAsync({
+						id,
+						userId,
+						price: props.price,
+						quantity: quantityInCart,
+						setIsLoadingSpinner,
+					}),
+				);
+			} else {
+				dispatch(
+					deleteFromCart({
+						id,
+						price: props.price,
+						quantity: quantityInCart,
+					}),
+				);
+			}
 		}
 	};
 
@@ -146,9 +152,7 @@ export const CardItem = styled(CardItemContainer)`
 	border-radius: 20px;
 	margin: 0 40px 40px 40px;
 
-	transition:
-		box-shadow 0.2s ease-in-out,
-		transform 0.3s ease-in-out;
+	transition: box-shadow 0.2s ease-in-out, transform 0.3s ease-in-out;
 
 	&:hover {
 		box-shadow: 0px 20px 35px rgba(0, 0, 0, 0.06);

@@ -32,7 +32,7 @@ const DeviceRowContainer: React.FC<IDeviceRow> = ({ className, ...props }) => {
 	};
 
 	const onSave = (id: string, newName: string, newPrice: number, newURL: string) => {
-		request(`/device/${id}`, 'PATCH', {
+		request(`/api/device/${id}`, 'PATCH', {
 			category: category,
 			name: newName,
 			price: newPrice,

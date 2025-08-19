@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { GreenButton } from '../../../components';
 import { useSelector } from 'react-redux';
 import { cartAmountSelector } from '../../../selectors';
-import { IComponentProps } from 'interfaces/interface';
+import type { IComponentProps } from '../../../interfaces';
 import styled from 'styled-components';
 
 interface ICartTotalBlock extends IComponentProps {

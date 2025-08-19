@@ -5,11 +5,10 @@ import { modalNavigationIsOpen } from '../../selectors';
 import { CardButton } from '../card-button/card-button';
 import { CATEGORIES } from '../../constants';
 import { NavigationItem } from './navigation-item/navigation-item';
-import { switchNavigationModal } from 'store/slices';
 import { faX } from '@fortawesome/free-solid-svg-icons';
+import type { IComponentProps } from '../../interfaces';
+import { switchNavigationModal, type AppDispatch } from '../../store';
 import styled from 'styled-components';
-import { IComponentProps } from 'interfaces/interface';
-import { AppDispatch } from 'store/store';
 
 const NavigationContainer: React.FC<IComponentProps> = ({ className }) => {
 	const navigationIsOpen = useSelector(modalNavigationIsOpen);

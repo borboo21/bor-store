@@ -5,7 +5,7 @@ import { selectUserRoleIdSelector } from '../../../selectors';
 import { checkAccess, request } from '../../../utils';
 import { Order } from './components';
 import { ROLE } from '../../../constants';
-import { IComponentProps, IOrder } from 'interfaces/interface';
+import type { IComponentProps, IOrder } from '../../../interfaces';
 import styled from 'styled-components';
 
 const OrdersContainer: React.FC<IComponentProps> = ({ className }) => {
@@ -15,7 +15,7 @@ const OrdersContainer: React.FC<IComponentProps> = ({ className }) => {
 	const [error, setError] = useState('');
 
 	const getOrders = () => {
-		request(`/order/all`).then((ordersRes) => {
+		request(`/api/order/all`).then((ordersRes) => {
 			if (ordersRes.error) {
 				setError(ordersRes.error);
 				return;

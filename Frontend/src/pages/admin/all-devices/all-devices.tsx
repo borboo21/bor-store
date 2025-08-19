@@ -6,8 +6,8 @@ import { selectModalIsOpen, selectUserRoleIdSelector } from '../../../selectors'
 import { checkAccess, request } from '../../../utils';
 import { ROLE } from '../../../constants';
 import { openModal } from '../../../store/slices';
-import { AppDispatch } from 'store/store';
-import { IComponentProps } from 'interfaces/interface';
+import type { IComponentProps } from '../../../interfaces';
+import type { AppDispatch } from '../../../store';
 import styled from 'styled-components';
 
 const AllPageContainer: React.FC<IComponentProps> = ({ className }) => {
@@ -20,7 +20,7 @@ const AllPageContainer: React.FC<IComponentProps> = ({ className }) => {
 	const userRoleId = useSelector(selectUserRoleIdSelector);
 
 	const getAllDevices = () =>
-		request('/device/all').then((deviceRes) => {
+		request('/api/device/all').then((deviceRes) => {
 			if (deviceRes.error) {
 				setError(deviceRes.error);
 				return;
@@ -54,6 +54,7 @@ const AllPageContainer: React.FC<IComponentProps> = ({ className }) => {
 				info: id,
 			}),
 		);
+		setShouldUpdateDeviceList(!shouldUpdateDeviceList);
 	};
 
 	return (

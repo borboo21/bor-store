@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IButton } from 'interfaces/interface';
+import type { IButton } from '../../interfaces/interface';
 import styled from 'styled-components';
 
 const ButtonContainer: React.FC<IButton> = ({

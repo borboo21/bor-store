@@ -1,5 +1,5 @@
-import { IComponentProps } from 'interfaces/interface';
 import React from 'react';
+import type { IComponentProps } from '../../interfaces';
 import styled from 'styled-components';
 
 const loaderContainer: React.FC<IComponentProps> = ({ className }) => (

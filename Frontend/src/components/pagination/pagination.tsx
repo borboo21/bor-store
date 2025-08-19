@@ -2,7 +2,7 @@ import { Button } from '../button/button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faArrowRight, faForward } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
-import { IPagination } from 'interfaces/interface';
+import type { IPagination } from '../../interfaces';
 
 const PaginationContainer: React.FC<IPagination> = ({
 	className,

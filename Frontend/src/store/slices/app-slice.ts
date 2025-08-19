@@ -1,6 +1,5 @@
-import { IModal } from '../../interfaces/interface';
-import { IApp } from 'interfaces/interface';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { IApp, IModal } from '../../interfaces';
 
 const initialState: IApp = {
 	wasLogout: false,

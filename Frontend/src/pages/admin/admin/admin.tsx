@@ -5,9 +5,9 @@ import { checkAccess } from '../../../utils';
 import { ROLE } from '../../../constants';
 import { useSelector } from 'react-redux';
 import { selectUserRoleIdSelector } from '../../../selectors';
+import type { IComponentProps } from '../../../interfaces';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBorderAll, faPlus, faRubleSign } from '@fortawesome/free-solid-svg-icons';
-import type { IComponentProps } from '../../../interfaces/interface';
 import styled from 'styled-components';
 
 const AdminPageContainer: React.FC<IComponentProps> = ({ className }) => {

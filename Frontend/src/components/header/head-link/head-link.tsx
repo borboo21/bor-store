@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ILink } from 'interfaces/interface';
 import { Link } from 'react-router-dom';
+import type { ILink } from '../../../interfaces';
 import styled from 'styled-components';
 
 const LinkContainer: React.FC<ILink> = ({ className, to, children, icon, size }) => (

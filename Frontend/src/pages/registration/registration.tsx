@@ -7,14 +7,16 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AuthFormError, GreenButton } from '../../components';
 import { useResetForm } from '../../hooks';
 import { uploadCartAsync } from '../../actions';
-import { setUser } from 'store/slices';
+
 import { ROLE } from '../../constants';
 import { request } from '../../utils';
 import { faArrowRight, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IComponentProps } from 'interfaces/interface';
+
 import styled from 'styled-components';
-import { selectUserRoleIdSelector } from 'selectors';
+import type { IComponentProps } from '../../interfaces';
+import { selectUserRoleIdSelector } from '../../selectors';
+import { setUser } from '../../store';
 
 const regFormSchema = yup.object().shape({
 	login: yup
@@ -62,19 +64,24 @@ const RegistrationContainer: React.FC<IComponentProps> = ({ className }) => {
 	useResetForm(reset);
 
 	const onSubmit = ({ login, password }: { login: string; password: string }) =>
-		request('/register', 'POST', { login, password }).then(({ error, user }) => {
-			if (error) {
-				setServerError(`Ошибка запроса: ${error}`);
-				return;
-			}
+		request('/api/auth/register', 'POST', { login, password }).then(
+			({ error, user }) => {
+				if (error) {
+					setServerError(`Ошибка запроса: ${error}`);
+					return;
+				}
 
-			dispatch(setUser(user));
-			sessionStorage.setItem('userData', JSON.stringify(user));
-			if (sessionStorage.cartData) {
-				uploadCartAsync(user.id, JSON.parse(sessionStorage.getItem('cartData')!));
-				sessionStorage.removeItem('cartData');
-			}
-		});
+				dispatch(setUser(user));
+				sessionStorage.setItem('userData', JSON.stringify(user));
+				if (sessionStorage.cartData) {
+					uploadCartAsync(
+						user.id,
+						JSON.parse(sessionStorage.getItem('cartData')!),
+					);
+					sessionStorage.removeItem('cartData');
+				}
+			},
+		);
 
 	const formError =
 		errors?.login?.message || errors?.password?.message || errors?.passCheck?.message;

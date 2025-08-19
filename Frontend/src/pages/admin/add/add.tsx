@@ -20,7 +20,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { checkAccess } from '../../../utils';
 import { useSelector } from 'react-redux';
 import { selectUserRoleIdSelector } from '../../../selectors';
-import type { IComponentProps } from '../../../interfaces/interface';
+import type { IComponentProps } from '../../../interfaces';
 import styled from 'styled-components';
 
 const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
@@ -112,7 +112,7 @@ const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
 							placeholder={'Вставьте ссылку на изображение'}
 						/>
 						<div className="select-div">
-							<FontAwesomeIcon color="gray" icon={faList} />
+							<FontAwesomeIcon icon={faList} color="gray"  />
 							<select value={category} onChange={onCategoryChange}>
 								{CATEGORIES.map((categoryName, index) => (
 									<option key={index} value={categoryName}>

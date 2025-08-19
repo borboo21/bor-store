@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ICardButton } from 'interfaces/interface';
+import type { ICardButton } from '../../interfaces';
 import styled from 'styled-components';
 
 const CardButtonContainer: React.FC<ICardButton> = ({

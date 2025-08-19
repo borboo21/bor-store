@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IDevice } from 'interfaces/interface';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { IDevice } from '../../interfaces';
 
 const initialState: IDevice = {
 	id: '',

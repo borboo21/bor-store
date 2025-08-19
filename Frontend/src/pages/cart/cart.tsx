@@ -3,14 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CardButton, CartItem } from '../../components';
 import { modalCartIsOpen, cartDevicesSelector, userIdSelector } from '../../selectors';
 import { takeOrder } from '../../actions';
-import { switchCartModal } from 'store/slices';
 import { CartSendOrder, CartTotalBlock, EmptyCart } from './components';
 import { useClickAway } from '@uidotdev/usehooks';
 import { faX } from '@fortawesome/free-solid-svg-icons';
-import { IComponentProps } from 'interfaces/interface';
-import { AppDispatch } from 'store/store';
+import type { IComponentProps } from '../../interfaces';
+import { loadCartAsync, switchCartModal, type AppDispatch } from '../../store';
 import styled from 'styled-components';
-import { loadCartAsync } from 'store/thunks';
 
 const CartContainer: React.FC<IComponentProps> = ({ className }) => {
 	const [isOrdered, setIsOrdered] = useState(false);

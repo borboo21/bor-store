@@ -1,6 +1,6 @@
-import { IUser } from 'interfaces/interface';
 import { ROLE } from '../../constants/role';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { IUser } from '../../interfaces';
 
 const initialState: IUser = {
 	id: '',

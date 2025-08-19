@@ -1,4 +1,4 @@
-import { isAction, type Middleware } from '@reduxjs/toolkit';
+import { isAction,type Middleware } from '@reduxjs/toolkit';
 
 const sessionStorageCart: Middleware = (store) => (next) => (action) => {
 	const result = next(action);

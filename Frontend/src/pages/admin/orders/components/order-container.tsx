@@ -1,6 +1,6 @@
-import { IOrderComponent } from 'interfaces/interface';
 import moment from 'moment/moment';
 import styled from 'styled-components';
+import type { IOrderComponent } from '../../../../interfaces';
 
 const OrderContainer: React.FC<IOrderComponent> = ({ className, ...props }) => {
 	function formatDate(isoDate: string) {

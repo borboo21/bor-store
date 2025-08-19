@@ -1,69 +1,51 @@
-# React + TypeScript + Vite
+# 🛍️ Интернет-магазин БорСтор
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Полнофункциональный fullstack проект с админ-панелью и адаптивным дизайном.
 
-Currently, two official plugins are available:
+🚀 <a href="http://91.186.198.70/">Ссылка на проект</link>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# 📌 Особенности:
 
-## Expanding the ESLint configuration
+## Для пользователей:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+🔐 Авторизация через JWT (регистрация, вход);
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+🛒 Корзина с сохранением состояния (даже после перезагрузки);
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+📱 Адаптивный интерфейс (мобильные устройства, планшеты, десктоп);
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+🔍 Поиск товаров с фильтром по цене, категориями и поисковой строкой;
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Для администраторов:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+📊 Таблица заказов (после заказа, все товары добавляются в таблицу);
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+⚙️ Таблица всех присутствующих товаров;
+
+✏️ CRUD-операции для товаров (добавление/редактирование/удаление);
+
+# 🛠️ Технологический стек
+
+## Frontend
+
+| Технология            | Описание                     |
+| --------------------- | ---------------------------- |
+| React                 | Библиотека для построения UI |
+| Redux                 | Управление состоянием        |
+| React Hook Form + yup | Валидация форм               |
+| Styled components     | Стилизация веб-страницы      |
+
+## Backend
+
+| Технология | Описание            |
+| ---------- | ------------------- |
+| Node.js    | Серверная платформа |
+| Express    | REST API            |
+| MongoDB    | База данных         |
+| Mongoose   | ODM для MongoDB     |
+
+## Инфраструктура
+
+🐳 Docker-контейнеризация
+
+🚀 Деплой на VPS (Ubuntu)

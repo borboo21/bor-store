@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IInput } from 'interfaces/interface';
+import type { IInput } from '../../interfaces';
 import styled from 'styled-components';
 
 const inputContainer: React.FC<IInput> = ({

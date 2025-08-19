@@ -15,12 +15,17 @@ import {
 } from '../../selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { ItemsInCart } from './items-in-cart/items-in-cart';
-import { clearCart, logout, switchCartModal, switchNavigationModal } from 'store/slices';
-import { IComponentProps } from 'interfaces/interface';
-import { AppDispatch } from 'store/store';
-import { CATEGORIES } from 'constants/categories';
 import myIcon from './logo/bor-store.png';
 import styled from 'styled-components';
+import {
+	clearCart,
+	logout,
+	switchCartModal,
+	switchNavigationModal,
+	type AppDispatch,
+} from '../../store';
+import type { IComponentProps } from '../../interfaces';
+import { CATEGORIES } from '../../constants';
 
 const HeaderContainer: React.FC<IComponentProps> = ({ className }) => {
 	const dispatch: AppDispatch = useDispatch();

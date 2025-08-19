@@ -1,5 +1,5 @@
-import { ILink } from 'interfaces/interface';
 import { Link } from 'react-router-dom';
+import type { ILink } from '../../../interfaces';
 import styled from 'styled-components';
 
 const NavigationItemContainer: React.FC<ILink> = ({ className, ...props }) => {

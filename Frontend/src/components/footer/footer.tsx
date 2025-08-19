@@ -1,5 +1,5 @@
-import { IComponentProps } from 'interfaces/interface';
 import styled from 'styled-components';
+import type { IComponentProps } from '../../interfaces';
 
 const FooterContainer: React.FC<IComponentProps> = ({ className }) => (
 	<footer className={className}>

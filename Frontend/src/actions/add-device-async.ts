@@ -1,4 +1,4 @@
-import { SetStateAction } from 'react';
+import type { SetStateAction } from 'react';
 import { request } from '../utils/request';
 
 export const addDeviceAsync = (
@@ -9,7 +9,7 @@ export const addDeviceAsync = (
 	setIsLoading: React.Dispatch<SetStateAction<boolean>>,
 ) => {
 	setIsLoading(true);
-	request(`/device`, 'POST', { category, name, imageUrl, price }).then(() => {
+	request(`/api/device`, 'POST', { category, name, imageUrl, price }).then(() => {
 		setIsLoading(false);
 	});
 };

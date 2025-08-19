@@ -1,4 +1,4 @@
-import { IItemsInCart } from 'interfaces/interface';
+import type { IItemsInCart } from '../../../interfaces';
 import styled from 'styled-components';
 
 const ItemsInCartContainer: React.FC<IItemsInCart> = ({ className, quantity = 0 }) =>

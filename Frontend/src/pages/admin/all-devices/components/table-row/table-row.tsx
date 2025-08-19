@@ -1,5 +1,5 @@
-import { ITableRow } from 'interfaces/interface';
 import styled from 'styled-components';
+import type { ITableRow } from '../../../../../interfaces';
 
 const TableRowContainer: React.FC<ITableRow> = ({ className, children, ...props }) => (
 	<div className={className} {...props}>

@@ -3,7 +3,7 @@ import userReducer from './slices/user-slice';
 import cartReducer from './slices/cart-slice';
 import deviceReducer from './slices/device-slice';
 import appReducer from './slices/app-slice';
-import sessionStorageCart from 'middleware/sessionStorageCart';
+import sessionStorageCart from '../middleware/sessionStorageCart';
 
 const reducer = combineReducers({
 	deviceReducer: deviceReducer,

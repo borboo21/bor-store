@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { Button, CardItem, Input, Pagination } from '../../components';
 import { request, debounce } from '../../utils';
+import type { IComponentProps } from '../../interfaces';
+import type { AppDispatch } from '../../store';
 import { PAGINATION_LIMIT } from '../../constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -11,8 +13,6 @@ import {
 	faMagnifyingGlass,
 	faRubleSign,
 } from '@fortawesome/free-solid-svg-icons';
-import { AppDispatch } from '@store/*';
-import { IComponentProps } from 'interfaces/interface';
 import styled from 'styled-components';
 
 export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
@@ -29,7 +29,7 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 
 	const getMain = () =>
 		request(
-			`/device?search=${search}&category=${category}&page=${page}&limit=${PAGINATION_LIMIT}${sortPrice}`,
+			`/api/device?search=${search}&category=${category}&page=${page}&limit=${PAGINATION_LIMIT}${sortPrice}`,
 		).then(({ data: { devices, lastPage } }) => {
 			setDevices(devices);
 			setLastPage(lastPage);

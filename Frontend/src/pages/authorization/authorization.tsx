@@ -10,13 +10,11 @@ import { useResetForm } from '../../hooks';
 import { selectUserRoleIdSelector } from '../../selectors';
 import { ROLE } from '../../constants';
 import { request } from '../../utils';
-import { setUser } from 'store/slices';
-import { AppDispatch } from 'store/store';
-import { IComponentProps } from 'interfaces/interface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
+import type { IComponentProps } from '../../interfaces';
+import { loadCartAsync, setUser, type AppDispatch } from '../../store';
 import styled from 'styled-components';
-import { loadCartAsync } from 'store/thunks';
 
 const authFormSchema = yup.object().shape({
 	login: yup
@@ -66,19 +64,24 @@ const AuthorizationContainer: React.FC<IComponentProps> = ({ className }) => {
 	useResetForm(reset);
 
 	const onSubmit = ({ login, password }: { login: string; password: string }) => {
-		request('/login', 'POST', { login, password }).then(({ error, user }) => {
-			if (error) {
-				setServerError(`Ошибка запроса: ${error}`);
-				return;
-			}
-			dispatch(setUser(user));
-			dispatch(loadCartAsync(user.id));
-			sessionStorage.setItem('userData', JSON.stringify(user));
-			if (sessionStorage.cartData) {
-				uploadCartAsync(user.id, JSON.parse(sessionStorage.getItem('cartData')!));
-				sessionStorage.removeItem('cartData');
-			}
-		});
+		request('/api/auth/login', 'POST', { login, password }).then(
+			({ error, user }) => {
+				if (error) {
+					setServerError(`Ошибка запроса: ${error}`);
+					return;
+				}
+				dispatch(setUser(user));
+				dispatch(loadCartAsync(user.id));
+				sessionStorage.setItem('userData', JSON.stringify(user));
+				if (sessionStorage.cartData) {
+					uploadCartAsync(
+						user.id,
+						JSON.parse(sessionStorage.getItem('cartData')!),
+					);
+					sessionStorage.removeItem('cartData');
+				}
+			},
+		);
 	};
 
 	const formError = errors?.login?.message || errors?.password?.message;

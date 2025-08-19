@@ -14,14 +14,18 @@ import {
 } from '../../selectors';
 import { BreadCrumbs, CounterItem, Error, GreenButton } from '../../components';
 import { loadDeviceAsync } from '../../actions';
-import { addToCart, deleteFromCart } from 'store/slices';
 import { Loader, SkeletonDevice, SkeletonDeviceMobile } from '../../components/loaders';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ERROR } from '../../constants';
-import { ICartDevice, IComponentProps } from 'interfaces/interface';
-import { addCartAsync, deleteFromCartAsync } from 'store/thunks';
-import { AppDispatch } from 'store/store';
 import styled from 'styled-components';
+import type { ICartDevice, IComponentProps } from '../../interfaces';
+import {
+	addCartAsync,
+	addToCart,
+	deleteFromCart,
+	deleteFromCartAsync,
+	type AppDispatch,
+} from '../../store';
 
 const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 	const [error, setError] = useState('');
@@ -88,14 +92,14 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 							quantity: cartItemQuantity,
 							setIsLoadingSpinner,
 						}),
-					)
+				  )
 				: dispatch(
 						deleteFromCart({
 							id: deviceId,
 							price: devicePrice,
 							quantity: cartItemQuantity,
 						}),
-					);
+				  );
 		}
 	};
 

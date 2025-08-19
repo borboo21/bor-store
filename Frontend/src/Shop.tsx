@@ -13,11 +13,10 @@ import {
 	Orders,
 	Registration,
 } from './pages';
-import { setCartStorage, setUser } from 'store/slices';
 import { ERROR } from './constants';
-import { AppDispatch } from './store/store';
-import { loadCartAsync } from 'store/thunks';
-import { ICartDevice, IUser } from 'interfaces/interface';
+import { type AppDispatch } from './store/store';
+import { loadCartAsync, setCartStorage, setUser } from './store';
+import type { ICartDevice, IUser } from './interfaces/interface';
 import styled from 'styled-components';
 
 const AppColumn = styled.div`

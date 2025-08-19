@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IGreenButton } from 'interfaces/interface';
 import styled from 'styled-components';
+import type { IGreenButton } from '../../interfaces';
 
 const GreenButtonContainer: React.FC<IGreenButton> = ({
 	children,

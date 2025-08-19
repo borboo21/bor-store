@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from 'store/store';
-import { deleteFromCart } from 'store/slices';
-import { userIdSelector, selectUserRoleIdSelector } from 'selectors';
 import { Loader } from '../loaders';
 import { CardButton } from '../card-button/card-button';
 import { CounterItem } from '../counter/counter';
+import { deleteFromCart, deleteFromCartAsync, type AppDispatch } from '../../store';
+import { selectUserRoleIdSelector, userIdSelector } from '../../selectors';
+import type { ICartDevice } from '../../interfaces';
 import { faX } from '@fortawesome/free-solid-svg-icons';
-import { ICartDevice } from 'interfaces/interface';
-import { deleteFromCartAsync } from 'store/thunks';
 import styled from 'styled-components';
 
 const CartItemContainer: React.FC<ICartDevice> = ({ className, ...props }) => {
@@ -27,14 +25,14 @@ const CartItemContainer: React.FC<ICartDevice> = ({ className, ...props }) => {
 						quantity: props.quantity,
 						setIsLoadingSpinner,
 					}),
-				)
+			  )
 			: dispatch(
 					deleteFromCart({
 						id: props.id,
 						price: props.price,
 						quantity: props.quantity,
 					}),
-				);
+			  );
 	};
 
 	return (

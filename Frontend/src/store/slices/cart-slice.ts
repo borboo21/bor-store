@@ -1,5 +1,5 @@
-import { ICart, ICartDevice } from 'interfaces/interface';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { ICart, ICartDevice } from '../../interfaces';
 
 const initialState: ICart = {
 	devices: [],

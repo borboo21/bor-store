@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { GreenButton } from '../../../components';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { IComponentProps } from 'interfaces/interface';
-
+import type { IComponentProps } from '../../../interfaces';
 interface ICartSendOrder extends IComponentProps {
 	onClose: () => void;
 }

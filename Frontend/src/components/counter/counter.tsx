@@ -5,12 +5,11 @@ import {
 	userIdSelector,
 } from '../../selectors';
 import { updateQuantity } from '../../actions';
-import { switchQuantity } from 'store/slices';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { AppDispatch } from 'store/store';
+import { switchQuantity, type AppDispatch } from '../../store';
+import type { ICounter } from '../../interfaces';
 import styled from 'styled-components';
-import { ICounter } from 'interfaces/interface';
 
 const CounterItemContainer: React.FC<ICounter> = ({ className, id, price }) => {
 	const dispatch: AppDispatch = useDispatch();
