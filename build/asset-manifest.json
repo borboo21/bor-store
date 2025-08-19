@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.b3d2875f.css",
+    "main.js": "/static/js/main.e42fa13c.js",
+    "static/media/bor-store.png": "/static/media/bor-store.d13e87f1b5ed9aae3e4e.png",
+    "index.html": "/index.html",
+    "main.b3d2875f.css.map": "/static/css/main.b3d2875f.css.map",
+    "main.e42fa13c.js.map": "/static/js/main.e42fa13c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b3d2875f.css",
+    "static/js/main.e42fa13c.js"
+  ]
+}
