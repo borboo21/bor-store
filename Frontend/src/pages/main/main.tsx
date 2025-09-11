@@ -13,11 +13,12 @@ import {
 	faMagnifyingGlass,
 	faRubleSign,
 } from '@fortawesome/free-solid-svg-icons';
+import type { DeviceDTO } from '../../../../shared';
 import styled from 'styled-components';
 
 export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 	const params = useParams();
-	const [devices, setDevices] = useState([]);
+	const [devices, setDevices] = useState<DeviceDTO[]>([]);
 	const [category, setCategory] = useState('');
 	const [page, setPage] = useState(1);
 	const [shouldSearch, setShouldSearch] = useState('');
@@ -28,7 +29,7 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 	const dispatch: AppDispatch = useDispatch();
 
 	const getMain = () =>
-		request(
+		request<{ devices: DeviceDTO[]; lastPage: number }>(
 			`/api/device?search=${search}&category=${category}&page=${page}&limit=${PAGINATION_LIMIT}${sortPrice}`,
 		).then(({ data: { devices, lastPage } }) => {
 			setDevices(devices);
@@ -108,31 +109,17 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 			</div>
 			<div className="card-container">
 				{devices.length > 0 ? (
-					devices.map(
-						({
-							_id,
-							category,
-							name,
-							price,
-							imageUrl,
-						}: {
-							_id: string;
-							category: string;
-							name: string;
-							price: number;
-							imageUrl: string;
-						}) => (
-							<CardItem
-								key={_id}
-								category={category}
-								name={name}
-								price={price}
-								imageUrl={imageUrl}
-								id={_id}
-								loading={isLoading}
-							/>
-						),
-					)
+					devices.map(({ id, category, name, price, imageUrl }) => (
+						<CardItem
+							key={id}
+							category={category}
+							name={name}
+							price={price}
+							imageUrl={imageUrl}
+							id={id}
+							loading={isLoading}
+						/>
+					))
 				) : (
 					<div className="no-device-found">
 						Не найдено ни одного устройства, попробуйте снова.

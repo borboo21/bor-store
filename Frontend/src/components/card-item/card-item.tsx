@@ -4,7 +4,7 @@ import { faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { CardButton } from '../card-button/card-button';
 import { CounterItem } from '../counter/counter';
 import {
-	cartDevicesSelector,
+	cartItemsSelector,
 	userIdSelector,
 	selectUserRoleIdSelector,
 } from '../../selectors';
@@ -22,27 +22,29 @@ import {
 import type { ICardItem } from '../../interfaces';
 
 const CardItemContainer: React.FC<ICardItem> = ({ className, loading, ...props }) => {
-	const cartDevices = useSelector(cartDevicesSelector);
+	const cartDevices = useSelector(cartItemsSelector);
 	const userId = useSelector(userIdSelector);
 	const roleId = useSelector(selectUserRoleIdSelector);
 	const dispatch: AppDispatch = useDispatch();
 	const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
 	const windowSize = useWindowSize();
 
-	const inCart: boolean = cartDevices.some((device) => device.id === props.id);
+	const inCart: boolean = cartDevices.some((item) => item.device.id === props.id);
 
 	const cartDevice = {
-		id: props.id,
-		category: props.category,
-		imageUrl: props.imageUrl,
-		name: props.name,
-		price: props.price,
+		device: {
+			id: props.id,
+			category: props.category,
+			imageUrl: props.imageUrl,
+			name: props.name,
+			price: props.price,
+		},
 		quantity: 1,
 	};
 
 	const handleClickPlus = (userId: string) => {
 		if (roleId !== 3) {
-			dispatch(addCartAsync({ userId, cartDevice, setIsLoadingSpinner }));
+			dispatch(addCartAsync({ userId, deviceId: props.id, setIsLoadingSpinner }));
 		} else {
 			dispatch(addToCart(cartDevice));
 			sessionStorage.setItem(
@@ -53,13 +55,13 @@ const CardItemContainer: React.FC<ICardItem> = ({ className, loading, ...props }
 	};
 
 	const handleClickDelete = (id: string, userId: string) => {
-		const findDevice = cartDevices.find((cartItem) => cartItem.id === id);
+		const findDevice = cartDevices.find((cartItem) => cartItem.device.id === id);
 		if (findDevice) {
 			const quantityInCart = findDevice.quantity;
 			if (roleId !== 3) {
 				dispatch(
 					deleteFromCartAsync({
-						id,
+						deviceId: id,
 						userId,
 						price: props.price,
 						quantity: quantityInCart,
@@ -69,7 +71,7 @@ const CardItemContainer: React.FC<ICardItem> = ({ className, loading, ...props }
 			} else {
 				dispatch(
 					deleteFromCart({
-						id,
+						deviceId: id,
 						price: props.price,
 						quantity: quantityInCart,
 					}),

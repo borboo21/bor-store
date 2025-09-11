@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useWindowSize } from '@uidotdev/usehooks';
 import {
-	cartDevicesSelector,
+	cartItemsSelector,
 	selectDeviceCategory,
 	selectDeviceId,
 	selectDeviceImageURL,
@@ -18,7 +18,7 @@ import { Loader, SkeletonDevice, SkeletonDeviceMobile } from '../../components/l
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ERROR } from '../../constants';
 import styled from 'styled-components';
-import type { ICartDevice, IComponentProps } from '../../interfaces';
+import type { IComponentProps } from '../../interfaces';
 import {
 	addCartAsync,
 	addToCart,
@@ -26,6 +26,7 @@ import {
 	deleteFromCartAsync,
 	type AppDispatch,
 } from '../../store';
+import type { CartItemDTO } from '../../../../shared/types/interface';
 
 const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 	const [error, setError] = useState('');
@@ -39,7 +40,7 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 	const deviceName = useSelector(selectDeviceName);
 	const deviceImageUrl = useSelector(selectDeviceImageURL);
 	const devicePrice = useSelector(selectDevicePrice);
-	const cartDevices = useSelector(cartDevicesSelector);
+	const cartDevices = useSelector(cartItemsSelector);
 	const userId = useSelector(userIdSelector);
 	const userRole = useSelector(selectUserRoleIdSelector);
 	const windowSize = useWindowSize();
@@ -56,20 +57,22 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 		}
 	}, [dispatch, params.id, setIsLoadingSkeleton]);
 
-	const inCart = cartDevices.some((item) => item.id === deviceId);
+	const inCart = cartDevices.some((item) => item.device.id === deviceId);
 
-	const cartDevice: ICartDevice = {
-		id: deviceId,
-		category: deviceCategory,
-		imageUrl: deviceImageUrl,
-		name: deviceName,
-		price: devicePrice,
+	const cartDevice: CartItemDTO = {
+		device: {
+			id: deviceId,
+			category: deviceCategory,
+			imageUrl: deviceImageUrl,
+			name: deviceName,
+			price: devicePrice,
+		},
 		quantity: 1,
 	};
 
 	const handleClick = () => {
 		if (userRole !== 3) {
-			dispatch(addCartAsync({ userId, cartDevice, setIsLoadingSpinner }));
+			dispatch(addCartAsync({ userId, deviceId, setIsLoadingSpinner }));
 		} else {
 			dispatch(addToCart(cartDevice));
 			sessionStorage.setItem(
@@ -80,26 +83,30 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 	};
 
 	const onDelete = () => {
-		const findCartItemQuantity = cartDevices.find((item) => item.id === deviceId);
+		const findCartItemQuantity = cartDevices.find(
+			(item) => item.device.id === deviceId,
+		);
 		if (findCartItemQuantity) {
 			const cartItemQuantity = findCartItemQuantity.quantity;
-			userRole !== 3
-				? dispatch(
-						deleteFromCartAsync({
-							id: deviceId,
-							userId,
-							price: devicePrice,
-							quantity: cartItemQuantity,
-							setIsLoadingSpinner,
-						}),
-				  )
-				: dispatch(
-						deleteFromCart({
-							id: deviceId,
-							price: devicePrice,
-							quantity: cartItemQuantity,
-						}),
-				  );
+			if (userRole !== 3) {
+				dispatch(
+					deleteFromCartAsync({
+						userId,
+						deviceId,
+						price: devicePrice,
+						quantity: cartItemQuantity,
+						setIsLoadingSpinner,
+					}),
+				);
+			} else {
+				dispatch(
+					deleteFromCart({
+						deviceId,
+						price: devicePrice,
+						quantity: cartItemQuantity,
+					}),
+				);
+			}
 		}
 	};
 

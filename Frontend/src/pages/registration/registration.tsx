@@ -17,6 +17,7 @@ import styled from 'styled-components';
 import type { IComponentProps } from '../../interfaces';
 import { selectUserRoleIdSelector } from '../../selectors';
 import { setUser } from '../../store';
+import type { UserDTO } from '../../../../shared/types/interface';
 
 const regFormSchema = yup.object().shape({
 	login: yup
@@ -64,8 +65,10 @@ const RegistrationContainer: React.FC<IComponentProps> = ({ className }) => {
 	useResetForm(reset);
 
 	const onSubmit = ({ login, password }: { login: string; password: string }) =>
-		request('/api/auth/register', 'POST', { login, password }).then(
-			({ error, user }) => {
+		request<UserDTO>('/api/auth/register', 'POST', { login, password }).then(
+			(registrationData) => {
+				const error = registrationData.error;
+				const user = registrationData.data;
 				if (error) {
 					setServerError(`Ошибка запроса: ${error}`);
 					return;

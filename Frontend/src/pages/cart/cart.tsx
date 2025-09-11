@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CardButton, CartItem } from '../../components';
-import { modalCartIsOpen, cartDevicesSelector, userIdSelector } from '../../selectors';
+import { modalCartIsOpen, cartItemsSelector, userIdSelector } from '../../selectors';
 import { takeOrder } from '../../actions';
 import { CartSendOrder, CartTotalBlock, EmptyCart } from './components';
 import { useClickAway } from '@uidotdev/usehooks';
@@ -14,7 +14,7 @@ const CartContainer: React.FC<IComponentProps> = ({ className }) => {
 	const [isOrdered, setIsOrdered] = useState(false);
 
 	const dispatch: AppDispatch = useDispatch();
-	const cartDevices = useSelector(cartDevicesSelector);
+	const cartDevices = useSelector(cartItemsSelector);
 	const modalCart = useSelector(modalCartIsOpen);
 	const userId = useSelector(userIdSelector);
 
@@ -64,12 +64,12 @@ const CartContainer: React.FC<IComponentProps> = ({ className }) => {
 						<div className="cart-items">
 							{cartDevices.map((item) => (
 								<CartItem
-									key={item.id}
-									id={item.id}
-									category={item.category}
-									name={item.name}
-									price={item.price}
-									imageUrl={item.imageUrl}
+									key={item.device.id}
+									id={item.device.id}
+									category={item.device.category}
+									name={item.device.name}
+									price={item.device.price}
+									imageUrl={item.device.imageUrl}
 									quantity={item.quantity}
 								/>
 							))}

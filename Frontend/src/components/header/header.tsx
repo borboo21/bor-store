@@ -9,7 +9,7 @@ import {
 import { Link } from 'react-router-dom';
 import { HeadLink } from './head-link/head-link';
 import {
-	cartDevicesSelector,
+	cartItemsSelector,
 	userLoginSelector,
 	selectUserRoleIdSelector,
 } from '../../selectors';
@@ -29,7 +29,7 @@ import { CATEGORIES } from '../../constants';
 
 const HeaderContainer: React.FC<IComponentProps> = ({ className }) => {
 	const dispatch: AppDispatch = useDispatch();
-	const cartDevices = useSelector(cartDevicesSelector);
+	const cartDevices = useSelector(cartItemsSelector);
 	const userLogin = useSelector(userLoginSelector);
 	const userRoleId = useSelector(selectUserRoleIdSelector);
 	const quantityAmount = cartDevices.reduce((sum, device) => sum + device.quantity, 0);

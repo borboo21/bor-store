@@ -1,5 +1,5 @@
 export * from './device-selectors/select-device-id';
-export * from './cart-selectors/cart-devices-selector';
+export * from './cart-selectors/cart-items-selector';
 export * from './user-selectors/user-role-id-selector';
 export * from './modal-selectors/select-modal-is-open';
 export * from './modal-selectors/select-modal-info';

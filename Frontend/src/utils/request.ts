@@ -1,8 +1,13 @@
-export function request<TResponse = any>(
+type requestType<T> = {
+	data: T;
+	error?: string;
+};
+
+export function request<T>(
 	url: string,
 	method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' = 'GET',
-	data?: Record<string, any>,
-): Promise<TResponse> {
+	data?: unknown,
+): Promise<requestType<T>> {
 	return fetch(url, {
 		headers: {
 			'content-type': 'application/json;charset=utf-8',

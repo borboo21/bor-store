@@ -11,7 +11,7 @@ const OrderContainer: React.FC<IOrderComponent> = ({ className, ...props }) => {
 		<div className={className}>
 			<div className="header">
 				<div className="first">
-					<span className="head-info">{props._id}</span>
+					<span className="head-info">{props.id}</span>
 				</div>
 				<div className="second">
 					<span className="order">В заказе:</span>
@@ -31,20 +31,14 @@ const OrderContainer: React.FC<IOrderComponent> = ({ className, ...props }) => {
 				<div className="vertical-line"></div>
 				<div className="second">
 					{props.items.map((item) => (
-						<li key={item._id} className="cartItem">
+						<li key={props.id} className="cartItem">
 							{item.name} — {item.quantity} шт.
 						</li>
 					))}
 				</div>
 				<div className="vertical-line"></div>
 				<div className="third-base">
-					<span className="amount">
-						{props.items.reduce(
-							(sum, device) => sum + device.price * device.quantity,
-							0,
-						)}{' '}
-						₽
-					</span>
+					<span className="amount">{props.amount} ₽</span>
 				</div>
 				<div className="vertical-line"></div>
 				<div className="fourth">

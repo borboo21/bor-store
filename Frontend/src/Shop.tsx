@@ -16,8 +16,8 @@ import {
 import { ERROR } from './constants';
 import { type AppDispatch } from './store/store';
 import { loadCartAsync, setCartStorage, setUser } from './store';
-import type { ICartDevice, IUser } from './interfaces/interface';
 import styled from 'styled-components';
+import type { DeviceDTO, UserDTO } from '../../shared/types/interface';
 
 const AppColumn = styled.div`
 	display: flex;
@@ -48,14 +48,13 @@ export const Shop = () => {
 		const currentUserDataJson = sessionStorage.getItem('userData');
 		const currentCartDataJson = sessionStorage.getItem('cartData');
 		if (currentCartDataJson) {
-			const currentCartData: [ICartDevice] = JSON.parse(currentCartDataJson);
+			const currentCartData: [{ device: DeviceDTO; quantity: number }] =
+				JSON.parse(currentCartDataJson);
 			dispatch(setCartStorage(currentCartData));
 		}
 		if (currentUserDataJson) {
-			const currentUserData: IUser = JSON.parse(currentUserDataJson);
-			dispatch(
-				setUser({ ...currentUserData, roleId: Number(currentUserData.roleId) }),
-			);
+			const currentUserData: UserDTO = JSON.parse(currentUserDataJson);
+			dispatch(setUser({ ...currentUserData, role: Number(currentUserData.role) }));
 			dispatch(loadCartAsync(currentUserData.id));
 		}
 	}, [dispatch]);

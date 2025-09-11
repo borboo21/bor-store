@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { IDevice } from '../../interfaces';
+import type { DeviceDTO } from '../../../../shared/types/interface';
 
-const initialState: IDevice = {
+const initialState: DeviceDTO = {
 	id: '',
 	category: '',
 	name: '',
@@ -13,7 +13,7 @@ const deviceSlice = createSlice({
 	name: 'deviceSlice',
 	initialState,
 	reducers: {
-		setDeviceData: (state, action: PayloadAction<IDevice>) => {
+		setDeviceData: (state, action: PayloadAction<DeviceDTO>) => {
 			state.id = action.payload.id;
 			state.category = action.payload.category;
 			state.name = action.payload.name;

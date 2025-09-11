@@ -15,6 +15,7 @@ import { faArrowRight, faLock, faUser } from '@fortawesome/free-solid-svg-icons'
 import type { IComponentProps } from '../../interfaces';
 import { loadCartAsync, setUser, type AppDispatch } from '../../store';
 import styled from 'styled-components';
+import type { UserDTO } from '../../../../shared/types/interface';
 
 const authFormSchema = yup.object().shape({
 	login: yup
@@ -64,22 +65,27 @@ const AuthorizationContainer: React.FC<IComponentProps> = ({ className }) => {
 	useResetForm(reset);
 
 	const onSubmit = ({ login, password }: { login: string; password: string }) => {
-		request('/api/auth/login', 'POST', { login, password }).then(
-			({ error, user }) => {
+		request<UserDTO>('/api/auth/login', 'POST', { login, password }).then(
+			(userData) => {
+				const error = userData.error;
+				const user = userData.data;
 				if (error) {
 					setServerError(`Ошибка запроса: ${error}`);
 					return;
 				}
 				dispatch(setUser(user));
-				dispatch(loadCartAsync(user.id));
-				sessionStorage.setItem('userData', JSON.stringify(user));
 				if (sessionStorage.cartData) {
 					uploadCartAsync(
 						user.id,
 						JSON.parse(sessionStorage.getItem('cartData')!),
-					);
+					).then(() => {
+						dispatch(loadCartAsync(user.id));
+					});
 					sessionStorage.removeItem('cartData');
+				} else {
+					dispatch(loadCartAsync(user.id));
 				}
+				sessionStorage.setItem('userData', JSON.stringify(user));
 			},
 		);
 	};

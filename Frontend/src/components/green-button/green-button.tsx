@@ -8,9 +8,7 @@ const GreenButtonContainer: React.FC<IGreenButton> = ({
 	onClick,
 	right,
 	left,
-	place,
 	icon,
-	inсart,
 	type,
 	disabled,
 	...props

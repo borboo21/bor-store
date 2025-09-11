@@ -1,20 +1,22 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import type { ICartDevice } from '../../interfaces';
 import { request } from '../../utils';
 import { addToCart, deleteFromCart } from '../slices';
+import type { AddToCartResponseDTO } from '../../../../shared/types/interface';
 
-type thunkCartType = {
+// Добавить товар в корзину
+type thunkAddToCartType = {
 	userId: string;
-	cartDevice: ICartDevice;
+	deviceId: string;
 	setIsLoadingSpinner: (value: boolean) => void;
 };
 
-// Добавить товар в корзину
 export const addCartAsync = createAsyncThunk(
 	'cart/addToCartAsync',
-	(args: thunkCartType, { dispatch }) => {
+	(args: thunkAddToCartType, { dispatch }) => {
 		args.setIsLoadingSpinner(true);
-		request(`/api/cart/${args.userId}`, 'POST', args.cartDevice).then((rawDevice) => {
+		request<AddToCartResponseDTO>(`/api/cart/${args.userId}`, 'POST', {
+			id: args.deviceId,
+		}).then((rawDevice) => {
 			dispatch(addToCart(rawDevice.data));
 			args.setIsLoadingSpinner(false);
 		});
@@ -22,23 +24,22 @@ export const addCartAsync = createAsyncThunk(
 );
 
 // Убрать товар из корзины
+
+type thunkDeleteFromCartType = {
+	userId: string;
+	deviceId: string;
+	price: number;
+	quantity: number;
+	setIsLoadingSpinner: (value: boolean) => void;
+};
 export const deleteFromCartAsync = createAsyncThunk(
 	'cart/deleteFromCartAsync',
-	(
-		args: {
-			userId: string;
-			id: string;
-			price: number;
-			quantity: number;
-			setIsLoadingSpinner: (value: boolean) => void;
-		},
-		{ dispatch },
-	) => {
+	(args: thunkDeleteFromCartType, { dispatch }) => {
 		args.setIsLoadingSpinner(true);
-		request(`/api/cart/${args.userId}`, 'DELETE', { id: args.id }).then(() => {
+		request(`/api/cart/${args.userId}`, 'DELETE', { id: args.deviceId }).then(() => {
 			dispatch(
 				deleteFromCart({
-					id: args.id,
+					deviceId: args.deviceId,
 					price: args.price,
 					quantity: args.quantity,
 				}),

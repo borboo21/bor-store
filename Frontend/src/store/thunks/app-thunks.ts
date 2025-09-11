@@ -1,12 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { request } from '../../utils';
 import { setCartData } from '../slices';
+import type { CartDTO } from '../../../../shared/types/interface';
 
 export const loadCartAsync = createAsyncThunk(
 	'cart/loadCartAsync',
 	(userId: string, { dispatch }) =>
-		request(`/api/cart/${userId}`).then((cartData) => {
-			if (cartData.data.length !== 0) {
+		request<CartDTO>(`/api/cart/${userId}`).then((cartData) => {
+			if (cartData.data.items.length !== 0) {
 				dispatch(setCartData(cartData.data));
 			}
 		}),

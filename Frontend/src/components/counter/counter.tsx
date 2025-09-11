@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
-	cartDevicesSelector,
+	cartItemsSelector,
 	selectUserRoleIdSelector,
 	userIdSelector,
 } from '../../selectors';
@@ -15,8 +15,8 @@ const CounterItemContainer: React.FC<ICounter> = ({ className, id, price }) => {
 	const dispatch: AppDispatch = useDispatch();
 	const userRole = useSelector(selectUserRoleIdSelector);
 	const userId = useSelector(userIdSelector);
-	const cartDevices = useSelector(cartDevicesSelector);
-	const itemInCart = cartDevices.find((device) => device.id === id);
+	const cartDevices = useSelector(cartItemsSelector);
+	const itemInCart = cartDevices.find((item) => item.device.id === id);
 	if (!itemInCart) {
 		return;
 	}

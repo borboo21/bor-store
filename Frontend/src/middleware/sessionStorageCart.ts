@@ -1,16 +1,20 @@
-import { isAction,type Middleware } from '@reduxjs/toolkit';
+import { isAction, type Middleware } from '@reduxjs/toolkit';
 
 const sessionStorageCart: Middleware = (store) => (next) => (action) => {
 	const result = next(action);
-	if (
-		isAction(action) &&
-		(action.type === 'cartReducer/deleteFromCart' ||
-			action.type === 'cartReducer/switchQuantity')
-	) {
-		const cart = store.getState().cartReducer;
-		sessionStorage.setItem('cartData', JSON.stringify(cart.devices));
+	const user = store.getState().userReducer;
+	if (user.role === 3) {
+		if (
+			isAction(action) &&
+			(action.type === 'cartSlice/deleteFromCart' ||
+				action.type === 'cartSlice/switchQuantity')
+		) {
+			const cart = store.getState().cartReducer;
+
+			sessionStorage.setItem('cartData', JSON.stringify(cart.items));
+		}
+		return result;
 	}
-	return result;
 };
 
 export default sessionStorageCart;

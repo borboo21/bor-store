@@ -5,43 +5,11 @@ import {
 	type ReactEventHandler,
 	type SetStateAction,
 } from 'react';
+import type { DeviceDTO, OrderDTO } from '../../../shared/';
 
-export interface IUser {
-	id: string;
-	login: string;
-	roleId: number;
-}
-
-export interface IDevice {
-	id: string;
-	category: string;
-	name: string;
-	imageUrl: string;
-	price: number;
-}
-export interface ICartDevice extends IDevice, IComponentProps {
+export interface ICartDevice extends DeviceDTO, IComponentProps {
 	quantity: number;
 }
-
-export interface IOrderItem {
-	_id: string;
-	name: string;
-	price: number;
-	quantity: number;
-}
-
-export interface IOrder {
-	_id: string;
-	login: string;
-	createdAt: string;
-	items: IOrderItem[];
-}
-
-export interface ICart {
-	devices: ICartDevice[];
-	amount: number;
-}
-
 export interface IApp {
 	wasLogout: boolean;
 	modalCartIsOpen: boolean;
@@ -85,7 +53,7 @@ export interface IComponentProps {
 	className?: string;
 }
 
-export interface ICardItem extends IComponentProps, IDevice {
+export interface ICardItem extends IComponentProps, DeviceDTO {
 	key?: string;
 	loading?: boolean;
 }
@@ -135,10 +103,10 @@ export interface ITableRow extends IComponentProps {
 	children: JSX.Element[];
 	withborder?: string;
 }
-export interface IDeviceRow extends IComponentProps, IDevice {
+export interface IDeviceRow extends IComponentProps, DeviceDTO {
 	key?: string;
 	onDelete: React.ReactEventHandler;
 	shouldUpdateDeviceList: boolean;
 	setShouldUpdateDeviceList: React.Dispatch<SetStateAction<boolean>>;
 }
-export interface IOrderComponent extends IComponentProps, IOrder {}
+export interface IOrderComponent extends IComponentProps, OrderDTO {}

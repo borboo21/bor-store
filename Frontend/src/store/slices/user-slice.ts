@@ -1,21 +1,21 @@
 import { ROLE } from '../../constants/role';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { IUser } from '../../interfaces';
+import type { UserDTO } from '../../../../shared/types/interface';
 
-const initialState: IUser = {
+const initialState: UserDTO = {
 	id: '',
 	login: '',
-	roleId: ROLE.GUEST,
+	role: ROLE.GUEST,
 };
 
 const userSlice = createSlice({
 	name: 'userSlice',
 	initialState,
 	reducers: {
-		setUser: (state, action: PayloadAction<IUser>) => {
+		setUser: (state, action: PayloadAction<UserDTO>) => {
 			state.id = action.payload.id;
 			state.login = action.payload.login;
-			state.roleId = action.payload.roleId;
+			state.role = action.payload.role;
 		},
 		logout: (state) => {
 			Object.assign(state, initialState);

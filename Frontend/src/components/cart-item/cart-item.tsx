@@ -16,23 +16,25 @@ const CartItemContainer: React.FC<ICartDevice> = ({ className, ...props }) => {
 	const userRole = useSelector(selectUserRoleIdSelector);
 
 	const handleClickX = () => {
-		userRole !== 3
-			? dispatch(
-					deleteFromCartAsync({
-						id: props.id,
-						userId,
-						price: props.price,
-						quantity: props.quantity,
-						setIsLoadingSpinner,
-					}),
-			  )
-			: dispatch(
-					deleteFromCart({
-						id: props.id,
-						price: props.price,
-						quantity: props.quantity,
-					}),
-			  );
+		if (userRole !== 3) {
+			dispatch(
+				deleteFromCartAsync({
+					deviceId: props.id,
+					userId,
+					price: props.price,
+					quantity: props.quantity,
+					setIsLoadingSpinner,
+				}),
+			);
+		} else {
+			dispatch(
+				deleteFromCart({
+					deviceId: props.id,
+					price: props.price,
+					quantity: props.quantity,
+				}),
+			);
+		}
 	};
 
 	return (
