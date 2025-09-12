@@ -74,7 +74,7 @@ const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
 		setPrice(0);
 	};
 
-	const isButtonDisabled = !isValidUrl(imageUrl) || !Boolean(name) || !Number(price);
+	const isButtonDisabled = !isValidUrl(imageUrl) || Boolean(name) || !Number(price);
 
 	return (
 		<PrivateContent access={[ROLE.ADMIN]}>
@@ -112,7 +112,7 @@ const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
 							placeholder={'Вставьте ссылку на изображение'}
 						/>
 						<div className="select-div">
-							<FontAwesomeIcon icon={faList} color="gray"  />
+							<FontAwesomeIcon icon={faList} color="gray" />
 							<select value={category} onChange={onCategoryChange}>
 								{CATEGORIES.map((categoryName, index) => (
 									<option key={index} value={categoryName}>

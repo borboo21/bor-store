@@ -9,23 +9,25 @@ import { openModal } from '../../../store/slices';
 import type { IComponentProps } from '../../../interfaces';
 import type { AppDispatch } from '../../../store';
 import styled from 'styled-components';
+import type { DeviceDTO } from '../../../../../shared';
 
 const AllPageContainer: React.FC<IComponentProps> = ({ className }) => {
 	const dispatch: AppDispatch = useDispatch();
 	const isOpen = useSelector(selectModalIsOpen);
-	const [device, setDevice] = useState([]);
-	const [error, setError] = useState(null);
+	const [devices, setDevices] = useState<DeviceDTO[]>([]);
+	const [error, setError] = useState('');
 	const [shouldUpdateDeviceList, setShouldUpdateDeviceList] = useState(false);
 
 	const userRoleId = useSelector(selectUserRoleIdSelector);
 
 	const getAllDevices = () =>
-		request('/api/device/all').then((deviceRes) => {
+		request<DeviceDTO[]>('/api/device/all').then((deviceRes) => {
 			if (deviceRes.error) {
 				setError(deviceRes.error);
 				return;
 			}
-			setDevice(deviceRes.data);
+			console.log(deviceRes);
+			setDevices(deviceRes.data);
 		});
 
 	useEffect(() => {
@@ -68,15 +70,15 @@ const AllPageContainer: React.FC<IComponentProps> = ({ className }) => {
 						<div className="price-column">Цена</div>
 						<div className="url-column">Ссылка</div>
 					</TableRow>
-					{device.map(({ category, _id, imageUrl, name, price }) => (
+					{devices.map(({ category, id, imageUrl, name, price }) => (
 						<DeviceRow
-							key={_id}
-							id={_id}
+							key={id}
+							id={id}
 							category={category}
 							imageUrl={imageUrl}
 							name={name}
 							price={price}
-							onDelete={() => onDelete(_id)}
+							onDelete={() => onDelete(id)}
 							shouldUpdateDeviceList={shouldUpdateDeviceList}
 							setShouldUpdateDeviceList={setShouldUpdateDeviceList}
 						/>

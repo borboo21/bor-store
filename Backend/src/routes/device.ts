@@ -29,9 +29,9 @@ router.get("/", async (req, res) => {
 // Получение всех девайсов
 router.get("/all", async (req, res) => {
   try {
-    const data = await getAllDevices();
-    const mappedData = data.map(mapDevice);
-    res.send({ mappedData });
+    const rawdata = await getAllDevices();
+    const data = rawdata.map(mapDevice);
+    res.send({ data });
   } catch (e) {
     if (e instanceof Error) {
       res.send({ error: e.message || "Unknown error" });
