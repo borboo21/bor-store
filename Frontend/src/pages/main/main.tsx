@@ -156,13 +156,7 @@ export const Main = styled(MainContainer)`
 
 	h5 {
 		font-weight: 600;
-		font-size: 16px;
-	}
-
-	span {
-		font-size: 13px;
-		opacity: 0.5;
-		text-transform: uppercase;
+		font-size: 18px;
 	}
 
 	b {
@@ -171,6 +165,12 @@ export const Main = styled(MainContainer)`
 
 	img {
 		cursor: pointer;
+	}
+
+	.price-title {
+		font-size: 13px;
+		opacity: 0.5;
+		text-transform: uppercase;
 	}
 
 	.sort-controls {

@@ -12,7 +12,14 @@ import {
 	userIdSelector,
 	selectUserRoleIdSelector,
 } from '../../selectors';
-import { BreadCrumbs, CounterItem, Error, GreenButton } from '../../components';
+import {
+	BreadCrumbs,
+	ColorBlock,
+	CounterItem,
+	Error,
+	GreenButton,
+	SpecBlock,
+} from '../../components';
 import { loadDeviceAsync } from '../../actions';
 import { Loader, SkeletonDevice, SkeletonDeviceMobile } from '../../components/loaders';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
@@ -32,6 +39,8 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 	const [error, setError] = useState('');
 	const [isLoadingSkeleton, setIsLoadingSkeleton] = useState(true);
 	const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
+	const memoryArr = ['128 Gb', '256 Gb', '512 Gb'];
+	const colorArr = ['#47537d', '#f7853f', '#e7e7e7'];
 
 	const dispatch: AppDispatch = useDispatch();
 	const params = useParams();
@@ -127,8 +136,15 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 						<div className="img-block">
 							<img width={310} src={deviceImageUrl} alt={deviceName} />
 						</div>
-						<div className="description">
+						<div className="device-description-block">
 							<h1>{deviceName}</h1>
+							<SpecBlock
+								specArr={memoryArr}
+								specName="Объем Памяти"
+								paddingTag="6px 12px"
+								fontSizeTag={13}
+							/>
+							<ColorBlock className="device-color" colorArr={colorArr} />
 							<h2>{devicePrice}₽</h2>
 							<div className="buy-container">
 								{!inCart ? (
@@ -186,16 +202,22 @@ export const DevicePage = styled(DevicePageContainer)`
 		margin-right: 46px;
 	}
 
-	.description {
-		width: 400px;
-		height: 400px;
+	.device-description-block {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
 		justify-content: space-evenly;
 		box-shadow: 0 0 24px 0 rgba(27, 30, 37, 0.08);
 		border-radius: 20px;
-		padding-left: 20px;
+		padding: 20px;
+	}
+
+	.device-memory {
+		margin: 15px 0;
+	}
+
+	.device-color {
+		margin: 15px 0;
 	}
 
 	.buy-container {
@@ -206,6 +228,14 @@ export const DevicePage = styled(DevicePageContainer)`
 
 	.counter {
 		padding-left: 20px;
+	}
+
+	.memory-tag {
+		margin: 0 4px;
+	}
+
+	.color-tag {
+		margin: 8px 4px;
 	}
 
 	@media (max-width: 800px) {

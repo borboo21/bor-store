@@ -11,7 +11,7 @@ router.post("/register", async (req, res) => {
 
     res.cookie("token", token, { httpOnly: true }).send({
       error: null,
-      user: mapUserForFrontend(user),
+      data: mapUserForFrontend(user),
     });
   } catch (e) {
     if (e instanceof Error) {
@@ -26,7 +26,7 @@ router.post("/login", async (req, res) => {
 
     res.cookie("token", token, { httpOnly: true }).send({
       error: null,
-      user: mapUserForFrontend(user),
+      data: mapUserForFrontend(user),
     });
   } catch (e) {
     if (e instanceof Error) {

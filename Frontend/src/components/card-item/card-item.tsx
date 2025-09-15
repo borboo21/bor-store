@@ -11,7 +11,6 @@ import {
 import { Loader, SkeletonMain, SkeletonMainMobile } from '../loaders';
 import { useWindowSize } from '@uidotdev/usehooks';
 import { useState } from 'react';
-import styled from 'styled-components';
 import {
 	addCartAsync,
 	addToCart,
@@ -20,6 +19,9 @@ import {
 	type AppDispatch,
 } from '../../store';
 import type { ICardItem } from '../../interfaces';
+import { SpecBlock } from '../tags-block/spec-block';
+import styled from 'styled-components';
+import { ColorBlock } from '../tags-block';
 
 const CardItemContainer: React.FC<ICardItem> = ({ className, loading, ...props }) => {
 	const cartDevices = useSelector(cartItemsSelector);
@@ -28,6 +30,9 @@ const CardItemContainer: React.FC<ICardItem> = ({ className, loading, ...props }
 	const dispatch: AppDispatch = useDispatch();
 	const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
 	const windowSize = useWindowSize();
+
+	const memoryArr = ['128 Gb', '256 Gb', '512 Gb'];
+	const colorArr = ['#47537d', '#f7853f', '#e7e7e7'];
 
 	const inCart: boolean = cartDevices.some((item) => item.device.id === props.id);
 
@@ -101,6 +106,13 @@ const CardItemContainer: React.FC<ICardItem> = ({ className, loading, ...props }
 					</div>
 					<div className="card-bottom">
 						<h5 className="device-name">{props.name}</h5>
+						<SpecBlock
+							specArr={memoryArr}
+							specName="Объем памяти"
+							paddingTag={'4px 8px'}
+							fontSizeTag={11}
+						/>
+						<ColorBlock colorArr={colorArr} />
 						<div className="buy-panel">
 							<div className="price">
 								<span className="price-title">Цена:</span>
@@ -182,7 +194,11 @@ export const CardItem = styled(CardItemContainer)`
 	}
 
 	.device-name {
-		margin: 10px 0 10px 0;
+		margin: 10px 0 6px 0;
+	}
+
+	.price-title {
+		margin-bottom: 6px;
 	}
 
 	@media (max-width: 600px) {

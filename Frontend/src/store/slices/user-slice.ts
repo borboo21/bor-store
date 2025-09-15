@@ -13,6 +13,7 @@ const userSlice = createSlice({
 	initialState,
 	reducers: {
 		setUser: (state, action: PayloadAction<UserDTO>) => {
+			console.log(action);
 			state.id = action.payload.id;
 			state.login = action.payload.login;
 			state.role = action.payload.role;
