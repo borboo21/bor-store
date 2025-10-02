@@ -1,14 +1,15 @@
 import type React from 'react';
 import { SpecTag } from '../tags/spec-tag';
-import { useState } from 'react';
 import styled from 'styled-components';
 
 type SpecBlockProps = {
 	className?: string;
-	specArr: (string | number)[];
+	specArr: string[];
 	specName: string;
 	paddingTag: string;
 	fontSizeTag: number;
+	selectedValue?: string;
+	onChange: (value: string) => void;
 };
 
 const SpecBlockContainer: React.FC<SpecBlockProps> = ({
@@ -17,13 +18,10 @@ const SpecBlockContainer: React.FC<SpecBlockProps> = ({
 	specName,
 	paddingTag,
 	fontSizeTag,
+	onChange,
+	selectedValue,
 }) => {
-	const [activeSpecTag, setActiveSpecTag] = useState(0);
-
-	const handleClickSpecTag = (index: number) => {
-		setActiveSpecTag(index);
-	};
-
+	console.log(specArr);
 	return (
 		<div className={className}>
 			<span className="spec-title">{specName}:</span>
@@ -32,8 +30,8 @@ const SpecBlockContainer: React.FC<SpecBlockProps> = ({
 					<SpecTag
 						key={index}
 						value={value}
-						disabled={activeSpecTag === index}
-						onClick={() => handleClickSpecTag(index)}
+						disabled={selectedValue === value}
+						onClick={() => onChange(value)}
 						$padding={paddingTag}
 						$fontsize={fontSizeTag}
 					/>

@@ -38,6 +38,8 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 			setIsLoading(false);
 		});
 
+	console.log(devices);
+
 	const checkCategory = () => {
 		const prevCategory = category;
 		if (prevCategory !== params.device) {
@@ -109,7 +111,7 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 			</div>
 			<div className="card-container">
 				{devices.length > 0 ? (
-					devices.map(({ id, category, name, price, imageUrl }) => (
+					devices.map(({ id, category, name, price, imageUrl, variants }) => (
 						<CardItem
 							key={id}
 							category={category}
@@ -118,6 +120,7 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 							imageUrl={imageUrl}
 							id={id}
 							loading={isLoading}
+							variants={variants}
 						/>
 					))
 				) : (

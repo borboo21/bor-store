@@ -8,22 +8,23 @@ import {
 	selectDeviceId,
 	selectDeviceImageURL,
 	selectDeviceName,
-	selectDevicePrice,
 	userIdSelector,
 	selectUserRoleIdSelector,
+	selectParams,
+	selectVariantId,
+	selectSpecId,
+	selectActivePrice,
 } from '../../selectors';
 import {
 	BreadCrumbs,
-	ColorBlock,
+	ColorBlockDevice,
 	CounterItem,
 	Error,
 	GreenButton,
-	SpecBlock,
 } from '../../components';
-import { loadDeviceAsync } from '../../actions';
 import { Loader, SkeletonDevice, SkeletonDeviceMobile } from '../../components/loaders';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { ERROR } from '../../constants';
+import { ERROR, SPECS } from '../../constants';
 import styled from 'styled-components';
 import type { IComponentProps } from '../../interfaces';
 import {
@@ -34,13 +35,23 @@ import {
 	type AppDispatch,
 } from '../../store';
 import type { CartItemDTO } from '../../../../shared/types/interface';
+import { DeviceSpecs } from '../../components/device-specs/device-specs';
+import { selectDeviceVariants } from '../../selectors/device-selectors/select-device-variants';
+import {
+	findSpecId,
+	setDeviceColor,
+	setDeviceDiagonal,
+	setDeviceRam,
+	setDeviceSimType,
+	setDeviceStorage,
+} from '../../store/slices';
+import { loadDeviceAsync } from '../../store/thunks/device-thunks';
 
 const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 	const [error, setError] = useState('');
 	const [isLoadingSkeleton, setIsLoadingSkeleton] = useState(true);
 	const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
-	const memoryArr = ['128 Gb', '256 Gb', '512 Gb'];
-	const colorArr = ['#47537d', '#f7853f', '#e7e7e7'];
+	// const colorArr = ['#47537d', '#f7853f', '#e7e7e7'];
 
 	const dispatch: AppDispatch = useDispatch();
 	const params = useParams();
@@ -48,17 +59,21 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 	const deviceCategory = useSelector(selectDeviceCategory);
 	const deviceName = useSelector(selectDeviceName);
 	const deviceImageUrl = useSelector(selectDeviceImageURL);
-	const devicePrice = useSelector(selectDevicePrice);
 	const cartDevices = useSelector(cartItemsSelector);
 	const userId = useSelector(userIdSelector);
 	const userRole = useSelector(selectUserRoleIdSelector);
+	const deviceVariants = useSelector(selectDeviceVariants);
+	const selectionParams = useSelector(selectParams);
+	const variantId = useSelector(selectVariantId);
+	const specId = useSelector(selectSpecId);
 	const windowSize = useWindowSize();
 
 	useEffect(() => {
 		setIsLoadingSkeleton(true);
 		if (params.id) {
-			dispatch(loadDeviceAsync(params.id)).then((deviceData) => {
-				if (deviceData.error) {
+			dispatch(loadDeviceAsync({ deviceId: params.id })).then((deviceData) => {
+				console.log(deviceData.type);
+				if (deviceData.type === 'device/loadDeviceAsync/rejected') {
 					setError(ERROR.DEVICE_NOT_FOUND);
 				}
 				setIsLoadingSkeleton(false);
@@ -66,20 +81,81 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 		}
 	}, [dispatch, params.id, setIsLoadingSkeleton]);
 
-	const inCart = cartDevices.some((item) => item.device.id === deviceId);
+	const { color, colorName, imageUrl, storage, diagonal, ram, simType } =
+		selectionParams;
 
-	const cartDevice: CartItemDTO = {
-		device: {
-			id: deviceId,
-			category: deviceCategory,
-			imageUrl: deviceImageUrl,
-			name: deviceName,
-			price: devicePrice,
-		},
-		quantity: 1,
+	const deviceColors = deviceVariants.map((value) => {
+		const id = value.variantId;
+		const color = value.color;
+		return { id, color };
+	});
+
+	const findDeviceVariant = deviceVariants.find(
+		(value) => value.variantId === variantId,
+	);
+
+	if (!findDeviceVariant) {
+		return <Error error={ERROR.DEVICE_NOT_FOUND}></Error>;
+	}
+
+	const onColorChange = (id: string) => {
+		const findVariant = deviceVariants.find((variant) => variant.variantId === id);
+		if (findVariant)
+			dispatch(
+				setDeviceColor({
+					color: findVariant.color,
+					colorName: findVariant.colorName,
+					variantId: findVariant.variantId,
+					imageURL: findVariant.imageUrl,
+				}),
+				dispatch(findSpecId(findVariant.specs)),
+			);
 	};
 
+	const deviceSpecs = findDeviceVariant.specs;
+
+	const onSpecChange = (specName: string, value: string) => {
+		const findVariant = deviceVariants.find(
+			(variant) => variant.variantId === variantId,
+		);
+		if (findVariant)
+			switch (specName) {
+				case SPECS.STORAGE:
+					dispatch(setDeviceStorage(value));
+					dispatch(findSpecId(findVariant.specs));
+					break;
+				case SPECS.RAM:
+					dispatch(setDeviceRam(value));
+					dispatch(findSpecId(findVariant.specs));
+					break;
+				case SPECS.DIAGONAL:
+					dispatch(setDeviceDiagonal(value));
+					dispatch(findSpecId(findVariant.specs));
+					break;
+				case SPECS.SIM:
+					dispatch(setDeviceSimType(value));
+					dispatch(findSpecId(findVariant.specs));
+			}
+	};
+
+	const devicePrice = selectActivePrice(deviceSpecs, specId);
+
+	const inCart = cartDevices.some((item) => item.device.id === deviceId);
+
 	const handleClick = () => {
+		if (devicePrice === 'Нет в наличии') {
+			return;
+		}
+		const cartDevice: CartItemDTO = {
+			device: {
+				id: deviceId,
+				category: deviceCategory,
+				imageUrl: deviceImageUrl,
+				name: deviceName,
+				price: devicePrice,
+			},
+			quantity: 1,
+		};
 		if (userRole !== 3) {
 			dispatch(addCartAsync({ userId, deviceId, setIsLoadingSpinner }));
 		} else {
@@ -92,6 +168,9 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 	};
 
 	const onDelete = () => {
+		if (devicePrice === 'Нет в наличии') {
+			return;
+		}
 		const findCartItemQuantity = cartDevices.find(
 			(item) => item.device.id === deviceId,
 		);
@@ -134,18 +213,30 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 					<BreadCrumbs lastName={deviceName} />
 					<div className="device-card">
 						<div className="img-block">
-							<img width={310} src={deviceImageUrl} alt={deviceName} />
+							<img width={310} src={imageUrl} alt={deviceName} />
 						</div>
 						<div className="device-description-block">
 							<h1>{deviceName}</h1>
-							<SpecBlock
-								specArr={memoryArr}
-								specName="Объем Памяти"
-								paddingTag="6px 12px"
-								fontSizeTag={13}
+							<ColorBlockDevice
+								className="device-color"
+								colorArr={deviceColors}
+								onColorChange={onColorChange}
 							/>
-							<ColorBlock className="device-color" colorArr={colorArr} />
-							<h2>{devicePrice}₽</h2>
+							<DeviceSpecs
+								variants={deviceSpecs}
+								selectedSpecs={{
+									'Объем памяти': storage!,
+									ОЗУ: ram!,
+									SIM: simType!,
+									Диагональ: diagonal!,
+								}}
+								onSpecChange={onSpecChange}
+							/>
+							{devicePrice !== 'Нет в наличии' ? (
+								<h2>{devicePrice}₽</h2>
+							) : (
+								<h2>{devicePrice}</h2>
+							)}
 							<div className="buy-container">
 								{!inCart ? (
 									!isLoadingSpinner ? (
@@ -153,6 +244,7 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 											className="inCartButton"
 											inсart={false}
 											onClick={handleClick}
+											disabled={devicePrice === 'Нет в наличии'}
 											right={true}
 											place={20}
 											icon={faArrowRight}
@@ -203,6 +295,7 @@ export const DevicePage = styled(DevicePageContainer)`
 	}
 
 	.device-description-block {
+		min-width: 370px;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;

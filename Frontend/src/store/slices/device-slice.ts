@@ -1,5 +1,5 @@
+import type { DeviceDTO } from './../../../../shared/types/interface';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { DeviceDTO } from '../../../../shared/types/interface';
 
 const initialState: DeviceDTO = {
 	id: '',
@@ -7,6 +7,7 @@ const initialState: DeviceDTO = {
 	name: '',
 	imageUrl: '',
 	price: 0,
+	variants: [],
 };
 
 const deviceSlice = createSlice({
@@ -19,6 +20,7 @@ const deviceSlice = createSlice({
 			state.name = action.payload.name;
 			state.imageUrl = action.payload.imageUrl;
 			state.price = action.payload.price;
+			state.variants = action.payload.variants;
 		},
 		resetDeviceData: (state) => {
 			Object.assign(state, initialState);

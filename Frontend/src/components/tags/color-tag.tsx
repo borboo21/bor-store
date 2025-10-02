@@ -16,8 +16,6 @@ const ColorTagContainer: React.FC<ColorTag> = ({ className, onClick, ...props })
 );
 
 export const ColorTag = styled(ColorTagContainer)`
-	width: 28px;
-	height: 28px;
 	border-radius: 18px;
 	border: ${(props) => (props.disabled ? '2px solid #9dd558' : 'none')};
 	padding: 3px 2px;
@@ -28,9 +26,9 @@ export const ColorTag = styled(ColorTagContainer)`
 		background-color: ${(props) => `${props.color}`};
 		display: inline-flex;
 		align-items: center;
-		border: none;
+		border: 0.5px solid #eaeaea;
 		border-radius: 18px;
-		padding: 6px 12px;
+		padding: 5px 11px;
 		white-space: nowrap;
 		cursor: pointer;
 	}

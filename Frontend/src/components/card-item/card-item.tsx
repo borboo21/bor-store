@@ -1,87 +1,44 @@
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { CardButton } from '../card-button/card-button';
-import { CounterItem } from '../counter/counter';
-import {
-	cartItemsSelector,
-	userIdSelector,
-	selectUserRoleIdSelector,
-} from '../../selectors';
-import { Loader, SkeletonMain, SkeletonMainMobile } from '../loaders';
-import { useWindowSize } from '@uidotdev/usehooks';
 import { useState } from 'react';
-import {
-	addCartAsync,
-	addToCart,
-	deleteFromCart,
-	deleteFromCartAsync,
-	type AppDispatch,
-} from '../../store';
+import { useDispatch } from 'react-redux';
+import { CardButton } from '../card-button/card-button';
+import { SkeletonMain, SkeletonMainMobile } from '../loaders';
+import { useWindowSize } from '@uidotdev/usehooks';
+import { setDeviceColor, setDeviceParams } from '../../store/slices';
+import { ColorBlockCard } from '../tags-block/color-block-card';
 import type { ICardItem } from '../../interfaces';
-import { SpecBlock } from '../tags-block/spec-block';
+import type { DeviceVariantDTO } from '../../../../shared';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
-import { ColorBlock } from '../tags-block';
 
 const CardItemContainer: React.FC<ICardItem> = ({ className, loading, ...props }) => {
-	const cartDevices = useSelector(cartItemsSelector);
-	const userId = useSelector(userIdSelector);
-	const roleId = useSelector(selectUserRoleIdSelector);
-	const dispatch: AppDispatch = useDispatch();
-	const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
+	const dispatch = useDispatch();
 	const windowSize = useWindowSize();
-
-	const memoryArr = ['128 Gb', '256 Gb', '512 Gb'];
-	const colorArr = ['#47537d', '#f7853f', '#e7e7e7'];
-
-	const inCart: boolean = cartDevices.some((item) => item.device.id === props.id);
-
-	const cartDevice = {
-		device: {
-			id: props.id,
-			category: props.category,
-			imageUrl: props.imageUrl,
-			name: props.name,
-			price: props.price,
-		},
-		quantity: 1,
-	};
-
-	const handleClickPlus = (userId: string) => {
-		if (roleId !== 3) {
-			dispatch(addCartAsync({ userId, deviceId: props.id, setIsLoadingSpinner }));
-		} else {
-			dispatch(addToCart(cartDevice));
-			sessionStorage.setItem(
-				'cartData',
-				JSON.stringify([...cartDevices, cartDevice]),
+	const variants = props.variants;
+	const deviceColors = variants.map((value) => {
+		const id = value.variantId;
+		const color = value.color;
+		return { id, color };
+	});
+	const onColorPick = (id: string) => {
+		const findVariant = variants.find((variant) => variant.variantId === id);
+		if (findVariant)
+			dispatch(
+				setDeviceColor({
+					variantId: findVariant.variantId,
+					color: findVariant.color,
+					colorName: findVariant.colorName,
+					imageURL: findVariant.imageUrl,
+				}),
+				dispatch(setDeviceParams(findVariant.specs[0])),
 			);
-		}
 	};
+	const [selectedVariant, setSelectedVariant] = useState<DeviceVariantDTO>(variants[0]);
 
-	const handleClickDelete = (id: string, userId: string) => {
-		const findDevice = cartDevices.find((cartItem) => cartItem.device.id === id);
-		if (findDevice) {
-			const quantityInCart = findDevice.quantity;
-			if (roleId !== 3) {
-				dispatch(
-					deleteFromCartAsync({
-						deviceId: id,
-						userId,
-						price: props.price,
-						quantity: quantityInCart,
-						setIsLoadingSpinner,
-					}),
-				);
-			} else {
-				dispatch(
-					deleteFromCart({
-						deviceId: id,
-						price: props.price,
-						quantity: quantityInCart,
-					}),
-				);
-			}
+	const onColorChange = (id: string) => {
+		const findVariant = variants.find((value) => value.variantId === id);
+		if (findVariant) {
+			setSelectedVariant(findVariant);
 		}
 	};
 
@@ -96,58 +53,35 @@ const CardItemContainer: React.FC<ICardItem> = ({ className, loading, ...props }
 			) : (
 				<>
 					<div className="device-image">
-						<Link to={`/device/${props.category}/${props.id}`}>
+						<Link
+							onClick={() => onColorPick(selectedVariant.variantId)}
+							to={`/device/${props.category}/${props.id}`}
+						>
 							<img
 								className="device-png"
-								src={props.imageUrl}
+								src={selectedVariant.imageUrl}
 								alt="device"
 							/>
 						</Link>
 					</div>
 					<div className="card-bottom">
 						<h5 className="device-name">{props.name}</h5>
-						<SpecBlock
-							specArr={memoryArr}
-							specName="Объем памяти"
-							paddingTag={'4px 8px'}
-							fontSizeTag={11}
+						<ColorBlockCard
+							colorArr={deviceColors}
+							onColorChange={onColorChange}
 						/>
-						<ColorBlock colorArr={colorArr} />
 						<div className="buy-panel">
 							<div className="price">
 								<span className="price-title">Цена:</span>
-								<b className="price-bold">{props.price}₽</b>
+								<b className="price-bold">От {props.price}₽</b>
 							</div>
-							{!inCart ? (
-								isLoadingSpinner ? (
-									<Loader />
-								) : (
-									<CardButton
-										icon={faPlus}
-										color="#ffffff"
-										onClick={() => handleClickPlus(userId)}
-										isLoading={isLoadingSpinner}
-									/>
-								)
-							) : isLoadingSpinner ? (
-								<Loader />
-							) : (
-								<>
-									<CounterItem
-										className="counter-main"
-										id={props.id}
-										price={props.price}
-									/>
-									<CardButton
-										icon={faCheck}
-										color="#65ed65"
-										onClick={() =>
-											handleClickDelete(props.id, userId)
-										}
-										isLoading={isLoadingSpinner}
-									/>
-								</>
-							)}
+							<Link to={`/device/${props.category}/${props.id}`}>
+								<CardButton
+									onClick={() => onColorPick(selectedVariant.variantId)}
+									icon={faPlus}
+									color="#ffffff"
+								/>
+							</Link>
 						</div>
 					</div>
 				</>
@@ -219,21 +153,6 @@ export const CardItem = styled(CardItemContainer)`
 		}
 		.buy-panel {
 			height: 60px;
-		}
-		.counter-main {
-			display: flex;
-			margin: 8px 5px 0 5px;
-			flex-direction: column-reverse;
-		}
-		.counter-button {
-			width: 20px;
-			height: 20px;
-			font-size: 10px;
-		}
-		.counter-input {
-			width: 20px;
-			height: 20px;
-			font-size: 10px;
 		}
 	}
 `;

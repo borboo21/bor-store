@@ -17,3 +17,7 @@ export * from './device-selectors/select-device-id';
 export * from './device-selectors/select-device-image-url';
 export * from './device-selectors/select-device-name';
 export * from './device-selectors/select-device-price';
+export * from './selection-selectors/select-params';
+export * from './selection-selectors/select-variant-id';
+export * from './selection-selectors/select-spec-id.ts';
+export * from './selection-selectors/select-active-price.ts';

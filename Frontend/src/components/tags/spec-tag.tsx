@@ -4,7 +4,7 @@ import type { ReactEventHandler } from 'react';
 
 type TagProps = {
 	className?: string;
-	value: string | number;
+	value: string;
 	onClick: ReactEventHandler;
 	disabled: boolean;
 	$padding?: string;
