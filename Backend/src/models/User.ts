@@ -1,12 +1,13 @@
+import mongoose from "mongoose";
+import type { HydratedDocument, InferSchemaType, Types } from "mongoose";
 import {
-  HydratedDocument,
-  InferSchemaType,
-  model,
-  Schema,
-  Types,
-} from "mongoose";
-import { CartItemPopulated, CartItemRaw, CartSchema } from "./Cart";
-import roles from "../constants/roles";
+  CartSchema,
+  type CartItemPopulated,
+  type CartItemRaw,
+} from "./Cart.ts";
+import { ROLES } from "../constants/roles.ts";
+
+const { model, Schema } = mongoose;
 
 const UserSchema = new Schema({
   login: {
@@ -20,7 +21,7 @@ const UserSchema = new Schema({
   },
   role: {
     type: Number,
-    default: roles.USER,
+    default: ROLES.USER,
   },
   cart: { type: CartSchema },
 });

@@ -1,5 +1,5 @@
-import { UserDTO } from "@shared/types/interface";
-import { UserDocument } from "../models/User";
+import type { UserDTO } from "../../../shared/types/interface.ts";
+import type { UserDocument } from "../models/User.ts";
 
 export function mapUserForFrontend(user: UserDocument): UserDTO {
   return {

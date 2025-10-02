@@ -1,5 +1,8 @@
-import { InferSchemaType, model, Schema, Types } from "mongoose";
-import { DeviceDocument } from "./Device";
+import mongoose from "mongoose";
+import type { InferSchemaType, Types } from "mongoose";
+import type { DeviceDocument } from "./Device.ts";
+
+const { model, Schema } = mongoose;
 
 export const CartSchema = new Schema({
   items: [

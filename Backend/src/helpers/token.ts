@@ -1,4 +1,5 @@
-import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import type { JwtPayload, SignOptions } from "jsonwebtoken";
 
 import dotenv from "dotenv";
 dotenv.config();

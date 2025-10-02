@@ -1,4 +1,7 @@
-import { HydratedDocument, InferSchemaType, model, Schema } from "mongoose";
+import mongoose from "mongoose";
+import type { HydratedDocument, InferSchemaType } from "mongoose";
+
+const { model, Schema } = mongoose;
 
 const OrderItemSchema = new Schema({
   name: {

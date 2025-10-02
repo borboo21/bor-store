@@ -1,15 +1,14 @@
-import {
+import type {
   AddToCartResponseDTO,
   MergeCartDataDTO,
-} from "@shared/types/interface";
-import { DeviceModel } from "../models/Device";
-import { UserModel } from "../models/User";
-import { mapDevice } from "../helpers/mapDevice";
-import { mapCart } from "../helpers/mapCart";
-import { CartItemPopulated } from "../models/Cart";
+} from "../../../shared/types/interface.ts";
+import { DeviceModel } from "../models/Device.ts";
+import { UserModel } from "../models/User.ts";
+import type { CartItemPopulated } from "../models/Cart.ts";
+import { mapDevice } from "../helpers/mapDevice.ts";
+import { mapCart } from "../helpers/mapCart.ts";
 
 // add
-
 export async function addDeviceInCart(
   userId: string,
   deviceId: string

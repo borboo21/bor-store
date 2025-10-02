@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { jwtHelper } from "../helpers/token";
-import { UserModel } from "../models/User";
+import type { NextFunction, Request, Response } from "express";
+import { jwtHelper } from "../helpers/token.ts";
+import { UserModel } from "../models/User.ts";
 
 export async function authenticated(
   req: Request,

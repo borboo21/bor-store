@@ -1,16 +1,16 @@
 import express from "express";
-import { authenticated } from "../middlewares/authenticated";
-import { hasRole } from "../middlewares/hasRole";
-import ROLES from "../constants/roles";
-import { mapDevice } from "../helpers/mapDevice";
 import {
-  getDevices,
-  getDevice,
   addDevice,
-  editDevice,
   deleteDevice,
+  editDevice,
   getAllDevices,
-} from "../controllers/device";
+  getDevice,
+  getDevices,
+} from "../controllers/device.ts";
+import { mapDevice } from "../helpers/mapDevice.ts";
+import { hasRole } from "../middlewares/hasRole.ts";
+import { authenticated } from "../middlewares/authenticated.ts";
+import { ROLES } from "../constants/roles.ts";
 
 const router = express.Router({ mergeParams: true });
 
@@ -58,6 +58,7 @@ router.post("/", authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
     name: req.body.name,
     price: req.body.price,
     imageUrl: req.body.imageUrl,
+    variants: req.body.variants || [],
   });
 
   res.send({ data: mapDevice(newDevice) });
@@ -74,6 +75,7 @@ router.patch(
       name: req.body.name,
       price: req.body.price,
       imageUrl: req.body.imageUrl,
+      variants: req.body.variants || [],
     });
     if (updatedDevice) {
       res.send({ data: mapDevice(updatedDevice) });

@@ -1,6 +1,6 @@
 import express from "express";
-import { mapUserForFrontend } from "../helpers/mapUser";
-import { login, register } from "../controllers/user";
+import { mapUserForFrontend } from "../helpers/mapUser.ts";
+import { login, register } from "../controllers/user.ts";
 
 const router = express.Router({ mergeParams: true });
 

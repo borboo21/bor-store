@@ -1,6 +1,6 @@
-import { CartDTO, CartItemDTO } from "@shared/index";
-import { mapDevice } from "./mapDevice";
-import { CartItemPopulated, CartPopulated } from "../models/Cart";
+import type { CartDTO, CartItemDTO } from "../../../shared/types/interface.ts";
+import type { CartItemPopulated, CartPopulated } from "../models/Cart.ts";
+import { mapDevice } from "./mapDevice.ts";
 
 export function mapCartItem(item: CartItemPopulated): CartItemDTO {
   return {

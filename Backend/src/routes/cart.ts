@@ -1,14 +1,20 @@
 import express from "express";
-import { authenticated } from "../middlewares/authenticated";
+import { authenticated } from "../middlewares/authenticated.ts";
 import {
+  addCartForUser,
   addDeviceInCart,
   deleteDeviceInCart,
-  switchQuantityInCart,
   getCart,
-  addCartForUser,
-} from "../controllers/cart";
+  switchQuantityInCart,
+} from "../controllers/cart.ts";
 
 const router = express.Router({ mergeParams: true });
+
+// добавить корзину собранную на фронтенде
+router.post("/merge/:userId", authenticated, async (req, res) => {
+  const cart = await addCartForUser(req.params.userId, req.body);
+  res.send({ data: cart });
+});
 
 // добавить девайс в корзину
 router.post("/:userId", authenticated, async (req, res) => {
@@ -31,12 +37,6 @@ router.patch("/:userId", authenticated, async (req, res) => {
 // получить данные корзины
 router.get("/:userId", authenticated, async (req, res) => {
   const cart = await getCart(req.params.userId);
-  res.send({ data: cart });
-});
-
-// добавить корзину собранную на фронтенде
-router.post("/merge/:userId", authenticated, async (req, res) => {
-  const cart = await addCartForUser(req.params.userId, req.body);
   res.send({ data: cart });
 });
 

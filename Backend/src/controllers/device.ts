@@ -1,5 +1,5 @@
-import { mapDevice } from "../helpers/mapDevice";
-import { Device, DeviceModel } from "../models/Device";
+import { mapDevice } from "../helpers/mapDevice.ts";
+import { DeviceModel, type Device } from "../models/Device.ts";
 
 //add
 

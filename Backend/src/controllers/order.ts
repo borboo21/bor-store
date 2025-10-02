@@ -1,6 +1,6 @@
-import { CartItemPopulated } from "../models/Cart";
-import { OrderModel } from "../models/Order";
-import { UserModel } from "../models/User";
+import type { CartItemPopulated } from "../models/Cart.ts";
+import { OrderModel } from "../models/Order.ts";
+import { UserModel } from "../models/User.ts";
 
 export function getAllOrders() {
   const allOrders = OrderModel.find(
