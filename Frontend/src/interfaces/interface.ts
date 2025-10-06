@@ -5,9 +5,9 @@ import {
 	type ReactEventHandler,
 	type SetStateAction,
 } from 'react';
-import type { DeviceDTO, OrderDTO } from '../../../shared/';
+import type { CartDeviceDTO, DeviceDTO, OrderDTO } from '../../../shared/';
 
-export interface ICartDevice extends DeviceDTO, IComponentProps {
+export interface ICartDevice extends CartDeviceDTO, IComponentProps {
 	quantity: number;
 }
 export interface IApp {
@@ -59,7 +59,7 @@ export interface ICardItem extends IComponentProps, DeviceDTO {
 }
 
 export interface ICounter extends IComponentProps {
-	id: string;
+	specId: string;
 	price: number;
 }
 

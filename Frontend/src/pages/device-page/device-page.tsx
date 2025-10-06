@@ -6,7 +6,6 @@ import {
 	cartItemsSelector,
 	selectDeviceCategory,
 	selectDeviceId,
-	selectDeviceImageURL,
 	selectDeviceName,
 	userIdSelector,
 	selectUserRoleIdSelector,
@@ -58,7 +57,6 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 	const deviceId = useSelector(selectDeviceId);
 	const deviceCategory = useSelector(selectDeviceCategory);
 	const deviceName = useSelector(selectDeviceName);
-	const deviceImageUrl = useSelector(selectDeviceImageURL);
 	const cartDevices = useSelector(cartItemsSelector);
 	const userId = useSelector(userIdSelector);
 	const userRole = useSelector(selectUserRoleIdSelector);
@@ -72,7 +70,6 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 		setIsLoadingSkeleton(true);
 		if (params.id) {
 			dispatch(loadDeviceAsync({ deviceId: params.id })).then((deviceData) => {
-				console.log(deviceData.type);
 				if (deviceData.type === 'device/loadDeviceAsync/rejected') {
 					setError(ERROR.DEVICE_NOT_FOUND);
 				}
@@ -140,7 +137,7 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 
 	const devicePrice = selectActivePrice(deviceSpecs, specId);
 
-	const inCart = cartDevices.some((item) => item.device.id === deviceId);
+	const inCart = cartDevices.some((item) => item.device.specId === specId);
 
 	const handleClick = () => {
 		if (devicePrice === 'Нет в наличии') {
@@ -148,16 +145,32 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 		}
 		const cartDevice: CartItemDTO = {
 			device: {
-				id: deviceId,
+				deviceId: deviceId,
 				category: deviceCategory,
-				imageUrl: deviceImageUrl,
 				name: deviceName,
+				variantId: variantId,
+				color: color,
+				colorName: colorName,
+				imageUrl: imageUrl,
+				specId: specId,
+				storage: storage,
+				diagonal: diagonal,
+				ram: ram,
+				simType: simType,
 				price: devicePrice,
 			},
 			quantity: 1,
 		};
 		if (userRole !== 3) {
-			dispatch(addCartAsync({ userId, deviceId, setIsLoadingSpinner }));
+			dispatch(
+				addCartAsync({
+					userId,
+					deviceId,
+					variantId,
+					specId,
+					setIsLoadingSpinner,
+				}),
+			);
 		} else {
 			dispatch(addToCart(cartDevice));
 			sessionStorage.setItem(
@@ -172,7 +185,7 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 			return;
 		}
 		const findCartItemQuantity = cartDevices.find(
-			(item) => item.device.id === deviceId,
+			(item) => item.device.specId === specId,
 		);
 		if (findCartItemQuantity) {
 			const cartItemQuantity = findCartItemQuantity.quantity;
@@ -180,7 +193,7 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 				dispatch(
 					deleteFromCartAsync({
 						userId,
-						deviceId,
+						specId,
 						price: devicePrice,
 						quantity: cartItemQuantity,
 						setIsLoadingSpinner,
@@ -189,7 +202,7 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 			} else {
 				dispatch(
 					deleteFromCart({
-						deviceId,
+						specId,
 						price: devicePrice,
 						quantity: cartItemQuantity,
 					}),
@@ -216,7 +229,7 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 							<img width={310} src={imageUrl} alt={deviceName} />
 						</div>
 						<div className="device-description-block">
-							<h1>{deviceName}</h1>
+							<h1 className="device-name">{deviceName}</h1>
 							<ColorBlockDevice
 								className="device-color"
 								colorArr={deviceColors}
@@ -254,7 +267,8 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 									) : (
 										<Loader />
 									)
-								) : !isLoadingSpinner ? (
+								) : !isLoadingSpinner ||
+								  devicePrice !== 'Нет в наличии' ? (
 									<>
 										<GreenButton
 											className="outFromCartButton"
@@ -268,8 +282,8 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 										</GreenButton>
 										<CounterItem
 											className="counter"
-											id={deviceId}
-											price={devicePrice}
+											specId={specId}
+											price={devicePrice as number}
 										/>
 									</>
 								) : (
@@ -290,8 +304,14 @@ export const DevicePage = styled(DevicePageContainer)`
 		align-items: center;
 	}
 
+	.device-name {
+		margin-bottom: 5px;
+		margin-top: 5px;
+	}
+
 	.img-block {
-		margin-right: 46px;
+		margin-right: 50px;
+		margin-bottom: 30px;
 	}
 
 	.device-description-block {
@@ -302,7 +322,7 @@ export const DevicePage = styled(DevicePageContainer)`
 		justify-content: space-evenly;
 		box-shadow: 0 0 24px 0 rgba(27, 30, 37, 0.08);
 		border-radius: 20px;
-		padding: 20px;
+		padding: 30px 20px;
 	}
 
 	.device-memory {

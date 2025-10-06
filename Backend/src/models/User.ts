@@ -1,10 +1,6 @@
 import mongoose from "mongoose";
 import type { HydratedDocument, InferSchemaType, Types } from "mongoose";
-import {
-  CartSchema,
-  type CartItemPopulated,
-  type CartItemRaw,
-} from "./Cart.ts";
+import { type CartItem, CartSchema } from "./Cart.ts";
 import { ROLES } from "../constants/roles.ts";
 
 const { model, Schema } = mongoose;
@@ -28,22 +24,12 @@ const UserSchema = new Schema({
 
 export type User = InferSchemaType<typeof UserSchema>;
 
-export type UserRaw = {
+export type UserType = {
   _id: Types.ObjectId;
   login: string;
   role: number;
   cart: {
-    items: CartItemRaw[];
-    amount: number;
-  };
-};
-
-export type UserPopulated = {
-  _id: Types.ObjectId;
-  login: string;
-  role: number;
-  cart: {
-    items: CartItemPopulated[];
+    items: CartItem[];
     amount: number;
   };
 };

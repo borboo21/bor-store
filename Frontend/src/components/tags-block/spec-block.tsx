@@ -5,11 +5,11 @@ import styled from 'styled-components';
 type SpecBlockProps = {
 	className?: string;
 	specArr: string[];
-	specName: string;
-	paddingTag: string;
-	fontSizeTag: number;
+	specName?: string;
+	paddingTag?: string;
+	fontSizeTag?: number;
 	selectedValue?: string;
-	onChange: (value: string) => void;
+	onChange?: (value: string) => void;
 };
 
 const SpecBlockContainer: React.FC<SpecBlockProps> = ({
@@ -24,14 +24,14 @@ const SpecBlockContainer: React.FC<SpecBlockProps> = ({
 	console.log(specArr);
 	return (
 		<div className={className}>
-			<span className="spec-title">{specName}:</span>
+			{specName && <span className="spec-title">{specName}:</span>}
 			<div className="spec-block">
 				{specArr.map((value, index) => (
 					<SpecTag
 						key={index}
 						value={value}
-						disabled={selectedValue === value}
-						onClick={() => onChange(value)}
+						disabled={selectedValue ? selectedValue === value : true}
+						onClick={onChange ? () => onChange(value) : undefined}
 						$padding={paddingTag}
 						$fontsize={fontSizeTag}
 					/>

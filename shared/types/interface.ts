@@ -1,12 +1,46 @@
+export interface DeviceSpecsDTO {
+  specsId: string;
+  storage?: string | null | undefined;
+  diagonal?: string | null | undefined;
+  ram?: string | null | undefined;
+  simType?: string | null | undefined;
+  price: number;
+}
+
+export interface DeviceVariantDTO {
+  variantId: string;
+  color: string;
+  colorName: string;
+  imageUrl: string;
+  specs: DeviceSpecsDTO[];
+}
+
 export interface DeviceDTO {
   id: string;
   category: string;
   name: string;
+  imageUrl?: string | null;
+  price: number;
+  variants: DeviceVariantDTO[];
+}
+
+export interface CartDeviceDTO {
+  deviceId: string;
+  name: string;
+  category: string;
+  variantId: string;
+  color: string;
+  colorName: string;
   imageUrl: string;
+  specId: string;
+  storage?: string | null | undefined;
+  diagonal?: string | null | undefined;
+  ram?: string | null | undefined;
+  simType?: string | null | undefined;
   price: number;
 }
 export interface CartItemDTO {
-  device: DeviceDTO;
+  device: CartDeviceDTO;
   quantity: number;
 }
 
@@ -50,9 +84,9 @@ export interface OrdersResponseDTO {
 }
 
 export type AddToCartResponseDTO = {
-  device: DeviceDTO;
+  device: CartDeviceDTO;
   quantity: number;
   amount?: number;
 };
 
-export type MergeCartDataDTO = [{ device: DeviceDTO; quantity: number }];
+export type MergeCartDataDTO = [{ device: CartDeviceDTO; quantity: number }];

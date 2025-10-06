@@ -18,19 +18,28 @@ router.post("/merge/:userId", authenticated, async (req, res) => {
 
 // добавить девайс в корзину
 router.post("/:userId", authenticated, async (req, res) => {
-  const newDeviceInCart = await addDeviceInCart(req.params.userId, req.body.id);
+  const newDeviceInCart = await addDeviceInCart(
+    req.params.userId,
+    req.body.deviceId,
+    req.body.variantId,
+    req.body.specId
+  );
   res.send({ data: newDeviceInCart });
 });
 
 // удалить из корзины
 router.delete("/:userId", authenticated, async (req, res) => {
-  await deleteDeviceInCart(req.params.userId, req.body.id);
+  await deleteDeviceInCart(req.params.userId, req.body.specId);
   res.send({ error: null });
 });
 
 // поменять количество
 router.patch("/:userId", authenticated, async (req, res) => {
-  await switchQuantityInCart(req.body.id, req.params.userId, req.body.quantity);
+  await switchQuantityInCart(
+    req.body.specId,
+    req.params.userId,
+    req.body.quantity
+  );
   res.send({ error: null });
 });
 

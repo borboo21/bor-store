@@ -5,7 +5,7 @@ import type { ReactEventHandler } from 'react';
 type TagProps = {
 	className?: string;
 	value: string;
-	onClick: ReactEventHandler;
+	onClick?: ReactEventHandler;
 	disabled: boolean;
 	$padding?: string;
 	$fontsize?: number;
@@ -33,8 +33,7 @@ export const SpecTag = styled(SpecTagContainer)`
 	padding: ${(props) => `${props.$padding}`};
 	white-space: nowrap;
 	cursor: pointer;
-	margin-right: 6px;
-	margin-bottom: 6px;
+	margin: 3px;
 
 	.value {
 		font-size: ${(props) => `${props.$fontsize}px`};

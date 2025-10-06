@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import type { HydratedDocument, InferSchemaType, Types } from "mongoose";
-import { v4 as uuidv4 } from "uuid";
 import validator from "validator";
 
 const { Schema, model } = mongoose;
@@ -31,6 +30,11 @@ export type DeviceSpecs = InferSchemaType<typeof DeviceSpecsSchema> & {
   _id: Types.ObjectId;
 };
 
+export const DeviceSpecModel = model<DeviceSpecs>(
+  "DeviceSpecs",
+  DeviceSpecsSchema
+);
+
 export const DeviceVariantSchema = new Schema(
   {
     color: {
@@ -60,28 +64,36 @@ export type DeviceVariant = InferSchemaType<typeof DeviceVariantSchema> & {
 
 export type DeviceVariantDocument = HydratedDocument<DeviceVariant>;
 
-export const DeviceSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  category: {
-    type: String,
-    required: true,
-  },
-  imageUrl: {
-    type: String,
-    validate: {
-      validator: (v: string) => validator.isURL(v),
-      message: "Image should be a valid URL",
+export const DeviceVariantModel = model<DeviceVariant>(
+  "DeviceVariant",
+  DeviceVariantSchema
+);
+
+export const DeviceSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
     },
+    category: {
+      type: String,
+      required: true,
+    },
+    imageUrl: {
+      type: String,
+      validate: {
+        validator: (v: string) => validator.isURL(v),
+        message: "Image should be a valid URL",
+      },
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    variants: [DeviceVariantSchema],
   },
-  price: {
-    type: Number,
-    required: true,
-  },
-  variants: [DeviceVariantSchema],
-});
+  { _id: true }
+);
 
 export type Device = InferSchemaType<typeof DeviceSchema>;
 

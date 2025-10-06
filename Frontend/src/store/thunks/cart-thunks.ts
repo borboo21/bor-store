@@ -7,6 +7,8 @@ import type { AddToCartResponseDTO } from '../../../../shared/types/interface';
 type thunkAddToCartType = {
 	userId: string;
 	deviceId: string;
+	variantId: string;
+	specId: string;
 	setIsLoadingSpinner: (value: boolean) => void;
 };
 
@@ -15,7 +17,9 @@ export const addCartAsync = createAsyncThunk(
 	(args: thunkAddToCartType, { dispatch }) => {
 		args.setIsLoadingSpinner(true);
 		request<AddToCartResponseDTO>(`/api/cart/${args.userId}`, 'POST', {
-			id: args.deviceId,
+			deviceId: args.deviceId,
+			variantId: args.variantId,
+			specId: args.specId,
 		}).then((rawDevice) => {
 			dispatch(addToCart(rawDevice.data));
 			args.setIsLoadingSpinner(false);
@@ -27,7 +31,7 @@ export const addCartAsync = createAsyncThunk(
 
 type thunkDeleteFromCartType = {
 	userId: string;
-	deviceId: string;
+	specId: string;
 	price: number;
 	quantity: number;
 	setIsLoadingSpinner: (value: boolean) => void;
@@ -36,15 +40,17 @@ export const deleteFromCartAsync = createAsyncThunk(
 	'cart/deleteFromCartAsync',
 	(args: thunkDeleteFromCartType, { dispatch }) => {
 		args.setIsLoadingSpinner(true);
-		request(`/api/cart/${args.userId}`, 'DELETE', { id: args.deviceId }).then(() => {
-			dispatch(
-				deleteFromCart({
-					deviceId: args.deviceId,
-					price: args.price,
-					quantity: args.quantity,
-				}),
-			);
-			args.setIsLoadingSpinner(false);
-		});
+		request(`/api/cart/${args.userId}`, 'DELETE', { specId: args.specId }).then(
+			() => {
+				dispatch(
+					deleteFromCart({
+						specId: args.specId,
+						price: args.price,
+						quantity: args.quantity,
+					}),
+				);
+				args.setIsLoadingSpinner(false);
+			},
+		);
 	},
 );

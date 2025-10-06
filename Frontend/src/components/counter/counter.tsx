@@ -11,29 +11,29 @@ import { switchQuantity, type AppDispatch } from '../../store';
 import type { ICounter } from '../../interfaces';
 import styled from 'styled-components';
 
-const CounterItemContainer: React.FC<ICounter> = ({ className, id, price }) => {
+const CounterItemContainer: React.FC<ICounter> = ({ className, specId, price }) => {
 	const dispatch: AppDispatch = useDispatch();
 	const userRole = useSelector(selectUserRoleIdSelector);
 	const userId = useSelector(userIdSelector);
 	const cartDevices = useSelector(cartItemsSelector);
-	const itemInCart = cartDevices.find((item) => item.device.id === id);
+	const itemInCart = cartDevices.find((item) => item.device.specId === specId);
 	if (!itemInCart) {
 		return;
 	}
 	const quantity = itemInCart.quantity;
 
 	const handleIncrease = () => {
-		dispatch(switchQuantity({ quantity: 1, id, price }));
+		dispatch(switchQuantity({ quantity: 1, specId, price }));
 		if (userRole !== 3) {
-			updateQuantity(id, userId, quantity + 1);
+			updateQuantity(specId, userId, quantity + 1);
 		}
 	};
 
 	const handleDeacrease = () => {
 		if (quantity > 1) {
-			dispatch(switchQuantity({ quantity: -1, id, price }));
+			dispatch(switchQuantity({ quantity: -1, specId, price }));
 			if (userRole !== 3) {
-				updateQuantity(id, userId, quantity - 1);
+				updateQuantity(specId, userId, quantity - 1);
 			}
 		}
 	};

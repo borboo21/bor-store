@@ -5,8 +5,8 @@ import type { ReactEventHandler } from 'react';
 type ColorTag = {
 	className?: string;
 	color: string;
-	onClick: ReactEventHandler;
-	disabled: boolean;
+	onClick?: ReactEventHandler;
+	disabled?: boolean;
 };
 
 const ColorTagContainer: React.FC<ColorTag> = ({ className, onClick, ...props }) => (

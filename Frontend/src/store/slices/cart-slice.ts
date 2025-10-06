@@ -1,7 +1,7 @@
 import type {
 	AddToCartResponseDTO,
+	CartDeviceDTO,
 	CartDTO,
-	DeviceDTO,
 } from '../../../../shared/types/interface';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
@@ -25,19 +25,19 @@ const cartSlice = createSlice({
 		},
 		deleteFromCart: (
 			state,
-			action: PayloadAction<{ deviceId: string; price: number; quantity: number }>,
+			action: PayloadAction<{ specId: string; price: number; quantity: number }>,
 		) => {
-			const { deviceId, price, quantity } = action.payload;
-			state.items = state.items.filter((item) => item.device.id !== deviceId);
+			const { specId, price, quantity } = action.payload;
+			state.items = state.items.filter((item) => item.device.specId !== specId);
 			state.amount -= price * quantity;
 		},
 
 		switchQuantity: (
 			state,
-			action: PayloadAction<{ id: string; price: number; quantity: number }>,
+			action: PayloadAction<{ specId: string; price: number; quantity: number }>,
 		) => {
-			const { id, price, quantity } = action.payload;
-			const findDevice = state.items.find((item) => item.device.id === id);
+			const { specId, price, quantity } = action.payload;
+			const findDevice = state.items.find((item) => item.device.specId === specId);
 			if (findDevice) {
 				findDevice.quantity += quantity;
 			}
@@ -50,7 +50,7 @@ const cartSlice = createSlice({
 		},
 		setCartStorage: (
 			state,
-			action: PayloadAction<[{ device: DeviceDTO; quantity: number }]>,
+			action: PayloadAction<[{ device: CartDeviceDTO; quantity: number }]>,
 		) => {
 			const cartData = action.payload;
 			state.items = cartData;

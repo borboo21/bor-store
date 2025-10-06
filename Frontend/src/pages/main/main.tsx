@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { Button, CardItem, Input, Pagination } from '../../components';
 import { request, debounce } from '../../utils';
 import type { IComponentProps } from '../../interfaces';
-import type { AppDispatch } from '../../store';
+import { resetDeviceData, type AppDispatch } from '../../store';
 import { PAGINATION_LIMIT } from '../../constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -15,6 +15,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import type { DeviceDTO } from '../../../../shared';
 import styled from 'styled-components';
+import { resetSelectionData } from '../../store/slices';
 
 export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 	const params = useParams();
@@ -38,8 +39,6 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 			setIsLoading(false);
 		});
 
-	console.log(devices);
-
 	const checkCategory = () => {
 		const prevCategory = category;
 		if (prevCategory !== params.device) {
@@ -55,7 +54,10 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 
 	useEffect(() => {
 		setIsLoading(true);
+		console.log('im here');
 		getMain();
+		dispatch(resetDeviceData());
+		dispatch(resetSelectionData());
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, category, page, sortPrice, shouldSearch, params]);
 
