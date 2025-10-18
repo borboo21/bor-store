@@ -19,18 +19,20 @@ const CartTotalBlockContainer: React.FC<ICartTotalBlock> = ({
 	onTakeOrder,
 }) => {
 	const cartAmount = useSelector(cartAmountSelector);
+	const cartAmountString = cartAmount.toLocaleString('ru');
+	const bonus = Math.floor(cartAmount * 0.02).toLocaleString('ru');
 	return (
 		<div className={className}>
 			<ul>
 				<li className="sum">
 					<span>Итого:</span>
 					<div></div>
-					<b>{cartAmount}₽</b>
+					<b>{cartAmountString}₽</b>
 				</li>
 				<li className="bonus">
 					<span>Бонусов к начислению:</span>
 					<div></div>
-					<b>{Math.floor(cartAmount * 0.02)}₽</b>
+					<b>{bonus}₽</b>
 				</li>
 			</ul>
 			{userId ? (

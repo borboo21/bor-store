@@ -21,7 +21,6 @@ const SpecBlockContainer: React.FC<SpecBlockProps> = ({
 	onChange,
 	selectedValue,
 }) => {
-	console.log(specArr);
 	return (
 		<div className={className}>
 			{specName && <span className="spec-title">{specName}:</span>}

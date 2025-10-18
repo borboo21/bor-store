@@ -19,8 +19,7 @@ export interface DeviceDTO {
   id: string;
   category: string;
   name: string;
-  imageUrl?: string | null;
-  price: number;
+  basePrice: number;
   variants: DeviceVariantDTO[];
 }
 

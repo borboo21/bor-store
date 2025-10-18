@@ -61,6 +61,7 @@ export const AdminPage = styled(AdminPageContainer)`
 	.container {
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		border: 1px solid #ebe5e5;
 		padding: 15px;
 		margin: 0 5px 0 5px;

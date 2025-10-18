@@ -19,8 +19,4 @@ export const Image = styled(imageContainer)`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-
-	img {
-		margin: 15px 7.5px 15px 7.5px;
-	}
 `;

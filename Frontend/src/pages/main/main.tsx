@@ -33,6 +33,7 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 		request<{ devices: DeviceDTO[]; lastPage: number }>(
 			`/api/device?search=${search}&category=${category}&page=${page}&limit=${PAGINATION_LIMIT}${sortPrice}`,
 		).then(({ data: { devices, lastPage } }) => {
+			console.log(devices);
 			setDevices(devices);
 			setLastPage(lastPage);
 			checkCategory();
@@ -54,7 +55,6 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 
 	useEffect(() => {
 		setIsLoading(true);
-		console.log('im here');
 		getMain();
 		dispatch(resetDeviceData());
 		dispatch(resetSelectionData());
@@ -113,14 +113,13 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 			</div>
 			<div className="card-container">
 				{devices.length > 0 ? (
-					devices.map(({ id, category, name, price, imageUrl, variants }) => (
+					devices.map(({ id, category, name, basePrice, variants }) => (
 						<CardItem
 							key={id}
 							category={category}
 							name={name}
-							price={price}
-							imageUrl={imageUrl}
 							id={id}
+							basePrice={basePrice}
 							loading={isLoading}
 							variants={variants}
 						/>

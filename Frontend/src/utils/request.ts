@@ -8,6 +8,7 @@ export function request<T>(
 	method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' = 'GET',
 	data?: unknown,
 ): Promise<requestType<T>> {
+	console.log(JSON.stringify(data));
 	return fetch(url, {
 		headers: {
 			'content-type': 'application/json;charset=utf-8',

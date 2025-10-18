@@ -42,6 +42,8 @@ const CartItemContainer: React.FC<ICartDevice> = ({ className, ...props }) => {
 		}
 	};
 
+	const price = props.price.toLocaleString('ru');
+
 	return (
 		<div className={className}>
 			<div className="photo-specs">
@@ -62,7 +64,7 @@ const CartItemContainer: React.FC<ICartDevice> = ({ className, ...props }) => {
 					<ColorTag color={props.color} />
 					<p className="color-name">{props.colorName}</p>
 				</div>
-				<b>{props.price}₽</b>
+				<b>{price}₽</b>
 			</div>
 			{isLoadingSpinner ? (
 				<Loader />

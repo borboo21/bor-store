@@ -9,6 +9,7 @@ const inputContainer: React.FC<IInput> = ({
 	placeholder,
 	type,
 	onChange,
+	registerProps,
 }) => {
 	return (
 		<div className={className}>
@@ -19,6 +20,7 @@ const inputContainer: React.FC<IInput> = ({
 				type={`${type ? type : 'text'}`}
 				value={value}
 				onChange={onChange}
+				{...registerProps}
 			/>
 		</div>
 	);
@@ -39,5 +41,9 @@ export const Input = styled(inputContainer)`
 		padding: 13px;
 		font-size: 16px;
 		width: ${(props) => `${props.width - 100}px`};
+	}
+
+	&:hover {
+		border: 1px, solid, #000000;
 	}
 `;

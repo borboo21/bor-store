@@ -79,14 +79,7 @@ export const DeviceSchema = new Schema(
       type: String,
       required: true,
     },
-    imageUrl: {
-      type: String,
-      validate: {
-        validator: (v: string) => validator.isURL(v),
-        message: "Image should be a valid URL",
-      },
-    },
-    price: {
+    basePrice: {
       type: Number,
       required: true,
     },

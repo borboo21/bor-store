@@ -67,7 +67,6 @@ const AuthorizationContainer: React.FC<IComponentProps> = ({ className }) => {
 	const onSubmit = ({ login, password }: { login: string; password: string }) => {
 		request<UserDTO>('/api/auth/login', 'POST', { login, password }).then(
 			(userData) => {
-				console.log(userData);
 				const error = userData.error;
 				const user = userData.data;
 				if (error) {

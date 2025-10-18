@@ -42,6 +42,8 @@ const CardItemContainer: React.FC<ICardItem> = ({ className, loading, ...props }
 		}
 	};
 
+	const devicePrice = props.basePrice.toLocaleString('ru');
+
 	return (
 		<div className={className} key={props.key}>
 			{loading ? (
@@ -73,7 +75,7 @@ const CardItemContainer: React.FC<ICardItem> = ({ className, loading, ...props }
 						<div className="buy-panel">
 							<div className="price">
 								<span className="price-title">Цена:</span>
-								<b className="price-bold">От {props.price}₽</b>
+								<b className="price-bold">От {devicePrice}₽</b>
 							</div>
 							<Link to={`/device/${props.category}/${props.id}`}>
 								<CardButton

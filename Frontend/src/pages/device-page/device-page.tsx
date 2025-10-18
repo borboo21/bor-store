@@ -137,6 +137,8 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 
 	const devicePrice = selectActivePrice(deviceSpecs, specId);
 
+	const formattedPrice = devicePrice.toLocaleString('ru');
+
 	const inCart = cartDevices.some((item) => item.device.specId === specId);
 
 	const handleClick = () => {
@@ -226,7 +228,7 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 					<BreadCrumbs lastName={deviceName} />
 					<div className="device-card">
 						<div className="img-block">
-							<img width={310} src={imageUrl} alt={deviceName} />
+							<img width={306} src={imageUrl} alt={deviceName} />
 						</div>
 						<div className="device-description-block">
 							<h1 className="device-name">{deviceName}</h1>
@@ -246,16 +248,16 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 								onSpecChange={onSpecChange}
 							/>
 							{devicePrice !== 'Нет в наличии' ? (
-								<h2>{devicePrice}₽</h2>
+								<h2>{formattedPrice}₽</h2>
 							) : (
-								<h2>{devicePrice}</h2>
+								<h2>{formattedPrice}</h2>
 							)}
 							<div className="buy-container">
 								{!inCart ? (
 									!isLoadingSpinner ? (
 										<GreenButton
-											className="inCartButton"
-											inсart={false}
+											className="in-cart-button"
+											$inсart={false}
 											onClick={handleClick}
 											disabled={devicePrice === 'Нет в наличии'}
 											right={true}
@@ -267,15 +269,15 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 									) : (
 										<Loader />
 									)
-								) : !isLoadingSpinner ||
+								) : !isLoadingSpinner &&
 								  devicePrice !== 'Нет в наличии' ? (
 									<>
 										<GreenButton
-											className="outFromCartButton"
-											inсart={true}
+											className="out-from-cart-button"
+											$inсart={true}
 											onClick={onDelete}
 											left={true}
-											place={200}
+											place={185}
 											icon={faArrowLeft}
 										>
 											Убрать из корзины
@@ -314,6 +316,14 @@ export const DevicePage = styled(DevicePageContainer)`
 		margin-bottom: 30px;
 	}
 
+	.in-cart-button {
+		width: 210px;
+	}
+
+	.out-from-cart-button {
+		width: 210px;
+	}
+
 	.device-description-block {
 		min-width: 370px;
 		display: flex;
@@ -337,6 +347,7 @@ export const DevicePage = styled(DevicePageContainer)`
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+		min-height: 55px;
 	}
 
 	.counter {

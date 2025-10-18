@@ -6,6 +6,7 @@ import {
 	type SetStateAction,
 } from 'react';
 import type { CartDeviceDTO, DeviceDTO, OrderDTO } from '../../../shared/';
+import type { UseFormRegisterReturn } from 'react-hook-form';
 
 export interface ICartDevice extends CartDeviceDTO, IComponentProps {
 	quantity: number;
@@ -39,7 +40,7 @@ export interface IGreenButton extends IButton {
 	right?: boolean;
 	left?: boolean;
 	place?: number;
-	inсart?: boolean;
+	$inсart?: boolean;
 	type?: 'button' | 'reset' | 'submit' | undefined;
 }
 
@@ -88,6 +89,25 @@ export interface IInput
 		React.InputHTMLAttributes<HTMLInputElement> {
 	icon: IconProp;
 	width: number;
+	registerProps?: UseFormRegisterReturn;
+}
+
+export interface DeviceForm {
+	category: string;
+	name: string;
+	basePrice: number | null;
+	variants: {
+		color: string;
+		colorName: string;
+		imageUrl: string;
+		specs: {
+			storage?: string;
+			ram?: string;
+			simType?: string;
+			diagonal?: string;
+			price: number | null;
+		}[];
+	}[];
 }
 export interface IPagination extends IComponentProps {
 	page: number;

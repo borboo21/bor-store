@@ -53,14 +53,7 @@ router.get("/:id", async (req, res) => {
 
 // добавить девайс
 router.post("/", authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-  const newDevice = await addDevice({
-    category: req.body.category,
-    name: req.body.name,
-    price: req.body.price,
-    imageUrl: req.body.imageUrl,
-    variants: req.body.variants || [],
-  });
-
+  const newDevice = await addDevice(req.body);
   res.send({ data: mapDevice(newDevice) });
 });
 
@@ -73,8 +66,7 @@ router.patch(
     const updatedDevice = await editDevice(req.params.id, {
       category: req.body.category,
       name: req.body.name,
-      price: req.body.price,
-      imageUrl: req.body.imageUrl,
+      basePrice: req.body.price,
       variants: req.body.variants || [],
     });
     if (updatedDevice) {

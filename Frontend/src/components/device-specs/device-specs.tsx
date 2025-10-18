@@ -11,8 +11,6 @@ function getUniqueValues<T extends keyof DeviceSpecsDTO>(
 	variants: DeviceSpecsDTO[],
 	key: T,
 ): string[] {
-	console.log(variants);
-
 	return Array.from(new Set(variants.map((v) => v[key]).filter(Boolean))) as string[];
 }
 

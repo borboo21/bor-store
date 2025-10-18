@@ -37,8 +37,7 @@ export function mapDevice(device: DeviceDocument): DeviceDTO {
     id: device._id.toString(),
     category: device.category,
     name: device.name,
-    imageUrl: device.imageUrl,
-    price: device.price,
+    basePrice: device.basePrice,
     variants: device.variants.map((variant) => mapDeviceVariant(variant)),
   };
 }

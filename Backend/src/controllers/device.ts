@@ -4,6 +4,7 @@ import { DeviceModel, type Device } from "../models/Device.ts";
 //add
 
 export function addDevice(device: Device) {
+  console.log(device);
   return DeviceModel.create(device);
 }
 
@@ -48,7 +49,7 @@ export async function getDevices({
     })
       .limit(limit)
       .skip((page - 1) * limit)
-      .sort(sorting ? { price: sorting } : { name: -1 }),
+      .sort(sorting ? { basePrice: sorting } : { name: -1 }),
     DeviceModel.countDocuments({
       category: { $regex: category, $options: "i" },
     }),

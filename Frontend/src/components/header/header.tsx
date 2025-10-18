@@ -71,7 +71,12 @@ const HeaderContainer: React.FC<IComponentProps> = ({ className }) => {
 			<div className="control-panel">
 				<div className="icon-container">
 					{userRoleId === 0 ? (
-						<HeadLink to="admin" icon={faGear} size="lg" />
+						<HeadLink
+							className="admin-link"
+							to="admin"
+							icon={faGear}
+							size="lg"
+						/>
 					) : (
 						''
 					)}
@@ -81,7 +86,6 @@ const HeaderContainer: React.FC<IComponentProps> = ({ className }) => {
 								<FontAwesomeIcon icon={faUser} size="lg" />
 								<FontAwesomeIcon icon={faXmark} size="xs" />
 							</div>
-
 							<span className="user-name">{userLogin}</span>
 						</div>
 					) : (
@@ -212,7 +216,15 @@ export const Header = styled(HeaderContainer)`
 			padding: 0px;
 		}
 		.user-name {
-			font-size: 11px;
+			display: flex;
+			justify-content: center;
+			font-size: 14px;
+		}
+		.basket-control {
+			padding-left: 5px;
+		}
+		.admin-link {
+			padding-right: 5px;
 		}
 	}
 `;

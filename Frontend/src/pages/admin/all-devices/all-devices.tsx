@@ -26,7 +26,6 @@ const AllPageContainer: React.FC<IComponentProps> = ({ className }) => {
 				setError(deviceRes.error);
 				return;
 			}
-			console.log(deviceRes);
 			setDevices(deviceRes.data);
 		});
 
