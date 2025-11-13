@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AuthFormError, GreenButton } from '../../components';
+import { FormError, GreenButton } from '../../components';
 import { useResetForm } from '../../hooks';
 import { uploadCartAsync } from '../../actions';
 
@@ -131,7 +131,7 @@ const RegistrationContainer: React.FC<IComponentProps> = ({ className }) => {
 				<GreenButton place={20} right={true} icon={faArrowRight} type={'submit'}>
 					Войти
 				</GreenButton>
-				{errorMessage && <AuthFormError>{errorMessage}</AuthFormError>}
+				{errorMessage && <FormError>{errorMessage}</FormError>}
 			</form>
 		</div>
 	);

@@ -4,7 +4,6 @@ import { CardButton, CartItem } from '../../components';
 import { modalCartIsOpen, cartItemsSelector, userIdSelector } from '../../selectors';
 import { takeOrder } from '../../actions';
 import { CartSendOrder, CartTotalBlock, EmptyCart } from './components';
-import { useClickAway } from '@uidotdev/usehooks';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import type { IComponentProps } from '../../interfaces';
 import { loadCartAsync, switchCartModal, type AppDispatch } from '../../store';
@@ -12,11 +11,23 @@ import styled from 'styled-components';
 
 const CartContainer: React.FC<IComponentProps> = ({ className }) => {
 	const [isOrdered, setIsOrdered] = useState(false);
+	const [visible, setVisible] = useState(false);
 
 	const dispatch: AppDispatch = useDispatch();
 	const cartDevices = useSelector(cartItemsSelector);
 	const modalCart = useSelector(modalCartIsOpen);
 	const userId = useSelector(userIdSelector);
+
+	useEffect(() => {
+		if (modalCart) {
+			document.body.classList.add('modal-open');
+			setVisible(true);
+		} else {
+			document.body.classList.remove('modal-open');
+			const timer = setTimeout(() => setVisible(false), 300);
+			return () => clearTimeout(timer);
+		}
+	}, [modalCart]);
 
 	const onClose = () => {
 		dispatch(switchCartModal());
@@ -29,26 +40,16 @@ const CartContainer: React.FC<IComponentProps> = ({ className }) => {
 		loadCartAsync(userId);
 	};
 
-	const ref = useClickAway<HTMLDivElement>(onClose);
-
-	useEffect(() => {
-		if (modalCart) {
-			document.body.classList.add('modal-open');
-		} else {
-			document.body.classList.remove('modal-open');
-		}
-		return () => {
-			document.body.classList.remove('modal-open');
-		};
-	}, [modalCart]);
-
-	if (!modalCart) {
+	if (!visible) {
 		return null;
 	}
 
 	return (
-		<div className={className}>
-			<div className="drawer" ref={ref}>
+		<div className={className} onClick={onClose}>
+			<div
+				className={`drawer ${modalCart ? 'open' : 'close'}`}
+				onClick={(e) => e.stopPropagation()}
+			>
 				{cartDevices.length !== 0 && (
 					<div className="cart-header">
 						<h2 className="cart-name">Корзина</h2>
@@ -64,12 +65,20 @@ const CartContainer: React.FC<IComponentProps> = ({ className }) => {
 						<div className="cart-items">
 							{cartDevices.map((item) => (
 								<CartItem
-									key={item.device.id}
-									id={item.device.id}
+									key={item.device.specId}
+									deviceId={item.device.deviceId}
+									variantId={item.device.variantId}
+									specId={item.device.specId}
 									category={item.device.category}
 									name={item.device.name}
 									price={item.device.price}
 									imageUrl={item.device.imageUrl}
+									color={item.device.color}
+									colorName={item.device.colorName}
+									diagonal={item.device.diagonal}
+									storage={item.device.storage}
+									simType={item.device.simType}
+									ram={item.device.ram}
 									quantity={item.quantity}
 								/>
 							))}
@@ -95,17 +104,28 @@ export const Cart = styled(CartContainer)`
 	background-color: rgba(0, 0, 0, 0.5);
 	z-index: 1;
 	overflow: hidden;
+	opacity: 0;
+	animation: fadeIn 0.3s forwards;
 
 	.drawer {
 		display: flex;
 		flex-direction: column;
 		position: fixed;
-		width: 420px;
 		right: 0;
+		min-width: 500px;
 		height: 100%;
 		background: #ffffff;
 		box-shadow: -10px 4px 24px rgba(0, 0, 0, 0.1);
 		padding: 30px;
+		transform: translateX(100%);
+	}
+
+	.drawer.open {
+		animation: slideInCart 0.3s forwards;
+	}
+
+	.drawer.close {
+		animation: slideOutCart 0.3s forwards;
 	}
 
 	.cart-header {
@@ -124,12 +144,38 @@ export const Cart = styled(CartContainer)`
 		flex: 1;
 		overflow: auto;
 		margin-bottom: 40px;
-		padding-right: 10px;
 	}
 
-	@media (max-width: 420px) {
-		.drawer {
-			width: auto;
+	@media (max-width: 500px) {
+		.drawer.open {
+			min-width: 100vw;
+		}
+	}
+
+	@keyframes slideInCart {
+		from {
+			transform: translateX(100%);
+		}
+		to {
+			transform: translateX(0);
+		}
+	}
+
+	@keyframes slideOutCart {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(100%);
+		}
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
 		}
 	}
 `;

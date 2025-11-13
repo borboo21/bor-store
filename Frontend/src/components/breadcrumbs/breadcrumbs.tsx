@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import type { IBreadCrumb } from '../../interfaces/interface';
+import styled from 'styled-components';
 
 const BreadCrumbsContainer: React.FC<IBreadCrumb> = ({ className, lastName }) => {
 	const location = useLocation();

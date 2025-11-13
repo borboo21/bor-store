@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
-import { UserModel } from "../models/User";
-import { jwtHelper } from "../helpers/token";
+import { jwtHelper } from "../helpers/token.ts";
+import { UserModel } from "../models/User.ts";
 
 //register
 export async function register(login: string, password: string) {

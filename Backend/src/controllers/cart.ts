@@ -1,58 +1,78 @@
-import {
+import type {
   AddToCartResponseDTO,
   MergeCartDataDTO,
-} from "@shared/types/interface";
-import { DeviceModel } from "../models/Device";
-import { UserModel } from "../models/User";
-import { mapDevice } from "../helpers/mapDevice";
-import { mapCart } from "../helpers/mapCart";
-import { CartItemPopulated } from "../models/Cart";
+} from "../../../shared/types/interface.ts";
+import { DeviceModel } from "../models/Device.ts";
+import { UserModel } from "../models/User.ts";
+import { mapCart, mapCartItemDevice } from "../helpers/mapCart.ts";
 
 // add
-
 export async function addDeviceInCart(
   userId: string,
-  deviceId: string
+  deviceId: string,
+  variantId: string,
+  specId: string
 ): Promise<AddToCartResponseDTO> {
   const device = await DeviceModel.findById(deviceId);
   if (!device) throw new Error("Device not found");
+  const variant = device.variants.find((v) => v._id.toString() === variantId);
+  if (!variant) throw new Error("Variant not found");
+  const spec = variant?.specs.find((s) => s._id.toString() === specId);
+  if (!spec) throw new Error("Spec not found");
+  const cartItem = {
+    device: {
+      deviceId: device._id,
+      name: device.name,
+      category: device.category,
+      variantId: variant._id,
+      color: variant.color,
+      colorName: variant.colorName,
+      imageUrl: variant.imageUrl,
+      specId: spec._id,
+      storage: spec.storage ?? undefined,
+      diagonal: spec.diagonal ?? undefined,
+      ram: spec.ram ?? undefined,
+      simType: spec.simType ?? undefined,
+      price: spec.price,
+    },
+    quantity: 1,
+  };
+  if (!cartItem.device) throw new Error("Cart item not created");
   const updatedUser = await UserModel.findByIdAndUpdate(
     userId,
     {
-      $push: { "cart.items": { device: device._id } },
-      $inc: { "cart.amount": +device.price },
+      $push: {
+        "cart.items": cartItem,
+      },
+      $inc: { "cart.amount": +spec.price },
     },
     { new: true }
-  ).populate<{ cart: { items: CartItemPopulated[]; amount: number } }>(
-    "cart.items.device"
   );
   if (!updatedUser) throw new Error("User not updated");
+  if (!updatedUser.cart) throw new Error("User don`t have cart");
   const lastAddedItem =
     updatedUser.cart.items[updatedUser.cart.items.length - 1];
+  if (!lastAddedItem) throw new Error("Cart item not found");
   return {
-    device: mapDevice(lastAddedItem.device),
+    device: mapCartItemDevice(lastAddedItem.device),
     quantity: lastAddedItem.quantity,
     amount: updatedUser.cart.amount,
   };
 }
 
 // delete
-export async function deleteDeviceInCart(userId: string, deviceId: string) {
-  const user = await UserModel.findById({
-    _id: userId,
-    "cart.items.device": deviceId,
-  }).populate<{
-    cart: { items: CartItemPopulated[]; amount: number };
-  }>("cart.items.device");
+export async function deleteDeviceInCart(userId: string, specId: string) {
+  const user = await UserModel.findById(userId);
   if (!user) throw new Error("User not found");
+  if (!user.cart) throw new Error("Cart not found");
   const cartItem = user.cart.items.find(
-    (item) => item.device._id.toString() === deviceId
+    (item) => item.device.specId.toString() === specId
   );
   if (!cartItem) throw new Error("Device not found");
   await UserModel.findOneAndUpdate(
-    { _id: userId, "cart.items.device": deviceId },
+    { _id: userId, "cart.items.device.specId": specId },
     {
-      $pull: { "cart.items": { device: deviceId } },
+      $pull: { "cart.items": { "device.specId": specId } },
       $inc: { "cart.amount": -(cartItem.device.price * cartItem?.quantity) },
     }
   );
@@ -60,16 +80,15 @@ export async function deleteDeviceInCart(userId: string, deviceId: string) {
 
 // switch quantity
 export async function switchQuantityInCart(
-  deviceId: string,
+  specId: string,
   userId: string,
   quantity: number
 ) {
-  const user = await UserModel.findById(userId).populate<{
-    cart: { items: CartItemPopulated[]; amount: number };
-  }>("cart.items.device");
+  const user = await UserModel.findById(userId);
   if (!user) throw new Error("User not found");
+  if (!user.cart) throw new Error("Cart not found");
   const cartItem = user.cart.items.find(
-    (item) => item.device._id.toString() === deviceId
+    (item) => item.device.specId.toString() === specId
   );
   if (!cartItem) throw new Error("Item not found in cart");
   const pricePerItem = cartItem.device.price;
@@ -77,19 +96,17 @@ export async function switchQuantityInCart(
   const newQuantity = quantity - oldQuantiy;
   const newAmount = newQuantity * pricePerItem;
   const updatedUser = await UserModel.findOneAndUpdate(
-    { _id: userId, "cart.items.device": deviceId },
+    { _id: userId, "cart.items.device.specId": specId },
     {
       $set: { "cart.items.$.quantity": quantity },
       $inc: { "cart.amount": newAmount },
     },
     { new: true }
-  ).populate<{ items: CartItemPopulated[]; amount: number }>(
-    "cart.items.device"
   );
   if (!updatedUser) throw new Error("Failed to update cart");
   if (!updatedUser.cart) throw new Error("User don`t have cart");
   const updatedItem = updatedUser.cart.items.find(
-    (item) => item.device._id.toString() === deviceId
+    (item) => item.device.specId.toString() === specId
   );
   if (!updatedItem) throw new Error("Updated item not found");
   return {
@@ -100,29 +117,58 @@ export async function switchQuantityInCart(
 
 // add cart from frontend
 export async function addCartForUser(userId: string, cart: MergeCartDataDTO) {
-  const user = await UserModel.findById(userId).populate<{
-    items: CartItemPopulated[];
-    amount: number;
-  }>("cart.items.device");
+  const user = await UserModel.findById(userId);
   if (user && user.cart) {
     for (const cartItem of cart) {
+      const device = await DeviceModel.findById(cartItem.device.deviceId);
+      if (!device) throw new Error("Device not found");
+      const variant = device.variants.find(
+        (v) => v._id.toString() === cartItem.device.variantId.toString()
+      );
+      if (!variant) throw new Error("Variant not found");
+      const spec = variant.specs.find(
+        (s) => s._id.toString() === cartItem.device.specId.toString()
+      );
+      if (!spec) throw new Error("Spec not found");
       const existingItem = user.cart.items.find(
-        (item) => item.device._id.toString() === cartItem.device.id
+        (item) => item.device.specId.toString() === cartItem.device.specId
       );
       if (existingItem) {
-        const device = await DeviceModel.findById(existingItem.device._id);
-        if (!device) throw new Error("Device not found");
         await UserModel.updateOne(
-          { _id: userId, "cart.items.device": device._id },
-          { $inc: { "cart.items.$.quantity": +cartItem.quantity } },
+          { _id: userId, "cart.items.device.specId": spec._id },
+          {
+            $inc: {
+              "cart.items.$.quantity": +cartItem.quantity,
+              "cart.amount": +(spec.price * cartItem.quantity),
+            },
+          },
           { new: true, projection: { _id: 0 } }
         );
       } else {
-        const device = await DeviceModel.findById(cartItem.device.id);
-        if (!device) throw new Error("Device not found");
+        const cartItemFromDB = {
+          device: {
+            deviceId: device._id,
+            name: device.name,
+            category: device.category,
+            variantId: variant._id,
+            color: variant.color,
+            colorName: variant.colorName,
+            imageUrl: variant.imageUrl,
+            specId: spec._id,
+            storage: spec.storage ?? undefined,
+            diagonal: spec.diagonal ?? undefined,
+            ram: spec.ram ?? undefined,
+            simType: spec.simType ?? undefined,
+            price: spec.price,
+          },
+          quantity: cartItem.quantity,
+        };
         await UserModel.updateOne(
           { _id: userId },
-          { $push: { "cart.items": { device: device._id } } },
+          {
+            $push: { "cart.items": cartItemFromDB },
+            $inc: { "cart.amount": +(spec.price * cartItem.quantity) },
+          },
           { new: true, projection: { _id: 0 } }
         );
       }
@@ -134,10 +180,9 @@ export async function addCartForUser(userId: string, cart: MergeCartDataDTO) {
 
 // get
 export async function getCart(userId: string) {
-  const user = await UserModel.findById(userId).populate<{
-    cart: { items: CartItemPopulated[]; amount: number };
-  }>("cart.items.device");
+  const user = await UserModel.findById(userId);
   if (!user) throw new Error("User not found");
+  if (!user.cart) throw new Error("Cart not found");
   user.cart.amount = user.cart.items.reduce(
     (sum, item) => sum + item.device.price * item.quantity,
     0

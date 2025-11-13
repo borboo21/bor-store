@@ -21,7 +21,6 @@ const LinkContainer: React.FC<ILink> = ({ className, to, children, icon, size })
 );
 
 export const HeadLink = styled(LinkContainer)`
-	padding: 0 10px;
 	display: flex;
 	align-items: center;
 

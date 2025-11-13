@@ -1,8 +1,8 @@
 import express from "express";
-import cart from "./cart";
-import device from "./device";
-import order from "./order";
-import auth from "./authorization";
+import cart from "./cart.ts";
+import device from "./device.ts";
+import order from "./order.ts";
+import auth from "./authorization.ts";
 
 const router = express.Router({ mergeParams: true });
 

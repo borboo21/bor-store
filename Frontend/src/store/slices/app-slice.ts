@@ -5,6 +5,7 @@ const initialState: IApp = {
 	wasLogout: false,
 	modalCartIsOpen: false,
 	modalNavigationIsOpen: false,
+	updateDeviceList: false,
 	modal: {
 		isOpen: false,
 		text: '',
@@ -32,9 +33,17 @@ const appSlice = createSlice({
 		closeModal: (state) => {
 			Object.assign(state.modal, initialState.modal);
 		},
+		toggleUpdateDeviceList: (state) => {
+			state.updateDeviceList = !state.updateDeviceList;
+		},
 	},
 });
 
-export const { switchCartModal, openModal, closeModal, switchNavigationModal } =
-	appSlice.actions;
+export const {
+	switchCartModal,
+	openModal,
+	closeModal,
+	switchNavigationModal,
+	toggleUpdateDeviceList,
+} = appSlice.actions;
 export default appSlice.reducer;

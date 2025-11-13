@@ -8,18 +8,23 @@ import { selectUserRoleIdSelector, userIdSelector } from '../../selectors';
 import type { ICartDevice } from '../../interfaces';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
+import { ColorTag } from '../tags/color-tag';
+import { SpecBlock } from '../tags-block';
 
 const CartItemContainer: React.FC<ICartDevice> = ({ className, ...props }) => {
 	const dispatch: AppDispatch = useDispatch();
 	const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
 	const userId = useSelector(userIdSelector);
 	const userRole = useSelector(selectUserRoleIdSelector);
+	const specProps = [props.storage, props.simType, props.diagonal, props.ram].filter(
+		Boolean,
+	) as string[];
 
 	const handleClickX = () => {
 		if (userRole !== 3) {
 			dispatch(
 				deleteFromCartAsync({
-					deviceId: props.id,
+					specId: props.specId,
 					userId,
 					price: props.price,
 					quantity: props.quantity,
@@ -29,7 +34,7 @@ const CartItemContainer: React.FC<ICartDevice> = ({ className, ...props }) => {
 		} else {
 			dispatch(
 				deleteFromCart({
-					deviceId: props.id,
+					specId: props.specId,
 					price: props.price,
 					quantity: props.quantity,
 				}),
@@ -37,13 +42,27 @@ const CartItemContainer: React.FC<ICartDevice> = ({ className, ...props }) => {
 		}
 	};
 
+	const price = props.price.toLocaleString('ru');
+
 	return (
 		<div className={className}>
-			<img width={90} src={props.imageUrl} alt="device" />
+			<div className="photo-specs">
+				<img
+					className="device-photo"
+					width={90}
+					src={props.imageUrl}
+					alt="device"
+				/>
+				<CounterItem specId={props.specId} price={props.price} />
+			</div>
 			<div className="device-info">
 				<p className="device-name">{props.name}</p>
-				<b>{props.price}₽</b>
-				<CounterItem id={props.id} price={props.price} />
+				{specProps && <SpecBlock specArr={specProps} fontSizeTag={12} />}
+				<div className="device-color">
+					<ColorTag color={props.color} />
+					<p className="color-name">{props.colorName}</p>
+				</div>
+				<b>{price}₽</b>
 			</div>
 			{isLoadingSpinner ? (
 				<Loader />
@@ -68,14 +87,38 @@ export const CartItem = styled(CartItemContainer)`
 		flex-direction: column;
 		align-items: center;
 		justify-content: space-around;
-		height: 120px;
-		margin-right: 10px;
-		font-size: 16px;
+		font-size: 18px;
+	}
+
+	.photo-specs {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.device-photo {
+		padding-bottom: 10px;
 	}
 
 	.device-name {
+		margin-top: 0;
 		margin-bottom: 5px;
 		text-align: center;
+	}
+
+	.device-color {
+		display: flex;
+		align-items: center;
+	}
+
+	.device-specs {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	.color-name {
+		font-size: 12px;
 	}
 
 	@media (max-width: 420px) {

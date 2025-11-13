@@ -1,5 +1,5 @@
-import { mapDevice } from "../helpers/mapDevice";
-import { Device, DeviceModel } from "../models/Device";
+import { mapDevice } from "../helpers/mapDevice.ts";
+import { DeviceModel, type Device } from "../models/Device.ts";
 
 //add
 
@@ -30,7 +30,6 @@ interface GetDevicesOptions {
   search?: string;
   category?: string;
   sorting?: Sorting;
-  limit?: number;
   page?: number;
 }
 
@@ -38,17 +37,15 @@ export async function getDevices({
   search = "",
   category = "",
   sorting = null,
-  limit = 8,
   page = 1,
 }: GetDevicesOptions) {
-  const [rawDevices, count] = await Promise.all([
+  const [rawDevices] = await Promise.all([
     DeviceModel.find({
       name: { $regex: search, $options: "i" },
       category: { $regex: category, $options: "i" },
     })
-      .limit(limit)
-      .skip((page - 1) * limit)
-      .sort(sorting ? { price: sorting } : { name: -1 }),
+      .skip(page - 1)
+      .sort(sorting ? { basePrice: sorting } : { name: -1 }),
     DeviceModel.countDocuments({
       category: { $regex: category, $options: "i" },
     }),
@@ -56,7 +53,6 @@ export async function getDevices({
   const devices = rawDevices.map(mapDevice);
   return {
     devices,
-    lastPage: Math.ceil(count / limit),
   };
 }
 

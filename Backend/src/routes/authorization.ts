@@ -1,6 +1,6 @@
 import express from "express";
-import { mapUserForFrontend } from "../helpers/mapUser";
-import { login, register } from "../controllers/user";
+import { mapUserForFrontend } from "../helpers/mapUser.ts";
+import { login, register } from "../controllers/user.ts";
 
 const router = express.Router({ mergeParams: true });
 
@@ -11,7 +11,7 @@ router.post("/register", async (req, res) => {
 
     res.cookie("token", token, { httpOnly: true }).send({
       error: null,
-      user: mapUserForFrontend(user),
+      data: mapUserForFrontend(user),
     });
   } catch (e) {
     if (e instanceof Error) {
@@ -26,7 +26,7 @@ router.post("/login", async (req, res) => {
 
     res.cookie("token", token, { httpOnly: true }).send({
       error: null,
-      user: mapUserForFrontend(user),
+      data: mapUserForFrontend(user),
     });
   } catch (e) {
     if (e instanceof Error) {

@@ -1,6 +1,5 @@
-import { CartItemPopulated } from "../models/Cart";
-import { OrderModel } from "../models/Order";
-import { UserModel } from "../models/User";
+import { OrderModel } from "../models/Order.ts";
+import { UserModel } from "../models/User.ts";
 
 export function getAllOrders() {
   const allOrders = OrderModel.find(
@@ -11,9 +10,7 @@ export function getAllOrders() {
 }
 
 export async function takeOrder(userId: string) {
-  const user = await UserModel.findById(userId).populate<{
-    cart: { items: CartItemPopulated[]; amount: number };
-  }>("cart.items.device");
+  const user = await UserModel.findById(userId);
   if (!user) throw new Error("User not found");
   if (!user.cart) throw new Error("Cart not exist");
   const order = new OrderModel({
@@ -21,6 +18,11 @@ export async function takeOrder(userId: string) {
     login: user.login,
     items: user.cart.items.map((item) => ({
       name: item.device.name,
+      colorName: item.device.colorName,
+      storage: item.device.storage,
+      ram: item.device.ram,
+      simType: item.device.simType,
+      diagonal: item.device.diagonal,
       price: item.device.price,
       quantity: item.quantity,
     })),

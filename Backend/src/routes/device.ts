@@ -1,16 +1,16 @@
 import express from "express";
-import { authenticated } from "../middlewares/authenticated";
-import { hasRole } from "../middlewares/hasRole";
-import ROLES from "../constants/roles";
-import { mapDevice } from "../helpers/mapDevice";
 import {
-  getDevices,
-  getDevice,
   addDevice,
-  editDevice,
   deleteDevice,
+  editDevice,
   getAllDevices,
-} from "../controllers/device";
+  getDevice,
+  getDevices,
+} from "../controllers/device.ts";
+import { mapDevice } from "../helpers/mapDevice.ts";
+import { hasRole } from "../middlewares/hasRole.ts";
+import { authenticated } from "../middlewares/authenticated.ts";
+import { ROLES } from "../constants/roles.ts";
 
 const router = express.Router({ mergeParams: true });
 
@@ -20,8 +20,6 @@ router.get("/", async (req, res) => {
     search: req.query.search as string | undefined,
     category: req.query.category as string | undefined,
     sorting: req.query.sorting ? (Number(req.query.sorting) as 1 | -1) : null,
-    limit: req.query.limit ? Number(req.query.limit) : 8,
-    page: req.query.page ? Number(req.query.page) : 1,
   });
   res.send({ data });
 });
@@ -53,13 +51,7 @@ router.get("/:id", async (req, res) => {
 
 // добавить девайс
 router.post("/", authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-  const newDevice = await addDevice({
-    category: req.body.category,
-    name: req.body.name,
-    price: req.body.price,
-    imageUrl: req.body.imageUrl,
-  });
-
+  const newDevice = await addDevice(req.body);
   res.send({ data: mapDevice(newDevice) });
 });
 
@@ -69,12 +61,7 @@ router.patch(
   authenticated,
   hasRole([ROLES.ADMIN]),
   async (req, res) => {
-    const updatedDevice = await editDevice(req.params.id, {
-      category: req.body.category,
-      name: req.body.name,
-      price: req.body.price,
-      imageUrl: req.body.imageUrl,
-    });
+    const updatedDevice = await editDevice(req.params.id, req.body);
     if (updatedDevice) {
       res.send({ data: mapDevice(updatedDevice) });
     }

@@ -1,140 +1,108 @@
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { faCheck, faPlus } from '@fortawesome/free-solid-svg-icons';
-import { CardButton } from '../card-button/card-button';
-import { CounterItem } from '../counter/counter';
-import {
-	cartItemsSelector,
-	userIdSelector,
-	selectUserRoleIdSelector,
-} from '../../selectors';
-import { Loader, SkeletonMain, SkeletonMainMobile } from '../loaders';
-import { useWindowSize } from '@uidotdev/usehooks';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import styled from 'styled-components';
-import {
-	addCartAsync,
-	addToCart,
-	deleteFromCart,
-	deleteFromCartAsync,
-	type AppDispatch,
-} from '../../store';
+import { useDispatch } from 'react-redux';
+import { CardButton } from '../card-button/card-button';
+import { useWindowSize } from '@uidotdev/usehooks';
+import { setDeviceColor, setDeviceParams } from '../../store/slices';
+import { ColorBlockCard } from '../tags-block/color-block-card';
 import type { ICardItem } from '../../interfaces';
+import type { DeviceVariantDTO } from '../../../../shared';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import styled from 'styled-components';
+import { ImageWithSkeleton } from '../image-with-skeleton/image-with-skeleton';
+import { useInView } from 'react-intersection-observer';
+import { SkeletonMain, SkeletonMainMobile } from '../loaders';
 
-const CardItemContainer: React.FC<ICardItem> = ({ className, loading, ...props }) => {
-	const cartDevices = useSelector(cartItemsSelector);
-	const userId = useSelector(userIdSelector);
-	const roleId = useSelector(selectUserRoleIdSelector);
-	const dispatch: AppDispatch = useDispatch();
-	const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
+const CardItemContainer: React.FC<ICardItem> = ({ className, ...props }) => {
+	const dispatch = useDispatch();
 	const windowSize = useWindowSize();
-
-	const inCart: boolean = cartDevices.some((item) => item.device.id === props.id);
-
-	const cartDevice = {
-		device: {
-			id: props.id,
-			category: props.category,
-			imageUrl: props.imageUrl,
-			name: props.name,
-			price: props.price,
-		},
-		quantity: 1,
-	};
-
-	const handleClickPlus = (userId: string) => {
-		if (roleId !== 3) {
-			dispatch(addCartAsync({ userId, deviceId: props.id, setIsLoadingSpinner }));
-		} else {
-			dispatch(addToCart(cartDevice));
-			sessionStorage.setItem(
-				'cartData',
-				JSON.stringify([...cartDevices, cartDevice]),
+	const variants = props.variants;
+	const deviceColors = variants.map((value) => {
+		const id = value.variantId;
+		const color = value.color;
+		return { id, color };
+	});
+	const navigate = useNavigate();
+	const onColorPick = (id: string) => {
+		const findVariant = variants.find((variant) => variant.variantId === id);
+		if (findVariant)
+			dispatch(
+				setDeviceColor({
+					variantId: findVariant.variantId,
+					color: findVariant.color,
+					colorName: findVariant.colorName,
+					imageURL: findVariant.imageUrl,
+				}),
+				dispatch(setDeviceParams(findVariant.specs[0])),
 			);
+	};
+	const [selectedVariant, setSelectedVariant] = useState<DeviceVariantDTO>(variants[0]);
+
+	const onColorChange = (id: string) => {
+		const findVariant = variants.find((value) => value.variantId === id);
+		if (findVariant) {
+			setSelectedVariant(findVariant);
 		}
 	};
 
-	const handleClickDelete = (id: string, userId: string) => {
-		const findDevice = cartDevices.find((cartItem) => cartItem.device.id === id);
-		if (findDevice) {
-			const quantityInCart = findDevice.quantity;
-			if (roleId !== 3) {
-				dispatch(
-					deleteFromCartAsync({
-						deviceId: id,
-						userId,
-						price: props.price,
-						quantity: quantityInCart,
-						setIsLoadingSpinner,
-					}),
-				);
-			} else {
-				dispatch(
-					deleteFromCart({
-						deviceId: id,
-						price: props.price,
-						quantity: quantityInCart,
-					}),
-				);
-			}
-		}
+	const onDevicePick = () => {
+		onColorPick(props.id);
+		navigate(`/device/${props.category}/${props.id}`);
 	};
+
+	const devicePrice = props.basePrice.toLocaleString('ru');
+
+	const { ref, inView } = useInView({
+		threshold: 0.5,
+		triggerOnce: true,
+	});
 
 	return (
-		<div className={className} key={props.key}>
-			{loading ? (
-				windowSize.width && windowSize.width <= 600 ? (
-					<SkeletonMainMobile />
-				) : (
+		<div
+			ref={ref}
+			className={className}
+			onClick={
+				windowSize.width && windowSize.width <= 600 ? onDevicePick : undefined
+			}
+			key={props.key}
+		>
+			{!inView ? (
+				windowSize.width && windowSize.width > 600 ? (
 					<SkeletonMain />
+				) : (
+					<SkeletonMainMobile />
 				)
 			) : (
 				<>
 					<div className="device-image">
-						<Link to={`/device/${props.category}/${props.id}`}>
-							<img
-								className="device-png"
-								src={props.imageUrl}
-								alt="device"
-							/>
+						<Link
+							onClick={() => onColorPick(selectedVariant.variantId)}
+							to={`/device/${props.category}/${props.id}`}
+						>
+							<ImageWithSkeleton src={selectedVariant.imageUrl} />
 						</Link>
 					</div>
 					<div className="card-bottom">
-						<h5 className="device-name">{props.name}</h5>
+						<h4 className="device-name">{props.name}</h4>
+						<ColorBlockCard
+							className="color-block-main"
+							colorArr={deviceColors}
+							onColorChange={onColorChange}
+						/>
 						<div className="buy-panel">
 							<div className="price">
 								<span className="price-title">Цена:</span>
-								<b className="price-bold">{props.price}₽</b>
+								<b className="price-bold">От {devicePrice}₽</b>
 							</div>
-							{!inCart ? (
-								isLoadingSpinner ? (
-									<Loader />
-								) : (
+							{windowSize.width && windowSize.width >= 600 && (
+								<Link to={`/device/${props.category}/${props.id}`}>
 									<CardButton
-										icon={faPlus}
-										color="#ffffff"
-										onClick={() => handleClickPlus(userId)}
-										isLoading={isLoadingSpinner}
-									/>
-								)
-							) : isLoadingSpinner ? (
-								<Loader />
-							) : (
-								<>
-									<CounterItem
-										className="counter-main"
-										id={props.id}
-										price={props.price}
-									/>
-									<CardButton
-										icon={faCheck}
-										color="#65ed65"
 										onClick={() =>
-											handleClickDelete(props.id, userId)
+											onColorPick(selectedVariant.variantId)
 										}
-										isLoading={isLoadingSpinner}
+										icon={faPlus}
 									/>
-								</>
+								</Link>
 							)}
 						</div>
 					</div>
@@ -151,6 +119,7 @@ export const CardItem = styled(CardItemContainer)`
 	border: 1px solid #ebe5e5;
 	padding: 20px;
 	width: 220px;
+	min-height: 355px;
 	border-radius: 20px;
 	margin: 0 40px 40px 40px;
 
@@ -182,42 +151,54 @@ export const CardItem = styled(CardItemContainer)`
 	}
 
 	.device-name {
-		margin: 10px 0 10px 0;
+		margin: 10px 0 6px 0;
+	}
+
+	.price-title {
+		margin-bottom: 6px;
 	}
 
 	@media (max-width: 600px) {
 		width: 145px;
 		margin: 0 20px 20px 20px;
+		min-height: 290px;
+		padding: 12px;
+		transition: none;
+
+		&:hover {
+			box-shadow: none;
+			transform: none;
+		}
+
+		.color-block-main {
+			.colors-title {
+				font-size: 10px;
+			}
+			button {
+				width: 20px;
+				height: 20px;
+			}
+			figure {
+				width: 12px;
+				height: 12px;
+			}
+		}
 
 		.device-png {
 			width: 100px;
 		}
 		.device-name {
-			font-size: 10px;
+			font-size: 11px;
 		}
 		.price-title {
-			font-size: 8px;
+			font-size: 10px;
 		}
 		.price-bold {
 			font-size: 11px;
 		}
-		.buy-panel {
-			height: 60px;
-		}
-		.counter-main {
-			display: flex;
-			margin: 8px 5px 0 5px;
-			flex-direction: column-reverse;
-		}
-		.counter-button {
-			width: 20px;
-			height: 20px;
-			font-size: 10px;
-		}
-		.counter-input {
-			width: 20px;
-			height: 20px;
-			font-size: 10px;
-		}
+	}
+
+	@media (max-width: 370px) {
+		margin: 0 5px 20px 10px;
 	}
 `;

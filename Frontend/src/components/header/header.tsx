@@ -69,25 +69,31 @@ const HeaderContainer: React.FC<IComponentProps> = ({ className }) => {
 				))}
 			</div>
 			<div className="control-panel">
-				<div className="icon-container">
-					{userRoleId === 0 ? (
-						<HeadLink to="admin" icon={faGear} size="lg" />
-					) : (
-						''
-					)}
-					{userLogin ? (
-						<div className="user" onClick={onLogout}>
-							<div className="exit">
-								<FontAwesomeIcon icon={faUser} size="lg" />
-								<FontAwesomeIcon icon={faXmark} size="xs" />
-							</div>
-
-							<span className="user-name">{userLogin}</span>
+				{userRoleId === 0 ? (
+					<HeadLink className="admin-link" to="admin" icon={faGear} size="lg" />
+				) : (
+					''
+				)}
+				{userLogin ? (
+					<div className="user" onClick={onLogout}>
+						<div className="exit">
+							<FontAwesomeIcon
+								className="user-logo"
+								icon={faUser}
+								size="lg"
+							/>
+							<FontAwesomeIcon
+								className="x-mark"
+								icon={faXmark}
+								size="2xs"
+							/>
 						</div>
-					) : (
-						<HeadLink to="login" icon={faUser} size="xl" />
-					)}
-				</div>
+						<span className="user-name">{userLogin}</span>
+					</div>
+				) : (
+					<HeadLink to="login" icon={faUser} size="xl" />
+				)}
+
 				<div className="basket-control">
 					<FontAwesomeIcon
 						onClick={onOpenCart}
@@ -122,6 +128,7 @@ export const Header = styled(HeaderContainer)`
 	& .navigation {
 		display: flex;
 		align-items: center;
+		gap: 20px;
 	}
 
 	& .navigation-button {
@@ -131,9 +138,15 @@ export const Header = styled(HeaderContainer)`
 	& .control-panel {
 		display: flex;
 		align-items: center;
+		gap: 15px;
 	}
+
 	& .icon {
-		width: 140px;
+		max-width: 140px;
+	}
+
+	& .control-panel {
+		min-width: 120px;
 	}
 
 	.icon-container {
@@ -144,37 +157,39 @@ export const Header = styled(HeaderContainer)`
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		padding-left: 10px;
+		justify-content: flex-end;
 	}
 
 	& .basket {
 		cursor: pointer;
-		padding: 3px 0;
 
 		&:hover {
 			color: #dfdfdf;
 		}
 	}
 
-	.user {
-		display: flex;
-		flex-direction: column;
+	& .user {
 		position: relative;
 		cursor: pointer;
-		padding: 0 10px;
+
+		& .x-mark {
+			position: absolute;
+			left: 25px;
+			top: -2px;
+		}
 
 		&:hover {
 			color: #dfdfdf;
 		}
 	}
 
-	.exit {
+	& .exit {
 		display: flex;
 		align-items: flex-start;
 		justify-content: center;
 	}
 
-	.amount {
+	& .amount {
 		font-size: small;
 	}
 
@@ -198,7 +213,7 @@ export const Header = styled(HeaderContainer)`
 
 	@media (max-width: 600px) {
 		.control-panel {
-			width: 100px;
+			min-width: 110px;
 			justify-content: center;
 		}
 		.item-counter {
@@ -208,11 +223,27 @@ export const Header = styled(HeaderContainer)`
 			left: 25px;
 			top: -12px;
 		}
-		.user {
-			padding: 0px;
+
+		& .x-mark {
+			left: 17px;
+		}
+
+		& .logo {
+			min-width: 110px;
 		}
 		.user-name {
-			font-size: 11px;
+			display: flex;
+			justify-content: center;
+			font-size: 14px;
+		}
+	}
+
+	@media (max-width: 400px) {
+		& .icon {
+			width: 110px;
+		}
+		& .control-panel {
+			gap: 5px;
 		}
 	}
 `;

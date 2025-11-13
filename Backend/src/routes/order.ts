@@ -1,10 +1,10 @@
 import express from "express";
-import { getAllOrders, takeOrder } from "../controllers/order";
-import ROLES from "../constants/roles";
-import { authenticated } from "../middlewares/authenticated";
-import { hasRole } from "../middlewares/hasRole";
-import { mapOrders } from "../helpers/mapOrder";
-import { OrdersResponseDTO } from "@shared/index";
+import { getAllOrders, takeOrder } from "../controllers/order.ts";
+import { authenticated } from "../middlewares/authenticated.ts";
+import { hasRole } from "../middlewares/hasRole.ts";
+import { mapOrders } from "../helpers/mapOrder.ts";
+import { ROLES } from "../constants/roles.ts";
+import type { OrdersResponseDTO } from "../../../shared/types/interface.ts";
 
 const router = express.Router({ mergeParams: true });
 

@@ -1,1 +1,1 @@
-export * from './image/image';
+export * from './spec-inputs/spec-inputs';

@@ -3,6 +3,7 @@ import userReducer from './slices/user-slice';
 import cartReducer from './slices/cart-slice';
 import deviceReducer from './slices/device-slice';
 import appReducer from './slices/app-slice';
+import selectionReducer from './slices/selection-slice';
 import sessionStorageCart from '../middleware/sessionStorageCart';
 
 const reducer = combineReducers({
@@ -10,6 +11,7 @@ const reducer = combineReducers({
 	userReducer: userReducer,
 	cartReducer: cartReducer,
 	appReducer: appReducer,
+	selectionReducer: selectionReducer,
 });
 
 export const store = configureStore({

@@ -5,15 +5,17 @@ import {
 	type ReactEventHandler,
 	type SetStateAction,
 } from 'react';
-import type { DeviceDTO, OrderDTO } from '../../../shared/';
+import type { CartDeviceDTO, DeviceDTO, OrderDTO } from '../../../shared/';
+import type { UseFormRegisterReturn } from 'react-hook-form';
 
-export interface ICartDevice extends DeviceDTO, IComponentProps {
+export interface ICartDevice extends CartDeviceDTO, IComponentProps {
 	quantity: number;
 }
 export interface IApp {
 	wasLogout: boolean;
 	modalCartIsOpen: boolean;
 	modalNavigationIsOpen: boolean;
+	updateDeviceList: boolean;
 	modal: IModal;
 }
 
@@ -32,6 +34,7 @@ export interface IButton {
 	active?: boolean | undefined;
 	disabled?: boolean | undefined;
 	width?: string;
+	height?: string;
 }
 
 export interface IGreenButton extends IButton {
@@ -39,13 +42,11 @@ export interface IGreenButton extends IButton {
 	right?: boolean;
 	left?: boolean;
 	place?: number;
-	inсart?: boolean;
+	$inсart?: boolean;
 	type?: 'button' | 'reset' | 'submit' | undefined;
 }
 
 export interface ICardButton extends IButton {
-	color?: string;
-	isLoading?: boolean;
 	margin?: string;
 }
 
@@ -59,7 +60,7 @@ export interface ICardItem extends IComponentProps, DeviceDTO {
 }
 
 export interface ICounter extends IComponentProps {
-	id: string;
+	specId: string;
 	price: number;
 }
 
@@ -86,8 +87,29 @@ export interface IItemsInCart extends IComponentProps {
 export interface IInput
 	extends IComponentProps,
 		React.InputHTMLAttributes<HTMLInputElement> {
-	icon: IconProp;
+	icon?: IconProp;
 	width: number;
+	registerProps?: UseFormRegisterReturn;
+	height?: number;
+	errorMessage?: string;
+}
+
+export interface DeviceForm {
+	category: string;
+	name: string;
+	basePrice: number | null;
+	variants: {
+		color: string;
+		colorName: string;
+		imageUrl: string;
+		specs: {
+			storage?: string | null;
+			ram?: string | null;
+			simType?: string | null;
+			diagonal?: string | null;
+			price: number | null;
+		}[];
+	}[];
 }
 export interface IPagination extends IComponentProps {
 	page: number;
@@ -100,13 +122,13 @@ export interface IPrivateContent {
 	serverError?: null | string;
 }
 export interface ITableRow extends IComponentProps {
-	children: JSX.Element[];
-	withborder?: string;
+	children: JSX.Element;
+	onClick?: () => void;
+	$withBorder?: string;
+	$isEdit?: boolean;
 }
 export interface IDeviceRow extends IComponentProps, DeviceDTO {
 	key?: string;
 	onDelete: React.ReactEventHandler;
-	shouldUpdateDeviceList: boolean;
-	setShouldUpdateDeviceList: React.Dispatch<SetStateAction<boolean>>;
 }
 export interface IOrderComponent extends IComponentProps, OrderDTO {}
