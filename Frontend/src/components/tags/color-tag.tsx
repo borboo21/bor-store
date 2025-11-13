@@ -10,25 +10,28 @@ type ColorTag = {
 };
 
 const ColorTagContainer: React.FC<ColorTag> = ({ className, onClick, ...props }) => (
-	<label className={className}>
-		<button className="color-picker" onClick={onClick} {...props}></button>
-	</label>
+	<button className={className} onClick={onClick} {...props}>
+		<figure className="color-picker"></figure>
+	</button>
 );
 
 export const ColorTag = styled(ColorTagContainer)`
-	border-radius: 18px;
+	border-radius: 50%;
 	border: ${(props) => (props.disabled ? '2px solid #9dd558' : 'none')};
-	padding: 3px 2px;
+	width: 32px;
+	height: 32px;
+	padding: 2px;
+	background-color: transparent;
 
 	.color-picker {
 		width: 24px;
 		height: 24px;
 		background-color: ${(props) => `${props.color}`};
+		box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px inset;
 		display: inline-flex;
 		align-items: center;
-		border: 0.5px solid #eaeaea;
-		border-radius: 18px;
-		padding: 5px 11px;
+		margin: 0;
+		border-radius: 50%;
 		white-space: nowrap;
 		cursor: pointer;
 	}

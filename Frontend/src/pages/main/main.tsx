@@ -1,11 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import { Button, CardItem, Input, Pagination } from '../../components';
+import {
+	Button,
+	CardItem,
+	Input,
+	ScrollToTopButton,
+	SkeletonMain,
+	SkeletonMainMobile,
+} from '../../components';
 import { request, debounce } from '../../utils';
 import type { IComponentProps } from '../../interfaces';
 import { resetDeviceData, type AppDispatch } from '../../store';
-import { PAGINATION_LIMIT } from '../../constants';
+import type { DeviceDTO } from '../../../../shared';
+import { resetSelectionData } from '../../store/slices';
+import { useWindowSize } from '@uidotdev/usehooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
 	faArrowDown,
@@ -13,40 +22,30 @@ import {
 	faMagnifyingGlass,
 	faRubleSign,
 } from '@fortawesome/free-solid-svg-icons';
-import type { DeviceDTO } from '../../../../shared';
 import styled from 'styled-components';
-import { resetSelectionData } from '../../store/slices';
 
 export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 	const params = useParams();
+	const windowSize = useWindowSize();
+	const dispatch: AppDispatch = useDispatch();
 	const [devices, setDevices] = useState<DeviceDTO[]>([]);
 	const [category, setCategory] = useState('');
-	const [page, setPage] = useState(1);
-	const [shouldSearch, setShouldSearch] = useState('');
+	const [shouldSearch, setShouldSearch] = useState(false);
 	const [search, setSearch] = useState('');
-	const [lastPage, setLastPage] = useState(1);
 	const [sortPrice, setSortPrice] = useState('');
 	const [isLoading, setIsLoading] = useState(true);
-	const dispatch: AppDispatch = useDispatch();
 
 	const getMain = () =>
 		request<{ devices: DeviceDTO[]; lastPage: number }>(
-			`/api/device?search=${search}&category=${category}&page=${page}&limit=${PAGINATION_LIMIT}${sortPrice}`,
-		).then(({ data: { devices, lastPage } }) => {
-			console.log(devices);
+			`/api/device?search=${search}&category=${category}${sortPrice}`,
+		).then(({ data: { devices } }) => {
 			setDevices(devices);
-			setLastPage(lastPage);
 			checkCategory();
 			setIsLoading(false);
 		});
 
 	const checkCategory = () => {
-		const prevCategory = category;
-		if (prevCategory !== params.device) {
-			setPage(1);
-		}
 		if (!params.device) {
-			setPage(page);
 			setCategory('');
 		} else {
 			setCategory(params.device);
@@ -59,9 +58,12 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 		dispatch(resetDeviceData());
 		dispatch(resetSelectionData());
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, category, page, sortPrice, shouldSearch, params]);
+	}, [dispatch, category, sortPrice, shouldSearch, params]);
 
-	const startDelayedSearch = useMemo(() => debounce(setShouldSearch, 2000), []);
+	const startDelayedSearch = useMemo(
+		() => debounce((value: boolean) => setShouldSearch(value), 2000),
+		[],
+	);
 
 	const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearch(e.target.value);
@@ -84,11 +86,17 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 		}
 	};
 
+	const renderSkeletons = () =>
+		windowSize.width && windowSize.width > 600
+			? Array.from({ length: 8 }, (_, i) => <SkeletonMain key={i} />)
+			: Array.from({ length: 8 }, (_, i) => <SkeletonMainMobile key={i} />);
+
 	return (
 		<div className={className}>
 			<div className="main-header">
 				<Input
 					width={250}
+					height={45}
 					value={search}
 					onChange={onSearch}
 					placeholder={'Поиск'}
@@ -112,7 +120,9 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 				</div>
 			</div>
 			<div className="card-container">
-				{devices.length > 0 ? (
+				{isLoading ? (
+					renderSkeletons()
+				) : devices.length > 0 ? (
 					devices.map(({ id, category, name, basePrice, variants }) => (
 						<CardItem
 							key={id}
@@ -130,16 +140,17 @@ export const MainContainer: React.FC<IComponentProps> = ({ className }) => {
 					</div>
 				)}
 			</div>
-			{devices.length ? (
-				<Pagination page={page} lastPage={lastPage} setPage={setPage} />
-			) : (
-				''
-			)}
+			<ScrollToTopButton />
 		</div>
 	);
 };
 
 export const Main = styled(MainContainer)`
+	display: flex;
+	min-width: 100%;
+	min-height: 70vh;
+	flex-direction: column;
+	align-items: center;
 	.card-container {
 		display: grid;
 		grid-template-columns: auto auto auto auto;
@@ -155,6 +166,7 @@ export const Main = styled(MainContainer)`
 		@media (max-width: 600px) {
 			flex-direction: column;
 			align-items: center;
+			gap: 10px;
 		}
 	}
 

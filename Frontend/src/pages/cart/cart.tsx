@@ -144,12 +144,11 @@ export const Cart = styled(CartContainer)`
 		flex: 1;
 		overflow: auto;
 		margin-bottom: 40px;
-		padding-right: 10px;
 	}
 
-	@media (max-width: 420px) {
-		.drawer {
-			width: auto;
+	@media (max-width: 500px) {
+		.drawer.open {
+			min-width: 100vw;
 		}
 	}
 

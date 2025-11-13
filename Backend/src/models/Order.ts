@@ -8,6 +8,21 @@ const OrderItemSchema = new Schema({
     type: String,
     required: true,
   },
+  colorName: {
+    type: String,
+  },
+  storage: {
+    type: String,
+  },
+  ram: {
+    type: String,
+  },
+  simType: {
+    type: String,
+  },
+  diagonal: {
+    type: String,
+  },
   price: {
     type: Number,
     required: true,

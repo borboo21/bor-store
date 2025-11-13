@@ -41,8 +41,6 @@ const SpecBlockContainer: React.FC<SpecBlockProps> = ({
 };
 
 export const SpecBlock = styled(SpecBlockContainer)`
-	margin: 6px 0 0 0;
-
 	.spec-title {
 		margin-bottom: 6px;
 		font-size: 13px;
@@ -51,5 +49,8 @@ export const SpecBlock = styled(SpecBlockContainer)`
 	}
 	.spec-block {
 		margin: 3px 0 0 0;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 `;

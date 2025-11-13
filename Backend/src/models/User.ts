@@ -34,6 +34,4 @@ export type UserType = {
   };
 };
 
-export type UserDocument = HydratedDocument<User>;
-
 export const UserModel = model<User>("User", UserSchema);

@@ -5,7 +5,6 @@ import type {
 import { DeviceModel } from "../models/Device.ts";
 import { UserModel } from "../models/User.ts";
 import { mapCart, mapCartItemDevice } from "../helpers/mapCart.ts";
-import type { CartItem } from "../models/Cart.ts";
 
 // add
 export async function addDeviceInCart(

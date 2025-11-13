@@ -30,15 +30,22 @@ const OrderContainer: React.FC<IOrderComponent> = ({ className, ...props }) => {
 				</div>
 				<div className="vertical-line"></div>
 				<div className="second">
-					{props.items.map((item) => (
-						<li key={props.id} className="cartItem">
-							{item.name} — {item.quantity} шт.
-						</li>
+					{props.items.map((item, index) => (
+						<ul key={index} className="cartItem">
+							<b>{item.name}</b>
+							{item.diagonal && <li>Диагональ: {item.diagonal}</li>}
+							{item.ram && <li>ОЗУ: {item.ram}</li>}
+							{item.storage && <li>Память: {item.storage}</li>}
+							{item.simType && <li>Способ связи: {item.simType}</li>}
+							{item.colorName && <li> Цвет: {item.colorName}</li>}
+							<li>Цена: {`${item.price.toLocaleString('ru')}₽`}</li>
+							<li>Количество: {item.quantity} шт.</li>
+						</ul>
 					))}
 				</div>
 				<div className="vertical-line"></div>
 				<div className="third-base">
-					<span className="amount">{props.amount} ₽</span>
+					<span className="amount">{`${props.amount}₽`}</span>
 				</div>
 				<div className="vertical-line"></div>
 				<div className="fourth">
@@ -117,6 +124,10 @@ export const Order = styled(OrderContainer)`
 		font-size: 15px;
 	}
 
+	.cartItem {
+		padding: 0 0 0 20px;
+	}
+
 	.third-header {
 		width: 100px;
 	}
@@ -157,12 +168,15 @@ export const Order = styled(OrderContainer)`
 	}
 
 	@media (max-width: 600px) {
-		width: 370px;
-		font-size: 7px;
+		width: 320px;
+		font-size: 8px;
 
+		.info {
+			width: 100px;
+		}
 		.second {
-			font-size: 7px;
-			width: 110px;
+			font-size: 8px;
+			width: 95px;
 		}
 		.head-info {
 			font-size: 6px;

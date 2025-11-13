@@ -4,7 +4,7 @@ import styled from 'styled-components';
 type ColorPickerProps = {
 	className?: string;
 	value: string;
-	onChange: (value: string) => void;
+	onChange?: (value: string) => void;
 };
 
 export const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange }) => {
@@ -19,7 +19,8 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange }) => 
 			<HiddenColorInput
 				ref={colorInputRef}
 				value={value}
-				onChange={(e) => onChange(e.target.value)}
+				disabled={onChange ? false : true}
+				onChange={(e) => (onChange ? onChange(e.target.value) : '')}
 			/>
 			<ColorCircle color={value} onClick={handleCircleClick} />
 			<span>{value}</span>
@@ -33,7 +34,6 @@ const ColorPickerWrapper = styled.div`
 	align-items: center;
 	gap: 12px;
 	width: 100%;
-	margin-bottom: 20px;
 `;
 
 const HiddenColorInput = styled.input.attrs({ type: 'color' })`
@@ -50,8 +50,8 @@ const ColorCircle = styled.div<{ color: string }>`
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;
-	border: 2px solid #ccc;
 	background-color: ${({ color }) => color};
+	box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 1px inset;
 	cursor: pointer;
 	transition: transform 0.15s ease, box-shadow 0.15s ease;
 

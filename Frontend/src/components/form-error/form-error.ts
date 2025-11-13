@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const AuthFormError = styled.div`
+export const FormError = styled.div`
 	border-radius: 20px;
 	display: flex;
 	justify-content: center;

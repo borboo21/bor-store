@@ -20,6 +20,7 @@ import {
 	CounterItem,
 	Error,
 	GreenButton,
+	ImageWithSkeleton,
 } from '../../components';
 import { Loader, SkeletonDevice, SkeletonDeviceMobile } from '../../components/loaders';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
@@ -48,9 +49,8 @@ import { loadDeviceAsync } from '../../store/thunks/device-thunks';
 
 const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 	const [error, setError] = useState('');
-	const [isLoadingSkeleton, setIsLoadingSkeleton] = useState(true);
+	const [isLoadingSkeleton, setIsLoadingSkeleton] = useState(false);
 	const [isLoadingSpinner, setIsLoadingSpinner] = useState(false);
-	// const colorArr = ['#47537d', '#f7853f', '#e7e7e7'];
 
 	const dispatch: AppDispatch = useDispatch();
 	const params = useParams();
@@ -68,15 +68,29 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 
 	useEffect(() => {
 		setIsLoadingSkeleton(true);
-		if (params.id) {
-			dispatch(loadDeviceAsync({ deviceId: params.id })).then((deviceData) => {
-				if (deviceData.type === 'device/loadDeviceAsync/rejected') {
-					setError(ERROR.DEVICE_NOT_FOUND);
-				}
-				setIsLoadingSkeleton(false);
-			});
-		}
-	}, [dispatch, params.id, setIsLoadingSkeleton]);
+		setError('');
+		if (!params.id) return;
+		dispatch(loadDeviceAsync({ deviceId: params.id }))
+			.unwrap()
+			.catch(() => setError(ERROR.DEVICE_NOT_FOUND))
+			.finally(() => setIsLoadingSkeleton(false));
+	}, [dispatch, params.id]);
+
+	if (isLoadingSkeleton) {
+		return windowSize.width && windowSize.width >= 800 ? (
+			<SkeletonDevice />
+		) : (
+			<SkeletonDeviceMobile />
+		);
+	}
+
+	const findDeviceVariant = deviceVariants.find(
+		(value) => value.variantId === variantId,
+	);
+
+	if (!findDeviceVariant || !deviceVariants.length || error) {
+		return <Error error={error}></Error>;
+	}
 
 	const { color, colorName, imageUrl, storage, diagonal, ram, simType } =
 		selectionParams;
@@ -86,14 +100,6 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 		const color = value.color;
 		return { id, color };
 	});
-
-	const findDeviceVariant = deviceVariants.find(
-		(value) => value.variantId === variantId,
-	);
-
-	if (!findDeviceVariant) {
-		return <Error error={ERROR.DEVICE_NOT_FOUND}></Error>;
-	}
 
 	const onColorChange = (id: string) => {
 		const findVariant = deviceVariants.find((variant) => variant.variantId === id);
@@ -215,87 +221,74 @@ const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 
 	return (
 		<div className={className}>
-			{error ? (
-				<Error error={error} />
-			) : isLoadingSkeleton ? (
-				windowSize.width && windowSize.width >= 800 ? (
-					<SkeletonDevice />
-				) : (
-					<SkeletonDeviceMobile />
-				)
-			) : (
-				<>
-					<BreadCrumbs lastName={deviceName} />
-					<div className="device-card">
-						<div className="img-block">
-							<img width={306} src={imageUrl} alt={deviceName} />
-						</div>
-						<div className="device-description-block">
-							<h1 className="device-name">{deviceName}</h1>
-							<ColorBlockDevice
-								className="device-color"
-								colorArr={deviceColors}
-								onColorChange={onColorChange}
-							/>
-							<DeviceSpecs
-								variants={deviceSpecs}
-								selectedSpecs={{
-									'Объем памяти': storage!,
-									ОЗУ: ram!,
-									SIM: simType!,
-									Диагональ: diagonal!,
-								}}
-								onSpecChange={onSpecChange}
-							/>
-							{devicePrice !== 'Нет в наличии' ? (
-								<h2>{formattedPrice}₽</h2>
+			<BreadCrumbs lastName={deviceName} />
+			<div className="device-card">
+				<div className="img-block">
+					<ImageWithSkeleton src={imageUrl} />
+				</div>
+				<div className="device-description-block">
+					<h1 className="device-name">{deviceName}</h1>
+					<ColorBlockDevice
+						className="device-color"
+						colorArr={deviceColors}
+						onColorChange={onColorChange}
+					/>
+					<DeviceSpecs
+						variants={deviceSpecs}
+						selectedSpecs={{
+							'Объем памяти': storage!,
+							ОЗУ: ram!,
+							SIM: simType!,
+							Диагональ: diagonal!,
+						}}
+						onSpecChange={onSpecChange}
+					/>
+					{devicePrice !== 'Нет в наличии' ? (
+						<h2>{formattedPrice}₽</h2>
+					) : (
+						<h2>{formattedPrice}</h2>
+					)}
+					<div className="buy-container">
+						{!inCart ? (
+							!isLoadingSpinner ? (
+								<GreenButton
+									className="in-cart-button"
+									$inсart={false}
+									onClick={handleClick}
+									disabled={devicePrice === 'Нет в наличии'}
+									right={true}
+									place={20}
+									icon={faArrowRight}
+								>
+									В корзину
+								</GreenButton>
 							) : (
-								<h2>{formattedPrice}</h2>
-							)}
-							<div className="buy-container">
-								{!inCart ? (
-									!isLoadingSpinner ? (
-										<GreenButton
-											className="in-cart-button"
-											$inсart={false}
-											onClick={handleClick}
-											disabled={devicePrice === 'Нет в наличии'}
-											right={true}
-											place={20}
-											icon={faArrowRight}
-										>
-											В корзину
-										</GreenButton>
-									) : (
-										<Loader />
-									)
-								) : !isLoadingSpinner &&
-								  devicePrice !== 'Нет в наличии' ? (
-									<>
-										<GreenButton
-											className="out-from-cart-button"
-											$inсart={true}
-											onClick={onDelete}
-											left={true}
-											place={185}
-											icon={faArrowLeft}
-										>
-											Убрать из корзины
-										</GreenButton>
-										<CounterItem
-											className="counter"
-											specId={specId}
-											price={devicePrice as number}
-										/>
-									</>
-								) : (
-									<Loader />
-								)}
-							</div>
-						</div>
+								<Loader />
+							)
+						) : !isLoadingSpinner && devicePrice !== 'Нет в наличии' ? (
+							<>
+								<GreenButton
+									className="out-from-cart-button"
+									$inсart={true}
+									onClick={onDelete}
+									left={true}
+									place={185}
+									icon={faArrowLeft}
+								>
+									Убрать из корзины
+								</GreenButton>
+								<CounterItem
+									className="counter"
+									specId={specId}
+									price={devicePrice as number}
+								/>
+							</>
+						) : (
+							<Loader />
+						)}
 					</div>
-				</>
-			)}
+				</div>
+			</div>
 		</div>
 	);
 };
@@ -314,6 +307,7 @@ export const DevicePage = styled(DevicePageContainer)`
 	.img-block {
 		margin-right: 50px;
 		margin-bottom: 30px;
+		max-width: 306px;
 	}
 
 	.in-cart-button {
@@ -362,13 +356,31 @@ export const DevicePage = styled(DevicePageContainer)`
 		margin: 8px 4px;
 	}
 
+	& .device-png {
+		width: 306px;
+	}
+
 	@media (max-width: 800px) {
 		.device-card {
 			flex-direction: column;
 		}
+		.img-block {
+			margin-right: 0;
+		}
 		.description {
 			width: 350px;
 			margin-top: 30px;
+		}
+	}
+
+	@media (max-width: 370px) {
+		.device-description-block {
+			min-width: 310px;
+			padding: 20px 8px;
+
+			& .spec-block {
+				justify-content: flex-start;
+			}
 		}
 	}
 `;

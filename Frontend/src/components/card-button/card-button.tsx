@@ -6,17 +6,15 @@ const CardButtonContainer: React.FC<ICardButton> = ({
 	className,
 	onClick,
 	icon,
-	color,
-	isLoading,
 	...props
 }) => (
 	<button className={className} onClick={onClick} {...props}>
-		{icon ? <FontAwesomeIcon icon={icon} /> : <></>}
+		{icon ? <FontAwesomeIcon className="icon" icon={icon} /> : <></>}
 	</button>
 );
 
 export const CardButton = styled(CardButtonContainer)`
-	background-color: ${({ color = '#ffffff;' }) => color};
+	background-color: #ffffff;
 	border: 1px solid #f2f2f2;
 	box-sizing: border-box;
 	border-radius: 8px;
@@ -30,5 +28,16 @@ export const CardButton = styled(CardButtonContainer)`
 
 	&:hover {
 		opacity: 1;
+	}
+
+	@media (max-width: 600px) {
+		opacity: 1;
+		height: 25px;
+		width: 25px;
+
+		.icon {
+			width: 12px;
+			height: 13px;
+		}
 	}
 `;

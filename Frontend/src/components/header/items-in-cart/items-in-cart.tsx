@@ -20,6 +20,6 @@ export const ItemsInCart = styled(ItemsInCartContainer)`
 	align-items: center;
 	color: white;
 	z-index: 2;
-	left: 34px;
-	top: -10px;
+	left: 20px;
+	top: -15px;
 `;

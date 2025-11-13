@@ -57,9 +57,7 @@ const CartItemContainer: React.FC<ICartDevice> = ({ className, ...props }) => {
 			</div>
 			<div className="device-info">
 				<p className="device-name">{props.name}</p>
-				<div className="device-specs">
-					{specProps && <SpecBlock specArr={specProps} fontSizeTag={12} />}
-				</div>
+				{specProps && <SpecBlock specArr={specProps} fontSizeTag={12} />}
 				<div className="device-color">
 					<ColorTag color={props.color} />
 					<p className="color-name">{props.colorName}</p>
@@ -115,6 +113,8 @@ export const CartItem = styled(CartItemContainer)`
 
 	.device-specs {
 		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 
 	.color-name {

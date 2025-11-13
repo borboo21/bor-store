@@ -31,7 +31,10 @@ const ColorsBlockCardContainer: React.FC<ColorsBlockCardProps> = ({
 						key={value.id}
 						color={value.color}
 						disabled={activeColorTag === value.id}
-						onClick={() => handleClickColorTag(value.id)}
+						onClick={(e) => {
+							e.stopPropagation();
+							handleClickColorTag(value.id);
+						}}
 					/>
 				))}
 			</div>
@@ -49,9 +52,5 @@ export const ColorBlockCard = styled(ColorsBlockCardContainer)`
 	}
 	.color-block {
 		margin: 6px 0 0 0;
-	}
-
-	.color-tag {
-		margin: 6px 0 12px 0;
 	}
 `;

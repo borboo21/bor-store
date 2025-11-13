@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import type { HydratedDocument, InferSchemaType } from "mongoose";
+import type { InferSchemaType } from "mongoose";
 import type { DeviceDocument, DeviceSpecs, DeviceVariant } from "./Device.ts";
 
 const { model, Schema } = mongoose;
@@ -69,7 +69,5 @@ export type CartType = {
 };
 
 export type Cart = InferSchemaType<typeof CartSchema>;
-
-export type CartDocument = HydratedDocument<Cart>;
 
 export const CartModel = model<Cart>("Cart", CartSchema);

@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react';
-import { BreadCrumbs, GreenButton, Input, PrivateContent } from '../../../components';
+import {
+	FormError,
+	BreadCrumbs,
+	ColorPicker,
+	GreenButton,
+	Image,
+	Input,
+	PrivateContent,
+} from '../../../components';
 import {
 	faArrowLeft,
 	faArrowRight,
@@ -9,31 +17,98 @@ import {
 	faTag,
 } from '@fortawesome/free-solid-svg-icons';
 import { addDeviceAsync } from '../../../actions';
-import { ColorPicker, Image, SpecInputs } from './components';
-import { CATEGORIES, ROLE } from '../../../constants';
+import { SpecInputs } from './components';
+import { CATEGORIES, ROLE, SPEC_FIELDS_BY_CATEGORY } from '../../../constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { checkAccess } from '../../../utils';
 import { useSelector } from 'react-redux';
 import { selectUserRoleIdSelector } from '../../../selectors';
+import * as yup from 'yup';
 import type { DeviceForm, IComponentProps } from '../../../interfaces';
 import styled from 'styled-components';
-import {
-	Controller,
-	FormProvider,
-	useFieldArray,
-	useForm,
-	useWatch,
-} from 'react-hook-form';
+import { Controller, FormProvider, useFieldArray, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
 	const userRole = useSelector(selectUserRoleIdSelector);
+
 	useEffect(() => {
 		if (!checkAccess([ROLE.ADMIN], userRole)) {
 			return;
 		}
 	}, [userRole]);
 
+	const deviceFormSchema = yup.object().shape({
+		category: yup.string().required(),
+		name: yup.string().required('Заполните название'),
+		basePrice: yup
+			.number()
+			.typeError('Введите цену числом')
+			.required('Цена обязательна')
+			.nullable()
+			.min(0, 'Цена не может быть отрицательной'),
+		variants: yup
+			.array()
+			.of(
+				yup.object({
+					color: yup
+						.string()
+						.required('Подберите цвет круглого индикатора')
+						.matches(/^#([0-9A-Fa-f]{6})$/, 'Введите корректный HEX цвет'),
+					colorName: yup.string().required('Название цвета обязательно'),
+					imageUrl: yup
+						.string()
+						.required('Введите ссылку')
+						.url('Введите правильную ссылку'),
+					specs: yup
+						.array()
+						.of(
+							yup.object({
+								storage: yup
+									.string()
+									.required('Укажите объём Памяти')
+									.matches(
+										/^\d+(Gb|Tb)$/i,
+										'Формат: например 128Gb или 1Tb',
+									)
+									.nullable()
+									.optional(),
+								ram: yup
+									.string()
+									.required('Укажите объём ОЗУ')
+									.matches(/^\d+(Gb)$/i, 'Формат: например 16Gb')
+									.nullable()
+									.optional(),
+								diagonal: yup
+									.string()
+									.required('Укажите диагональ')
+									.matches(
+										/^\d{1,2}(\.\d{1,2})?"$/,
+										'Формат: например 13" или 15.6"',
+									)
+									.nullable()
+									.optional(),
+								simType: yup
+									.string()
+									.required('Укажите способ связи')
+									.nullable()
+									.optional(),
+								price: yup
+									.number()
+									.typeError('Введите цену числом')
+									.min(0, 'Цена не может быть отрицательной')
+									.required('Заполните цену')
+									.nullable(),
+							}),
+						)
+						.required('У аппарата должно быть хоть один вариант'),
+				}),
+			)
+			.required('У варианта должна быть хоть одна спецификация'),
+	});
+
 	const methods = useForm<DeviceForm>({
+		resolver: yupResolver(deviceFormSchema),
 		defaultValues: {
 			category: CATEGORIES[0],
 			name: '',
@@ -41,7 +116,14 @@ const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
 			variants: [],
 		},
 	});
-	const { control, register, handleSubmit, watch, reset } = methods;
+	const {
+		control,
+		register,
+		handleSubmit,
+		watch,
+		reset,
+		formState: { errors },
+	} = methods;
 
 	const [step, setStep] = useState(1);
 	const [activeVariant, setActiveVariant] = useState<null | number>(null);
@@ -71,24 +153,38 @@ const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
 		remove: removeVariant,
 	} = useFieldArray({ control, name: 'variants' });
 
+	const availableFields: string[] =
+		SPEC_FIELDS_BY_CATEGORY[
+			watch('category') as keyof typeof SPEC_FIELDS_BY_CATEGORY
+		];
+
 	const onClickAddColor = () => {
-		if (variants.length < 1) {
+		const newSpec = Object.fromEntries(availableFields.map((f) => [f, ''])) as {
+			storage?: string | null;
+			ram?: string | null;
+			diagonal?: string | null;
+			simType?: string | null;
+		};
+		if (variants.length < 1 && step === 1) {
 			addVariant({
 				color: '#FFFFFF',
 				colorName: '',
 				imageUrl: '',
-				specs: [
-					{
-						storage: '',
-						ram: '',
-						simType: '',
-						diagonal: '',
-						price: null,
-					},
-				],
+				specs: [{ ...newSpec, price: null }],
+			});
+			setStep(2);
+		}
+		if (step === 1) {
+			setStep(2);
+		}
+		if (step === 2) {
+			addVariant({
+				color: '#FFFFFF',
+				colorName: '',
+				imageUrl: '',
+				specs: [{ ...newSpec, price: null }],
 			});
 		}
-		setStep(2);
 	};
 
 	const onClickAddSpec = (index: number) => {
@@ -105,8 +201,9 @@ const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
 		}
 	};
 
-	const values = useWatch({ control });
-	console.log(values);
+	const errorVariantIndexes = Object.keys(errors?.variants || {})
+		.map((key) => Number(key) + 1)
+		.filter((n) => !isNaN(n));
 
 	return (
 		<PrivateContent access={[ROLE.ADMIN]}>
@@ -128,24 +225,25 @@ const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
 										</select>
 									</div>
 									<Input
-										width={350}
+										width={320}
 										icon={faTag}
 										placeholder={'Укажите имя товара'}
 										registerProps={register('name')}
+										errorMessage={errors.name?.message}
 									/>
 									<Input
-										width={350}
+										width={320}
 										icon={faRubleSign}
 										placeholder={'Укажите самую низкую цену'}
 										registerProps={register('basePrice', {
 											valueAsNumber: true,
 										})}
+										errorMessage={errors.basePrice?.message}
 									/>
 									<GreenButton
 										className="color-button"
 										onClick={onClickAddColor}
 										right={true}
-										place={20}
 										icon={faArrowRight}
 										disabled={!watch('name') || !watch('basePrice')}
 									>
@@ -201,25 +299,32 @@ const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
 											)}
 										/>
 										<Input
-											width={350}
+											width={320}
 											icon={faTag}
 											placeholder={'Укажите название цвета'}
 											registerProps={register(
 												`variants.${index}.colorName`,
 											)}
+											errorMessage={
+												errors.variants?.[index]?.colorName
+													?.message
+											}
 										/>
 										<Input
-											width={350}
+											width={320}
 											icon={faLink}
 											placeholder={'Ссылка на изображение'}
 											registerProps={register(
 												`variants.${index}.imageUrl`,
 											)}
+											errorMessage={
+												errors.variants?.[index]?.imageUrl
+													?.message
+											}
 										/>
 										<div className="btn-group">
 											<GreenButton
 												className="control-button"
-												place={140}
 												left={true}
 												icon={faArrowLeft}
 												onClick={() => removeVariant(index)}
@@ -229,7 +334,6 @@ const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
 											</GreenButton>
 											<GreenButton
 												className="control-button"
-												place={10}
 												right={true}
 												icon={faArrowRight}
 												onClick={() => onClickAddSpec(index)}
@@ -251,22 +355,7 @@ const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
 									</GreenButton>
 									<GreenButton
 										className="control-button"
-										onClick={() =>
-											addVariant({
-												color: '#FFFFFF',
-												colorName: '',
-												imageUrl: '',
-												specs: [
-													{
-														storage: '',
-														ram: '',
-														simType: '',
-														diagonal: '',
-														price: null,
-													},
-												],
-											})
-										}
+										onClick={() => onClickAddColor()}
 									>
 										Добавить цвет
 									</GreenButton>
@@ -275,10 +364,15 @@ const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
 										onClick={handleSubmit(addDevice)}
 										right={true}
 										icon={faArrowRight}
-										place={10}
 									>
 										Добавить товар
 									</GreenButton>
+									{errorVariantIndexes.length > 0 && (
+										<FormError>
+											Ошибки в вариантах:{' '}
+											{errorVariantIndexes.join(', ')}
+										</FormError>
+									)}
 								</div>
 							</>
 						)}
@@ -286,6 +380,7 @@ const AddPageContainer: React.FC<IComponentProps> = ({ className }) => {
 							<SpecInputs
 								variantIndex={activeVariant}
 								onBack={() => setStep(2)}
+								availableFields={availableFields}
 							/>
 						)}
 					</div>
@@ -318,6 +413,7 @@ export const AddPage = styled(AddPageContainer)`
 		display: flex;
 		align-items: center;
 		flex-direction: column;
+		gap: 15px;
 		margin-top: 20px;
 	}
 
@@ -327,8 +423,7 @@ export const AddPage = styled(AddPageContainer)`
 		border: 1px solid #ebe5e5;
 		border-radius: 10px;
 		padding: 0 15px;
-		margin-bottom: 20px;
-		width: 350px;
+		width: 320px;
 	}
 	.select-color-input {
 		display: flex;
@@ -345,10 +440,11 @@ export const AddPage = styled(AddPageContainer)`
 	}
 	.btn-group {
 		display: flex;
+		justify-content: center;
 		flex-wrap: wrap;
 		gap: 10px;
 		width: fit-content;
-		max-width: 350px;
+		max-width: 320px;
 	}
 
 	.control-button {
@@ -356,7 +452,7 @@ export const AddPage = styled(AddPageContainer)`
 		align-items: center;
 		justify-content: center;
 		font-size: 14px;
-		width: 170px;
+		width: 155px;
 	}
 
 	.final-btn-group {
@@ -365,7 +461,7 @@ export const AddPage = styled(AddPageContainer)`
 		justify-content: center;
 		gap: 10px;
 		width: fit-content;
-		max-width: 350px;
+		max-width: 320px;
 		margin-top: 36px;
 	}
 

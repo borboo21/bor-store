@@ -15,6 +15,7 @@ export interface IApp {
 	wasLogout: boolean;
 	modalCartIsOpen: boolean;
 	modalNavigationIsOpen: boolean;
+	updateDeviceList: boolean;
 	modal: IModal;
 }
 
@@ -33,6 +34,7 @@ export interface IButton {
 	active?: boolean | undefined;
 	disabled?: boolean | undefined;
 	width?: string;
+	height?: string;
 }
 
 export interface IGreenButton extends IButton {
@@ -45,8 +47,6 @@ export interface IGreenButton extends IButton {
 }
 
 export interface ICardButton extends IButton {
-	color?: string;
-	isLoading?: boolean;
 	margin?: string;
 }
 
@@ -87,9 +87,11 @@ export interface IItemsInCart extends IComponentProps {
 export interface IInput
 	extends IComponentProps,
 		React.InputHTMLAttributes<HTMLInputElement> {
-	icon: IconProp;
+	icon?: IconProp;
 	width: number;
 	registerProps?: UseFormRegisterReturn;
+	height?: number;
+	errorMessage?: string;
 }
 
 export interface DeviceForm {
@@ -101,10 +103,10 @@ export interface DeviceForm {
 		colorName: string;
 		imageUrl: string;
 		specs: {
-			storage?: string;
-			ram?: string;
-			simType?: string;
-			diagonal?: string;
+			storage?: string | null;
+			ram?: string | null;
+			simType?: string | null;
+			diagonal?: string | null;
 			price: number | null;
 		}[];
 	}[];
@@ -120,13 +122,13 @@ export interface IPrivateContent {
 	serverError?: null | string;
 }
 export interface ITableRow extends IComponentProps {
-	children: JSX.Element[];
-	withborder?: string;
+	children: JSX.Element;
+	onClick?: () => void;
+	$withBorder?: string;
+	$isEdit?: boolean;
 }
 export interface IDeviceRow extends IComponentProps, DeviceDTO {
 	key?: string;
 	onDelete: React.ReactEventHandler;
-	shouldUpdateDeviceList: boolean;
-	setShouldUpdateDeviceList: React.Dispatch<SetStateAction<boolean>>;
 }
 export interface IOrderComponent extends IComponentProps, OrderDTO {}

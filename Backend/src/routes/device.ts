@@ -20,8 +20,6 @@ router.get("/", async (req, res) => {
     search: req.query.search as string | undefined,
     category: req.query.category as string | undefined,
     sorting: req.query.sorting ? (Number(req.query.sorting) as 1 | -1) : null,
-    limit: req.query.limit ? Number(req.query.limit) : 8,
-    page: req.query.page ? Number(req.query.page) : 1,
   });
   res.send({ data });
 });
@@ -63,12 +61,7 @@ router.patch(
   authenticated,
   hasRole([ROLES.ADMIN]),
   async (req, res) => {
-    const updatedDevice = await editDevice(req.params.id, {
-      category: req.body.category,
-      name: req.body.name,
-      basePrice: req.body.price,
-      variants: req.body.variants || [],
-    });
+    const updatedDevice = await editDevice(req.params.id, req.body);
     if (updatedDevice) {
       res.send({ data: mapDevice(updatedDevice) });
     }

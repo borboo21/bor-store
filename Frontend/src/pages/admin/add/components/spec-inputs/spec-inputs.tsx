@@ -12,16 +12,26 @@ import type { DeviceForm } from '../../../../../interfaces';
 type SpecInputs = {
 	variantIndex: number;
 	onBack: () => void;
+	availableFields: string[];
 };
-const SpecInputsComponent: React.FC<SpecInputs> = ({ variantIndex, onBack }) => {
-	const { control, register, watch, getValues } = useFormContext<DeviceForm>();
+const SpecInputsComponent: React.FC<SpecInputs> = ({
+	variantIndex,
+	onBack,
+	availableFields,
+}) => {
+	const {
+		control,
+		register,
+		watch,
+		getValues,
+		formState: { errors },
+	} = useFormContext<DeviceForm>();
 
-	const category = watch('category');
 	const variants = watch('variants');
 
 	const {
 		fields: specs,
-		append: addSpec,
+		append,
 		remove: removeSpec,
 		replace,
 	} = useFieldArray({ control, name: `variants.${variantIndex}.specs` });
@@ -32,64 +42,95 @@ const SpecInputsComponent: React.FC<SpecInputs> = ({ variantIndex, onBack }) => 
 		replace(firstSpecs);
 	};
 
-	console.log(specs.length === 1);
+	const addSpec = () => {
+		const newSpec = Object.fromEntries(availableFields.map((f) => [f, ''])) as {
+			storage?: string | null;
+			ram?: string | null;
+			diagonal?: string | null;
+			simType?: string | null;
+		};
+		console.log(newSpec);
+		append({ ...newSpec, price: null });
+	};
 
 	return (
 		<>
 			{specs.map((spec, index) => (
 				<>
 					<div key={spec.id} className="input-containers">
-						{category !== 'AirPods' && (
+						{availableFields.includes('storage') && (
 							<Input
-								width={350}
+								width={320}
 								icon={faTag}
 								registerProps={register(
 									`variants.${variantIndex}.specs.${index}.storage`,
 								)}
 								placeholder={'Укажите объем памяти'}
+								errorMessage={
+									errors.variants?.[variantIndex]?.specs?.[index]
+										?.storage?.message
+								}
 							/>
 						)}
-						{category === 'MacBook' && (
+						{availableFields.includes('ram') && (
 							<Input
-								width={350}
+								width={320}
 								icon={faTag}
 								registerProps={register(
 									`variants.${variantIndex}.specs.${index}.ram`,
 								)}
 								placeholder={'Укажите ОЗУ'}
+								errorMessage={
+									errors.variants?.[variantIndex]?.specs?.[index]?.ram
+										?.message
+								}
 							/>
 						)}
-						{(category === 'iPad' || category === 'iPhone') && (
+						{availableFields.includes('simType') && (
 							<Input
-								width={350}
+								width={320}
 								icon={faTag}
 								registerProps={register(
 									`variants.${variantIndex}.specs.${index}.simType`,
 								)}
 								placeholder={'Укажите способ связи'}
+								errorMessage={
+									errors.variants?.[variantIndex]?.specs?.[index]
+										?.simType?.message
+								}
 							/>
 						)}
-						{(category === 'MacBook' || category === 'iPad') && (
+						{availableFields.includes('diagonal') && (
 							<Input
-								width={350}
+								width={320}
 								icon={faTag}
 								registerProps={register(
 									`variants.${variantIndex}.specs.${index}.diagonal`,
 								)}
 								placeholder={'Укажите диагональ дисплея'}
+								errorMessage={
+									errors.variants?.[variantIndex]?.specs?.[index]
+										?.diagonal?.message
+								}
 							/>
 						)}
-						<Input
-							width={350}
-							icon={faRubleSign}
-							registerProps={register(
-								`variants.${variantIndex}.specs.${index}.price`,
-								{
-									valueAsNumber: true,
-								},
-							)}
-							placeholder={'Укажите цену'}
-						/>
+						{availableFields.includes('price') && (
+							<Input
+								width={320}
+								icon={faRubleSign}
+								registerProps={register(
+									`variants.${variantIndex}.specs.${index}.price`,
+									{
+										valueAsNumber: true,
+									},
+								)}
+								placeholder={'Укажите цену'}
+								errorMessage={
+									errors.variants?.[variantIndex]?.specs?.[index]?.price
+										?.message
+								}
+							/>
+						)}
 						<GreenButton
 							className="control-button"
 							left={true}
@@ -117,15 +158,7 @@ const SpecInputsComponent: React.FC<SpecInputs> = ({ variantIndex, onBack }) => 
 					className="control-button"
 					right={true}
 					place={10}
-					onClick={() =>
-						addSpec({
-							storage: '',
-							ram: '',
-							simType: '',
-							diagonal: '',
-							price: null,
-						})
-					}
+					onClick={addSpec}
 					icon={faArrowRight}
 				>
 					Добавить еще спецификацию

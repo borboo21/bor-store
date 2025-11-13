@@ -57,6 +57,11 @@ export interface UserDTO {
 
 export interface OrderItemDTO {
   name: string;
+  colorName?: string;
+  storage?: string;
+  diagonal?: string;
+  ram?: string;
+  simType?: string;
   price: number;
   quantity: number;
 }

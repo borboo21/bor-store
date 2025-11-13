@@ -8,7 +8,7 @@ import {
 } from '../../selectors';
 import styled from 'styled-components';
 import type { IComponentProps } from '../../interfaces';
-import { closeModal, type AppDispatch } from '../../store';
+import { closeModal, toggleUpdateDeviceList, type AppDispatch } from '../../store';
 import { request } from '../../utils';
 
 const ModalContainer: React.FC<IComponentProps> = ({ className }) => {
@@ -26,9 +26,12 @@ const ModalContainer: React.FC<IComponentProps> = ({ className }) => {
 
 	switch (type) {
 		case 'deleteDevice': {
-			onConfirm = () => {
-				request(`/api/device/${info}`, 'DELETE');
-				dispatch(closeModal());
+			onConfirm = async () => {
+				const res = await request(`/api/device/${info}`, 'DELETE');
+				if (!res.error) {
+					dispatch(closeModal());
+					dispatch(toggleUpdateDeviceList());
+				}
 			};
 			onCancel = () => dispatch(closeModal());
 		}
