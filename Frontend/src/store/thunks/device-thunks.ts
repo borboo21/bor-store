@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { request } from '../../utils';
 import { setDeviceColor, setDeviceData, setDeviceParams } from '../slices';
-import type { DeviceDTO } from '../../../../shared';
+import type { DeviceDTO } from '@shared/types';
 import type { RootState } from '../store';
 
 // Загрузка данных устройства

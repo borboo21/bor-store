@@ -6,7 +6,7 @@ import { checkAccess, request } from '../../../utils';
 import { Order } from './components';
 import { ROLE } from '../../../constants';
 import type { IComponentProps } from '../../../interfaces';
-import type { OrderDTO, OrdersResponseDTO } from '../../../../../shared';
+import type { OrderDTO, OrdersResponseDTO } from '@shared/types';
 import styled from 'styled-components';
 
 const OrdersContainer: React.FC<IComponentProps> = ({ className }) => {

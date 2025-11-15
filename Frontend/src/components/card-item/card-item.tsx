@@ -6,7 +6,7 @@ import { useWindowSize } from '@uidotdev/usehooks';
 import { setDeviceColor, setDeviceParams } from '../../store/slices';
 import { ColorBlockCard } from '../tags-block/color-block-card';
 import type { ICardItem } from '../../interfaces';
-import type { DeviceVariantDTO } from '../../../../shared';
+import type { DeviceVariantDTO } from '@shared/types';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { ImageWithSkeleton } from '../image-with-skeleton/image-with-skeleton';

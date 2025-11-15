@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { request } from '../../utils';
 import { addToCart, deleteFromCart } from '../slices';
-import type { AddToCartResponseDTO } from '../../../../shared/types/interface';
+import type { AddToCartResponseDTO } from '@shared/types';
 
 // Добавить товар в корзину
 type thunkAddToCartType = {

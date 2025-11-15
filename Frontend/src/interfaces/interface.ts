@@ -1,11 +1,6 @@
 import { type IconProp, type SizeProp } from '@fortawesome/fontawesome-svg-core';
-import {
-	type JSX,
-	type ReactElement,
-	type ReactEventHandler,
-	type SetStateAction,
-} from 'react';
-import type { CartDeviceDTO, DeviceDTO, OrderDTO } from '../../../shared/';
+import { type JSX, type ReactElement, type ReactEventHandler } from 'react';
+import type { CartDeviceDTO, DeviceDTO, OrderDTO } from '@shared/types';
 import type { UseFormRegisterReturn } from 'react-hook-form';
 
 export interface ICartDevice extends CartDeviceDTO, IComponentProps {
@@ -110,11 +105,6 @@ export interface DeviceForm {
 			price: number | null;
 		}[];
 	}[];
-}
-export interface IPagination extends IComponentProps {
-	page: number;
-	lastPage: number;
-	setPage: React.Dispatch<SetStateAction<number>>;
 }
 export interface IPrivateContent {
 	children: JSX.Element;

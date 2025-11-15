@@ -2,7 +2,7 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "module": "Node16",
-    "paths": { "@shared/*": ["../shared/*"] },
+    "paths": { "@shared/*": ["../shared/index.ts"] },
     "target": "es2022",
     "rootDir": "../",
     "outDir": "./dist",

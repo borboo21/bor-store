@@ -17,7 +17,7 @@ import { ERROR } from './constants';
 import { type AppDispatch } from './store/store';
 import { loadCartAsync, setCartStorage, setUser } from './store';
 import styled from 'styled-components';
-import type { CartDeviceDTO, UserDTO } from '../../shared/types/interface';
+import type { CartDeviceDTO, UserDTO } from '@shared/types';
 
 const AppColumn = styled.div`
 	display: flex;

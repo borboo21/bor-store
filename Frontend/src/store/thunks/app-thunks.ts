@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { request } from '../../utils';
 import { setCartData } from '../slices';
-import type { CartDTO } from '../../../../shared/types/interface';
+import type { CartDTO } from '@shared/types';
 
 // Загрузка данных корзины
 export const loadCartAsync = createAsyncThunk(

@@ -1,4 +1,4 @@
-import type { DeviceSpecsDTO } from './../../../../shared/types/interface';
+import type { DeviceSpecsDTO } from '@shared/types';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 interface SelectionSlice {

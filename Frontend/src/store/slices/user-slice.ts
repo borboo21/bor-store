@@ -1,6 +1,6 @@
 import { ROLE } from '../../constants/role';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { UserDTO } from '../../../../shared/types/interface';
+import type { UserDTO } from '@shared/types';
 
 const initialState: UserDTO = {
 	id: '',

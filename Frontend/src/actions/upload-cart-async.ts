@@ -1,4 +1,4 @@
-import type { MergeCartDataDTO } from '../../../shared';
+import type { MergeCartDataDTO } from '@shared/types';
 import { request } from '../utils/request';
 
 export const uploadCartAsync = async (userId: string, cart: MergeCartDataDTO) => {

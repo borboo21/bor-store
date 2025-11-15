@@ -14,8 +14,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
 import type { IComponentProps } from '../../interfaces';
 import { loadCartAsync, setUser, type AppDispatch } from '../../store';
+import type { UserDTO } from '@shared/types';
 import styled from 'styled-components';
-import type { UserDTO } from '../../../../shared/types/interface';
 
 const authFormSchema = yup.object().shape({
 	login: yup

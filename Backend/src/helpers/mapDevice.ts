@@ -2,7 +2,7 @@ import type {
   DeviceDTO,
   DeviceSpecsDTO,
   DeviceVariantDTO,
-} from "../../../shared/types/interface.ts";
+} from "@shared/types";
 import type {
   DeviceDocument,
   DeviceSpecs,

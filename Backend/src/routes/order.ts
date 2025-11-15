@@ -4,7 +4,7 @@ import { authenticated } from "../middlewares/authenticated.ts";
 import { hasRole } from "../middlewares/hasRole.ts";
 import { mapOrders } from "../helpers/mapOrder.ts";
 import { ROLES } from "../constants/roles.ts";
-import type { OrdersResponseDTO } from "../../../shared/types/interface.ts";
+import type { OrdersResponseDTO } from "@shared/types";
 
 const router = express.Router({ mergeParams: true });
 

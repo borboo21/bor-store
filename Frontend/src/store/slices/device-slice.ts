@@ -1,4 +1,4 @@
-import type { DeviceDTO } from './../../../../shared/types/interface';
+import type { DeviceDTO } from '@shared/types';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: DeviceDTO = {

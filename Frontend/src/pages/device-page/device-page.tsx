@@ -25,7 +25,6 @@ import {
 import { Loader, SkeletonDevice, SkeletonDeviceMobile } from '../../components/loaders';
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ERROR, SPECS } from '../../constants';
-import styled from 'styled-components';
 import type { IComponentProps } from '../../interfaces';
 import {
 	addCartAsync,
@@ -34,7 +33,7 @@ import {
 	deleteFromCartAsync,
 	type AppDispatch,
 } from '../../store';
-import type { CartItemDTO } from '../../../../shared/types/interface';
+import type { CartItemDTO } from '@shared/types';
 import { DeviceSpecs } from '../../components/device-specs/device-specs';
 import { selectDeviceVariants } from '../../selectors/device-selectors/select-device-variants';
 import {
@@ -46,6 +45,7 @@ import {
 	setDeviceStorage,
 } from '../../store/slices';
 import { loadDeviceAsync } from '../../store/thunks/device-thunks';
+import styled from 'styled-components';
 
 const DevicePageContainer: React.FC<IComponentProps> = ({ className }) => {
 	const [error, setError] = useState('');

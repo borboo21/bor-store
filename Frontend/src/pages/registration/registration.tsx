@@ -17,7 +17,7 @@ import styled from 'styled-components';
 import type { IComponentProps } from '../../interfaces';
 import { selectUserRoleIdSelector } from '../../selectors';
 import { setUser } from '../../store';
-import type { UserDTO } from '../../../../shared/types/interface';
+import type { UserDTO } from '@shared/types';
 
 const regFormSchema = yup.object().shape({
 	login: yup

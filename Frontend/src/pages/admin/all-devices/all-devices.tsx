@@ -12,8 +12,8 @@ import { ROLE } from '../../../constants';
 import { openModal } from '../../../store/slices';
 import type { IComponentProps } from '../../../interfaces';
 import type { AppDispatch } from '../../../store';
+import type { DeviceDTO } from '@shared/types';
 import styled from 'styled-components';
-import type { DeviceDTO } from '../../../../../shared';
 
 const AllPageContainer: React.FC<IComponentProps> = ({ className }) => {
 	const dispatch: AppDispatch = useDispatch();

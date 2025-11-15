@@ -12,7 +12,7 @@ import {
 import { request, debounce } from '../../utils';
 import type { IComponentProps } from '../../interfaces';
 import { resetDeviceData, type AppDispatch } from '../../store';
-import type { DeviceDTO } from '../../../../shared';
+import type { DeviceDTO } from '@shared/types';
 import { resetSelectionData } from '../../store/slices';
 import { useWindowSize } from '@uidotdev/usehooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

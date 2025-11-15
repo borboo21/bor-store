@@ -1,4 +1,4 @@
-import type { DeviceSpecsDTO } from '../../../../shared';
+import type { DeviceSpecsDTO } from '@shared/types';
 
 export const selectActivePrice = (
 	specsArray: DeviceSpecsDTO[],

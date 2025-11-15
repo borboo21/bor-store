@@ -1,8 +1,4 @@
-import type {
-	AddToCartResponseDTO,
-	CartDeviceDTO,
-	CartDTO,
-} from '../../../../shared/types/interface';
+import type { AddToCartResponseDTO, CartDeviceDTO, CartDTO } from '@shared/types';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: CartDTO = {

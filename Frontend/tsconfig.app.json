@@ -6,9 +6,12 @@
 		"lib": ["ES2022", "DOM", "DOM.Iterable"],
 		"module": "ESNext",
 		"skipLibCheck": true,
+		"paths": {
+			"@shared/types": ["../shared/index.ts"]
+		},
 
 		/* Bundler mode */
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"allowImportingTsExtensions": true,
@@ -26,5 +29,5 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedSideEffectImports": true
 	},
-	"include": ["src", "../shared/types/interface.ts"]
+	"include": ["src"]
 }
