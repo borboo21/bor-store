@@ -1,4 +1,4 @@
-import type { CartDeviceDTO, CartDTO, CartItemDTO } from "@shared/types";
+import type { CartDeviceDTO, CartDTO, CartItemDTO } from "@shared/index.js";
 import type { CartItem, CartType } from "../models/Cart.ts";
 
 export function mapCartItemDevice(item: CartItem["device"]): CartDeviceDTO {

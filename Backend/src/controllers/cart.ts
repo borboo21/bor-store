@@ -1,4 +1,4 @@
-import type { AddToCartResponseDTO, MergeCartDataDTO } from "@shared/types";
+import type { AddToCartResponseDTO, MergeCartDataDTO } from "@shared/index.js";
 import { DeviceModel } from "../models/Device.ts";
 import { UserModel } from "../models/User.ts";
 import { mapCart, mapCartItemDevice } from "../helpers/mapCart.ts";

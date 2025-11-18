@@ -1,31 +1,31 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "module": "Node16",
-    "paths": { "@shared/*": ["../shared/index.ts"] },
-    "target": "es2022",
-    "rootDir": "../",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "paths": {
+      "@shared/*": ["../shared/*"]
+    },
+    "target": "es2020",
     "outDir": "./dist",
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node16",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "alwaysStrict": true,
-    "isolatedModules": true,
     "moduleDetection": "force",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "noEmit": true,
-    "allowImportingTsExtensions": true,
+    "noEmit": false,
+    "emitDeclarationOnly": false,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "allowJs": true,
     "typeRoots": ["src/types"]
   },
-  "include": [
-    "src",
-    "../shared/",
-    "src/types/express/index.d.ts",
-    "src/app.ts"
-  ],
+  "include": ["src", "src/types/express/index.d.ts", "src/app.ts"],
   "exclude": ["node_modules", "dist"]
 }

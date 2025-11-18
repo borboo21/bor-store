@@ -1,4 +1,4 @@
-import type { OrdersResponseDTO } from "@shared/types";
+import type { OrdersResponseDTO } from "@shared/index.js";
 import type { OrderDocument } from "../models/Order.ts";
 
 export function mapOrders(order: OrderDocument): OrdersResponseDTO {

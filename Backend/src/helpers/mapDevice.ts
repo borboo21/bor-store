@@ -2,7 +2,7 @@ import type {
   DeviceDTO,
   DeviceSpecsDTO,
   DeviceVariantDTO,
-} from "@shared/types";
+} from "@shared/index.js";
 import type {
   DeviceDocument,
   DeviceSpecs,

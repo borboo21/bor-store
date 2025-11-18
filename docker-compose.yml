@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
+    container_name: project-backend
+    env_file:
+      - ./backend/.env
+    environment:
+      NODE_ENV: production
+    ports:
+      - "3001:3001"
+    restart: always
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Frontend/Dockerfile
+    container_name: project-frontend
+    ports:
+      - "80:80"
+    restart: always

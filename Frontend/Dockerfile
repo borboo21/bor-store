@@ -1,16 +1,20 @@
-FROM node:18
+FROM node:18 AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+COPY tsconfig.json ./
+COPY Frontend ./Frontend
+COPY shared ./shared
+
+RUN cd shared && npm install && npm run build
+RUN cd Frontend && npm install && npm run build
 
 
-COPY . .
+FROM nginx:stable-alpine AS runner
+COPY --from=builder /app/Frontend/dist /usr/share/nginx/html
+COPY Frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
+EXPOSE 80
 
-WORKDIR /src
-RUN npm i
-RUN npm run build
-
-WORKDIR /Backend
-RUN npm i
-
-EXPOSE  3001
-
-CMD ["node","app.js"]
+CMD [ "nginx", "-g", "daemon off;" ]
