@@ -45,7 +45,6 @@ const SpecsEditorContainer = ({
 	};
 
 	const errorMessageSpec = errors.variants?.[variantIndex]?.specs;
-	console.log(errorMessageSpec);
 
 	return (
 		<div className={className}>

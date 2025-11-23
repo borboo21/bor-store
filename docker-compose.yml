@@ -5,7 +5,7 @@ services:
       dockerfile: Backend/Dockerfile
     container_name: project-backend
     env_file:
-      - ./backend/.env
+      - ./Backend/.env
     environment:
       NODE_ENV: production
     ports:

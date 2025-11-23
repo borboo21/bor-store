@@ -49,7 +49,6 @@ const SpecInputsComponent: React.FC<SpecInputs> = ({
 			diagonal?: string | null;
 			simType?: string | null;
 		};
-		console.log(newSpec);
 		append({ ...newSpec, price: null });
 	};
 
