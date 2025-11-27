@@ -19,4 +19,9 @@ export const TableRow = styled(TableRowContainer)`
 	min-height: 60px;
 	gap: 10px;
 	cursor: ${({ $isEdit }) => ($isEdit ? 'auto' : 'pointer')};
+
+	@media (max-width: 480px) {
+		margin-top: ${({ $isEdit }) => ($isEdit ? '20px' : '0')};
+		grid-template-columns: ${({ $isEdit }) => ($isEdit ? '1fr' : '1fr 1fr 1fr')};
+	}
 `;

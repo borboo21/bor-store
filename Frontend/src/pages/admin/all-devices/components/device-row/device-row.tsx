@@ -240,7 +240,7 @@ const DeviceRowContainer: React.FC<IDeviceRow> = ({ className, ...props }) => {
 										errorMessage={errors.name?.message}
 									></Input>
 									<Input
-										width={95}
+										width={115}
 										height={40}
 										placeholder="Базовая цена"
 										registerProps={register('basePrice')}
@@ -441,7 +441,6 @@ export const DeviceRow = styled(DeviceRowContainer)`
 		height: 30px;
 		grid-column: span 3;
 	}
-
 	.select-div {
 		display: flex;
 		align-items: center;
@@ -449,12 +448,12 @@ export const DeviceRow = styled(DeviceRowContainer)`
 		border-radius: 10px;
 		padding: 0 10px;
 		height: 40px;
-		width: 100px;
+		width: 115px;
 		select {
 			border: none;
 			outline: none;
 			font-size: 14px;
-			width: 80px;
+			width: 95px;
 			height: 35px;
 			cursor: pointer;
 			background: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2ZmZjt9LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHJlY3QgY2xhc3M9ImNscy0xIiB3aWR0aD0iNC45NSIgaGVpZ2h0PSIxMCIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIxLjQxIDQuNjcgMi40OCAzLjE4IDMuNTQgNC42NyAxLjQxIDQuNjciLz48cG9seWdvbiBjbGFzcz0iY2xzLTIiIHBvaW50cz0iMy41NCA1LjMzIDIuNDggNi44MiAxLjQxIDUuMzMgMy41NCA1LjMzIi8+PC9zdmc+)

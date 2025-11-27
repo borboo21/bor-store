@@ -77,16 +77,18 @@ const HeaderContainer: React.FC<IComponentProps> = ({ className }) => {
 				{userLogin ? (
 					<div className="user" onClick={onLogout}>
 						<div className="exit">
-							<FontAwesomeIcon
-								className="user-logo"
-								icon={faUser}
-								size="lg"
-							/>
-							<FontAwesomeIcon
-								className="x-mark"
-								icon={faXmark}
-								size="2xs"
-							/>
+							<div className="user-logo">
+								<FontAwesomeIcon
+									className="user-logo-svg"
+									icon={faUser}
+									size="lg"
+								/>
+								<FontAwesomeIcon
+									className="x-mark"
+									icon={faXmark}
+									size="2xs"
+								/>
+							</div>
 						</div>
 						<span className="user-name">{userLogin}</span>
 					</div>
@@ -169,12 +171,15 @@ export const Header = styled(HeaderContainer)`
 	}
 
 	& .user {
-		position: relative;
 		cursor: pointer;
+
+		& .user-logo {
+			position: relative;
+		}
 
 		& .x-mark {
 			position: absolute;
-			left: 25px;
+			left: 20px;
 			top: -2px;
 		}
 

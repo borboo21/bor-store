@@ -19,7 +19,7 @@ const UserSchema = new Schema({
     type: Number,
     default: ROLES.USER,
   },
-  cart: { type: CartSchema },
+  cart: { type: CartSchema, required: true },
 });
 
 export type User = InferSchemaType<typeof UserSchema>;
