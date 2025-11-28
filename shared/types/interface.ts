@@ -52,7 +52,7 @@ export interface UserDTO {
   id: string;
   login: string;
   role: number;
-  cart: CartDTO;
+  cart?: CartDTO;
 }
 
 export interface OrderItemDTO {
